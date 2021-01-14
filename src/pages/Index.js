@@ -12,13 +12,13 @@ const Index = () => {
 
 	useEffect(() => {
 		const config = {
-			apiKey: 'AIzaSyCact62GvnM5H_Ct6_zRfC4SFBEYtS_t-Y',
-			authDomain: 'mtech-express.firebaseapp.com',
-			projectId: 'mtech-express',
-			storageBucket: 'mtech-express.appspot.com',
-			messagingSenderId: '158553773762',
-			appId: '1:158553773762:web:df35631e370613edd1cd5b',
-			measurementId: 'G-15M26VBD0D'
+			apiKey: process.env.REACT_APP_API_KEY,
+			authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+			projectId: process.env.REACT_APP_PROJECT_ID,
+			storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+			messagingSenderId: process.env.REACT_APP_MESSENGER_SENDER_ID,
+			appId: process.env.REACT_APP_APP_ID,
+			measurementId: process.env.REACT_APP_MEASUREMENT_ID
 		};
 		//Initialize Firebase app if it hasn't already
 		firebase.apps.length === 0 ? firebase.initializeApp(config) : firebase.app();
