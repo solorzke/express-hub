@@ -1,0 +1,25 @@
+#page-content-wrapper {
+    min-width: 100vw;
+}
+
+#wrapper {
+    overflow-x: hidden;
+}
+
+#wrapper .bg-nav {
+    background-color: #2a1e5c !important;
+}
+
+#wrapper .bars {
+    color: #ee4266
+}
+#wrapper.toggled #sidebar-wrapper {
+    margin-left: 0;
+}
+
+@media (min-width: 768px) {
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: -15rem;
+        border-color: #2a1e5c;
+    }
+}

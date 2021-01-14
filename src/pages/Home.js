@@ -1,6 +1,7 @@
 import React from 'react';
 import Wrapper from '../components/Wrapper/Wrapper';
 import { Cookie } from '../data/Cookie';
+import '../css/index.css';
 
 const Home = () => {
 	return <Wrapper children={<Body />} current="Home" />;

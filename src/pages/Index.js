@@ -4,6 +4,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { Button } from 'react-bootstrap';
 import { Cookie } from '../data/Cookie';
+import '../css/login.css';
 
 const Index = () => {
 	const [ progress, setProgress ] = useState(false);

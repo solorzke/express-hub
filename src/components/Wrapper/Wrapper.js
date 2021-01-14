@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Drawer from '../Drawer/Drawer';
+import './Wrapper.css';
 
 const Wrapper = ({ children, current }) => {
 	const Wrap = () => {
