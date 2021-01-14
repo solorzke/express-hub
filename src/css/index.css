@@ -1,0 +1,118 @@
+.index-bg-nav {
+    background-color: #2a1e5c !important;
+}
+
+.index-bars {
+    color: #ee4266
+}
+
+.index-new-user-logo {
+    color: #ee4266;
+    font-size: 300px;
+}
+
+.index h1, .index h2, .index h3, .index h4, .index h5, .index h6 {
+    font-family: 'Play', sans-serif;
+}
+
+.index-add-client-view {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.index-add-client-view:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.index-add-order-view {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.index-add-order-view:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.index a {
+    color: gray;
+}
+
+.index a:hover {
+    color: #ee4266;
+    text-decoration: none;
+}
+
+/* form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+form > input {
+    padding: 5px;
+    margin: 5px;
+    width: 75%;
+}
+*/
+
+.index-submit-btn {
+    width: 20%;
+    border-color: #ee4266;
+    color: #fff;
+    background-color: #ee4266;
+    border-radius: 5px;
+    text-shadow: none;
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: groove;
+}
+
+.index-progress-circle {
+    color: #ee4266;
+    text-align: center;
+    width: 100%;
+    font-size: 100px;
+}
+
+.index-progress-circle-green {
+    color: #2DD881;
+    text-align: center;
+    width: 100%;
+    font-size: 100px;
+}
+
+.index-list-item {
+    background-color: #e8e8e8 !important;
+}
+
+.index-list-item:hover {
+    background-color: #2a1e5c !important;
+    color: #fff !important;
+}
+
+.index-text-highlight {
+    color: #ee4266;
+}
+
+.index-client-pane > h2 {
+    display: inline;
+}
+
+.index-item-img {
+    height: 300px;
+    width: auto;
+}
+
+.index-item-div {
+    cursor: pointer;
+}
+
+.index-item-div > img:hover {
+    opacity: 0.5;
+    background-color: #e8e8e8;
+}
+
