@@ -2,7 +2,7 @@ export class Cookie {
 	static setCookie(cname, cvalue) {
 		const expire = new Date();
 		expire.setDate(expire.getDate() + 1);
-		document.cookie = `${this.cname}=${this.cvalue}; expires=${expire}; path=/`;
+		document.cookie = `${cname}=${cvalue}; expires=${expire}; path=/`;
 	}
 
 	static getCookie(cname) {
