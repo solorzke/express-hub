@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Wrapper from '../components/Wrapper/Wrapper';
 import { Cookie } from '../data/Cookie';
+import Firebase from 'firebase/app';
+import 'firebase/firestore';
+import { Config } from '../data/Config';
 import '../css/index.css';
 
 const Home = () => {
@@ -8,9 +11,15 @@ const Home = () => {
 };
 
 const Body = () => {
+	const fname = Cookie.getCookie('fname').charAt(0).toUpperCase() + Cookie.getCookie('fname').slice(1);
+	useEffect(() => {
+		//Initialize Firebase app if it hasn't already
+		Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
+	});
+
 	return (
 		<div className="container-fluid">
-			<h1 className="mt-4">Hello {Cookie.getCookie('uid')}</h1>
+			<h1 className="mt-4">Hello {fname}</h1>
 			<p>
 				The starting state of the menu will appear collapsed on smaller screens, and will appear non-collapsed
 				on larger screens. When toggled using the button below, the menu will change.
