@@ -4,7 +4,7 @@ import './Drawer.css';
 
 const Drawer = () => {
 	return (
-		<div className="border-right " id="sidebar-wrapper">
+		<div className="border-right" id="sidebar-wrapper">
 			<div className="sidebar-heading">Mtech Express</div>
 			<div className="list-group list-group-flush">
 				<Link to="/home" className="list-group-item list-group-item-action">

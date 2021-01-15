@@ -22,4 +22,9 @@
         margin-left: -15rem;
         border-color: #2a1e5c;
     }
+
+    #page-content-wrapper {
+        min-width: 0;
+        width: 100%;
+    }
 }
