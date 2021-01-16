@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Wrapper from '../components/Wrapper/Wrapper';
 import { Cookie } from '../data/Cookie';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
 import { Config } from '../data/Config';
 import '../css/index.css';
+//Initialize Firebase app if it hasn't already
+Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
 const Home = () => {
 	return <Wrapper children={<Body />} current="Home" />;
@@ -12,11 +14,6 @@ const Home = () => {
 
 const Body = () => {
 	const fname = Cookie.getCookie('fname').charAt(0).toUpperCase() + Cookie.getCookie('fname').slice(1);
-	useEffect(() => {
-		//Initialize Firebase app if it hasn't already
-		Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
-	});
-
 	return (
 		<div className="container-fluid">
 			<h1 className="mt-4">Hello {fname}</h1>
