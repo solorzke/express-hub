@@ -1,0 +1,19 @@
+.toast-div {
+    position: relative;
+    min-height: 100px;
+}
+
+.toast-element {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+}
+
+.toast-success {
+    color: #50C878;
+}
+
+.toast-fail {
+    color: #e0115f;
+}
