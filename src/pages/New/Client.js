@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
 import Toast from '../../components/Toast/Toast';
+import Input from '../../components/Inputs/Horizontal';
+import InputCol from '../../components/Inputs/Input';
 import { Config } from '../../data/Config';
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
@@ -17,7 +19,9 @@ const Body = () => {
 	const [ heading, setHeading ] = useState('Processing');
 	const history = useHistory();
 
-	const onSubmit = async () => {
+	const onSubmit = async (e) => {
+		//prevent the form's default submission behavior
+		e.preventDefault();
 		if (img !== 'fas fa-spinner fa-pulse') setImg('fas fa-spinner fa-pulse');
 		setToast(true);
 		try {
@@ -60,62 +64,40 @@ const Body = () => {
 			<p className="mb-5">
 				Enter the client's information before proceeding to adding their new shipment order to the database.
 			</p>
-			<form>
+			<form onSubmit={(e) => onSubmit(e)}>
 				<div className="form-group row">
-					<div className="form-group col-md-6">
-						<label htmlFor="fname">First Name</label>
-						<input type="text" className="form-control" id="fname" placeholder="First Name" name="fname" />
-					</div>
-					<div className="form-group col-md-6">
-						<label htmlFor="lname">Last Name</label>
-						<input type="text" className="form-control" id="lname" placeholder="Last Name" name="lname" />
-					</div>
+					<InputCol
+						column="col-md-6"
+						label="First Name"
+						type="text"
+						id="fname"
+						placeholder="First Name"
+						name="fname"
+					/>
+					<InputCol
+						column="col-md-6"
+						label="Last Name"
+						type="text"
+						id="lname"
+						placeholder="Last Name"
+						name="lname"
+					/>
 				</div>
 				<div className="form-group row">
-					<label htmlFor="email" className="col-sm-2 col-form-label">
-						Email
-					</label>
-					<div className="col-sm-10">
-						<input
-							type="email"
-							className="form-control"
-							id="email"
-							placeholder="Email Address"
-							name="email"
-						/>
-					</div>
+					<Input label="Email" type="email" id="email" placeholder="Email Address" name="email" />
 				</div>
 				<div className="form-group row">
-					<label htmlFor="phone" className="col-sm-2 col-form-label">
-						Phone Number
-					</label>
-					<div className="col-sm-10">
-						<input
-							type="tel"
-							className="form-control"
-							id="phone"
-							placeholder="Phone Number"
-							name="phone"
-							pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
-						/>
-					</div>
+					<Input label="Phone Number" type="tel" id="phone" placeholder="Phone Number" name="phone" />
 				</div>
 				<div className="form-group row">
-					<label htmlFor="address" className="col-sm-2 col-form-label">
-						Address
-					</label>
-					<div className="col-sm-10">
-						<input type="text" className="form-control" id="address" placeholder="Address" name="address" />
-					</div>
+					<Input label="Address" type="text" id="address" placeholder="Address" name="address" />
 				</div>
 				<div className="form-group row">
 					<div className="col-md d-flex justify-content-end align-items-center">
-						<a href="index.php?action=new-order" className="mr-2 btn btn-md btn-secondary">
+						<a href="/new-order" className="mr-2 btn btn-md btn-secondary">
 							Cancel
 						</a>
-						<button type="button" className="btn btn-primary" id="btn-modal" onClick={() => onSubmit()}>
-							Add Client
-						</button>
+						<input value="Add Client" type="submit" className="btn btn-primary" id="btn-modal" />
 					</div>
 				</div>
 			</form>
