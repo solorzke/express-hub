@@ -2,27 +2,35 @@ import React, { useState, useRef } from 'react';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
+import 'firebase/storage';
 import Toast from '../../components/Toast/Toast';
 import Input from '../../components/Inputs/Input';
 import Async from 'react-async';
 import { Config } from '../../data/Config';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
 const Order = () => <Wrapper children={<Body />} current="New Order" />;
 
 const Body = () => {
-	//Select refs for clients, country, province
+	//Select refs for clients, country, province, order-receipt file, shipping receipt file, and item image
 	let clientRef = useRef(null);
 	let countryRef = useRef(null);
 	let provinceRef = useRef(null);
+	let orderRef = useRef(null);
+	let shippingRef = useRef(null);
+	let itemImageRef = useRef(null);
 
 	//State objects for use throughout the component
 	const [ img, setImg ] = useState('fas fa-spinner fa-pulse');
 	const [ toast, setToast ] = useState(false);
 	const [ message, setMessage ] = useState('Adding Client...');
 	const [ heading, setHeading ] = useState('Processing');
+	const [ progress, setProgress ] = useState(false);
+	const [ progressImg, setProgressImg ] = useState('fas fa-spinner fa-pulse');
+	const [ progressMsg, setProgressMsg ] = useState(null);
+	const [ progressHeading, setProgressHeading ] = useState(null);
 
 	const history = useHistory();
 
@@ -37,11 +45,77 @@ const Body = () => {
 	//Format the selected names to first letter uppercase followed by lowercase
 	const formatName = (str = '') => str.charAt(0).toUpperCase() + str.slice(1);
 
+	//Return an array of refs that have files waiting to be uploaded to cloud storage
+	const filesToBeUploaded = () => {
+		const refs = [
+			{ ref: orderRef, name: 'order-file' },
+			{ ref: shippingRef, name: 'shipping-file' },
+			{ ref: itemImageRef, name: 'item-file' }
+		];
+		return refs.filter((ref) => ref.ref.current.files[0] !== undefined);
+	};
+
+	const uploadFile = (orderId, docs) => {
+		let urls = [];
+		const doc = docs.pop();
+		const item = { name: doc.name, file: doc.ref.current.files[0] };
+		const path = `test/${orderId}/${item.name}`;
+		Firebase.storage().ref(path).put(item.file).then((snapshot) => {
+			snapshot.ref.getDownloadURL().then((url) => {
+				urls.push();
+			});
+		});
+	};
+
+	//Execute firestore update in the callback after images are uploaded to store
+	const waitAfterUpload = (docs, data, callback) => {
+		let urls = [];
+		const orderId = data['orderId'];
+		if (docs.length === 0) callback(data);
+		const firstItem = { name: docs[0].name, file: docs[0].ref.current.files[0] };
+		const firstPath = `images/${orderId}/${firstItem.name}`;
+		Firebase.storage().ref(firstPath).put(firstItem.file).then((snapshot) => {
+			snapshot.ref.getDownloadURL().then((url) => {
+				urls.push({ name: firstItem.name, url: url });
+				console.log('> Firebase: First file uploaded!');
+				console.log(`> Firebase: Current url array state: ${urls}`);
+				if (docs.length >= 2) {
+					const secondItem = { name: docs[1].name, file: docs[1].ref.current.files[0] };
+					const secondPath = `images/${orderId}/${secondItem.name}`;
+					Firebase.storage().ref(secondPath).put(secondItem.file).then((snapshot) => {
+						snapshot.ref.getDownloadURL().then((url) => {
+							urls.push({ name: secondItem.name, url: url });
+							console.log('> Firebase: Second file uploaded!');
+							console.log(`> Firebase: Current url array state: ${urls}`);
+							if (docs.length === 3) {
+								const thirdItem = { name: docs[2].name, file: docs[2].ref.current.files[0] };
+								const thirdPath = `images/${orderId}/${thirdItem.name}`;
+								Firebase.storage().ref(thirdPath).put(thirdItem.file).then((snapshot) => {
+									snapshot.ref.getDownloadURL().then((url) => {
+										urls.push({ name: thirdItem.name, url: url });
+										console.log('> Firebase: Third file uploaded!');
+										console.log(`> Firebase: Current url array state: ${urls}`);
+										callback(urls);
+									});
+								});
+							} else {
+								callback(urls);
+							}
+						});
+					});
+				} else {
+					callback(urls);
+				}
+			});
+		});
+	};
+
 	//Add all the form data and files to the firestore request to create a new order
-	const onSubmit = async (e) => {
+	const onSubmit = (e) => {
 		e.preventDefault();
 		if (img !== 'fas fa-spinner fa-pulse') setImg('fas fa-spinner fa-pulse');
-		setToast(true);
+		if (progressImg !== 'fas fa-spinner fa-pulse') setImg('fas fa-spinner fa-pulse');
+		setProgress(true);
 		try {
 			const orderId = Number(new Date()).toString();
 			const clientId = clientRef.current.selectedOptions[0].value;
@@ -54,9 +128,9 @@ const Body = () => {
 			const country = countryRef.current.selectedOptions[0].text;
 			const province = provinceRef.current.selectedOptions[0].text;
 			const address = document.getElementById('address').value.toLowerCase();
-
+			const documents = filesToBeUploaded();
 			//Store data into a obj
-			const data = {
+			let data = {
 				orderId: orderId,
 				clientId: clientId,
 				date: orderDate,
@@ -70,23 +144,28 @@ const Body = () => {
 				address: address
 			};
 
-			//Add data to a new document from the collection 'orders' in the firestore
-			await Firebase.firestore().collection('orders').doc(orderId).set(data);
-			setImg('fas fa-check-circle toast-success');
-			setHeading('Complete');
-			setMessage('Client added!');
-			console.log(`> Firebase: client data added`);
-			setTimeout(() => {
-				setToast(false);
-				history.push('/new-order');
-			}, 3000);
+			waitAfterUpload(documents, data, (urls) => {
+				setToast(true);
+				urls.forEach((item) => (data[item.name] = item.url));
+				Firebase.firestore().collection('orders').doc(orderId).set(data).then(() => {
+					setImg('fas fa-check-circle toast-success');
+					setHeading('Complete');
+					setMessage('Client added!');
+					console.log(`> Firebase: client data added`);
+					setTimeout(() => {
+						setProgress(false);
+						setToast(false);
+						// history.push('/new-order');
+					}, 3000);
+				});
+			});
 		} catch (error) {
 			setImg('fas fa-window-close toast-fail');
 			setHeading('Failed');
 			setMessage("Client couldn't be added!");
+			console.log(`> Firebase: Error couldnt send request.\n ${error.message}`);
 			setTimeout(() => {
 				setToast(false);
-				console.log(`> Firebase: Error couldnt send request.\n ${error.message}`);
 			}, 3000);
 		}
 	};
@@ -234,6 +313,7 @@ const Body = () => {
 					</label>
 					<div className="col-sm-10">
 						<input
+							ref={orderRef}
 							type="file"
 							className="form-control"
 							id="order-receipt"
@@ -248,6 +328,7 @@ const Body = () => {
 					</label>
 					<div className="col-sm-10">
 						<input
+							ref={shippingRef}
 							type="file"
 							className="form-control"
 							id="shipping-receipt"
@@ -262,6 +343,7 @@ const Body = () => {
 					</label>
 					<div className="col-sm-10">
 						<input
+							ref={itemImageRef}
 							type="file"
 							className="form-control"
 							id="item-img"
@@ -280,11 +362,18 @@ const Body = () => {
 				</div>
 			</form>
 			<Toast
+				onClose={() => setProgress(false)}
+				show={progress}
+				message={progressMsg}
+				heading={progressHeading}
+				img={<i className={`${img} p-3`} />}
+			/>
+			<Toast
 				onClose={() => setToast(false)}
 				show={toast}
 				message={message}
 				heading={heading}
-				img={<i className={`${img} p-3`} />}
+				img={<i className={`${progressImg} p-3`} />}
 			/>
 		</main>
 	);
