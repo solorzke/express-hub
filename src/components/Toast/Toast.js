@@ -4,7 +4,7 @@ import './Toast.css';
 
 const Message = ({ message, heading, img, show, onClose }) => {
 	return (
-		<div aria-live="polite" aria-atomic="true" className="toast-div">
+		<div aria-live="polite" aria-atomic="true">
 			<Toast className="toast-element" show={show} onClose={onClose}>
 				<Toast.Header>
 					{img}

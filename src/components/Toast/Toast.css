@@ -1,13 +1,16 @@
 .toast-div {
     position: relative;
     min-height: 100px;
+    padding-bottom: 10px;
 }
 
 .toast-element {
-    position: absolute;
-    top: 0;
+    position: fixed;
+    top: 10;
     right: 0;
+    margin-right: 20px;
     width: 50%;
+    z-index: 1;
 }
 
 .toast-success {
