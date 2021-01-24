@@ -59,36 +59,18 @@ const Body = () => {
 		});
 	};
 
-	//Execute firestore update in the callback after images are uploaded to store
-	const manageUploads = (docs, data, callback) => {
+	/* Return the downloaded urls to the callback once all files are uploaded */
+	const uploadAllFiles = async (docs, data, callback) => {
 		let urls = [];
 		const orderId = data['orderId'];
-		if (docs.length === 0) callback(data);
-		setHeading('Uploading files to the cloud.');
-		uploadFile(docs.pop(), orderId).then((obj) => {
-			urls.push(obj);
+		do {
+			const doc = docs.pop();
+			const url = await uploadFile(doc, orderId);
 			console.log('> Firebase: File uploaded!');
-			setMessage('File 1 to the cloud.');
-			if (docs.length > 0) {
-				uploadFile(docs.pop(), orderId).then((obj) => {
-					urls.push(obj);
-					console.log('> Firebase: File uploaded!');
-					setMessage('File 2 to the cloud.');
-					if (docs.length > 0) {
-						uploadFile(docs.pop(), orderId).then((obj) => {
-							urls.push(obj);
-							console.log('> Firebase: File uploaded!');
-							console.log(`> Firebase: Current state of urls ${urls}`);
-							callback(urls);
-						});
-					} else {
-						callback(urls);
-					}
-				});
-			} else {
-				callback(urls);
-			}
-		});
+			setMessage('File uploaded to the cloud.');
+			urls.push(url);
+		} while (docs.length !== 0);
+		callback(urls);
 	};
 
 	//Add all the form data and files to the firestore request to create a new order
@@ -124,10 +106,11 @@ const Body = () => {
 				address: address
 			};
 
-			manageUploads(documents, data, (urls) => {
+			uploadAllFiles(documents, data, (urls) => {
 				setHeading('Files uploaded! Adding order to the cloud...');
-				setMessage('File 3 to the cloud.');
+				setMessage('All files uploaded to the cloud.');
 				urls.forEach((item) => (data[item.name] = item.url));
+				console.log(data);
 				Firebase.firestore().collection('orders').doc(orderId).set(data).then(() => {
 					setImg('fas fa-check-circle toast-success');
 					setHeading('Order Added!');
@@ -135,7 +118,7 @@ const Body = () => {
 					console.log(`> Firebase: order data added`);
 					setTimeout(() => {
 						setToast(false);
-						window.location.href('/new-order');
+						window.location.href = '/new-order';
 					}, 3000);
 				});
 			});
