@@ -85,8 +85,6 @@ const Body = () => {
 			const item = document.getElementById('item').value.toLowerCase();
 			const fname = document.getElementById('beneficiary-f').value.toLowerCase();
 			const lname = document.getElementById('beneficiary-l').value.toLowerCase();
-			const carrier = document.getElementById('carrier').value.toLowerCase();
-			const trackingNum = document.getElementById('tracking').value;
 			const country = countryRef.current.selectedOptions[0].text;
 			const province = provinceRef.current.selectedOptions[0].text;
 			const address = document.getElementById('address').value.toLowerCase();
@@ -99,8 +97,6 @@ const Body = () => {
 				item: item,
 				recipientFname: fname,
 				recipientLname: lname,
-				carrier: carrier,
-				trackingNum: trackingNum,
 				country: country,
 				province: province,
 				address: address
@@ -208,36 +204,6 @@ const Body = () => {
 						placeholder="Last name"
 						name="beneficiary-l"
 					/>
-				</div>
-
-				<div className="form-group row">
-					<label htmlFor="carrier" className="col-sm-2 col-form-label">
-						Shipping Carrier
-					</label>
-					<div className="col-sm-10">
-						<input
-							type="text"
-							className="form-control"
-							id="carrier"
-							placeholder="Shipping carrier name"
-							name="carrier"
-							required
-						/>
-					</div>
-				</div>
-				<div className="form-group row">
-					<label htmlFor="tracking" className="col-sm-2 col-form-label">
-						Tracking Number
-					</label>
-					<div className="col-sm-10">
-						<input
-							type="text"
-							className="form-control"
-							id="tracking"
-							placeholder="Tracking Number"
-							name="tracking"
-						/>
-					</div>
 				</div>
 				<h3 className="py-3">Destination</h3>
 				<div className="form-group row">
