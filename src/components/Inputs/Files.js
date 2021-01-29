@@ -4,34 +4,35 @@ import './Files.css';
 
 const FileInput = ({ itemName, quantity, onDelete, onFilesChange }) => {
 	let aviRef = useRef(null);
+	let aviInputRef = useRef(null);
 	let fileRef = useRef(null);
 	const [ files, setFiles ] = useState([]);
+	const [ avi, setAvi ] = useState(null);
 	const [ key, setKey ] = useState('1');
 
 	useEffect(
 		() => {
 			setDefaultImage();
-			onFilesChange(files);
+			onFilesChange(files, avi, itemName);
 		},
-		[ files ]
+		[ files, avi ]
 	);
 
 	const onChange = (e) => {
-		let image = document.getElementById('avi');
-		image.src = URL.createObjectURL(e.target.files[0]);
-		console.log(e.target.files[0]);
+		const url = URL.createObjectURL(e.target.files[0]);
+		aviRef.current.src = url;
+		setAvi(e.target.files[0]);
 	};
 
 	const setDefaultImage = () => {
-		let image = document.getElementById('avi');
 		const url = 'https://www.nbmchealth.com/wp-content/uploads/rem/2018/04/default-placeholder.png';
-		if (image.src === '') image.src = url;
+		if (aviRef.current.src === '') aviRef.current.src = url;
 	};
 
 	const onClick = (type) => {
 		switch (type) {
 			case 'avi':
-				aviRef.current.click();
+				aviInputRef.current.click();
 				return;
 			default:
 				fileRef.current.click();
@@ -52,7 +53,7 @@ const FileInput = ({ itemName, quantity, onDelete, onFilesChange }) => {
 	};
 
 	return (
-		<div className="w-50">
+		<div className="w-100">
 			<Accordion>
 				<Card>
 					<Card.Header className="px-2 py-0">
@@ -61,13 +62,13 @@ const FileInput = ({ itemName, quantity, onDelete, onFilesChange }) => {
 								<button className="btn btn-default btn-file" onClick={() => onClick('avi')}>
 									<input
 										onChange={onChange}
-										ref={aviRef}
+										ref={aviInputRef}
 										type="file"
 										id="avi-1"
 										style={{ display: 'none' }}
 										accept="image/*"
 									/>
-									<img className="text-center" height="50" width="50" id="avi" />
+									<img ref={aviRef} className="text-center" height="50" width="50" id="avi" />
 								</button>
 							</div>
 							<div className="col-md-10 pl-3 text-left pt-2">
@@ -97,17 +98,9 @@ const FileInput = ({ itemName, quantity, onDelete, onFilesChange }) => {
 													onChange={addFile}
 													style={{ display: 'none' }}
 												/>
-												Add File
+												Add File(s)
 											</button>
 											<button className="btn btn-link" type="button" onClick={onDelete}>
-												<input
-													ref={fileRef}
-													type="file"
-													multiple
-													className="btn btn-link py-0 px-3"
-													onChange={addFile}
-													style={{ display: 'none' }}
-												/>
 												Remove Item
 											</button>
 										</span>
@@ -117,11 +110,17 @@ const FileInput = ({ itemName, quantity, onDelete, onFilesChange }) => {
 						</div>
 					</Card.Header>
 					<Accordion.Collapse eventKey={key}>
-						<Card.Body>
+						<Card.Body className="p-0">
 							<ListGroup variant="flush">
 								{files.map((item, index) => {
 									return (
-										<ListGroup.Item key={index}>
+										<ListGroup.Item
+											key={index}
+											className="file-item"
+											style={{
+												borderBottom: index === files.length - 1 ? '1px solid #e8e8e8' : ''
+											}}
+										>
 											{item.name}
 											<button
 												className="btn btn-danger float-right"
