@@ -10,19 +10,17 @@ const Items = () => <Wrapper children={<Body />} current="New Order" active="new
 const Body = () => {
 	//Location declared to determine if the page has form data passed into it or else redirect it to another page
 	const location = useLocation();
-	const [ items, setItems ] = useState([]);
+	const [ items, setItems ] = useState({});
 	/* BLUEPRINT OF THE ITEMS ARRAY TO DETERMINE HOW TO STRUCTURE ITS IMPORTANT FEATURES
-		items: [
-			[0]: {
-					createObjectKey('Item Name') => 'itemname' : {
-						avi: ...avi_obj, 
-						files: ...files_obj,
-						quantity: number,
-						name: formatString(item name) => Item Name
-					},
-				}
+		items: {
+				createObjectKey('Item Name') => 'itemname' : {
+					avi: ...avi_obj, 
+					files: ...files_obj,
+					quantity: number,
+					name: formatString(item name) => Item Name
+				},
 			...
-		]
+		}
 	*/
 
 	useEffect(
@@ -41,14 +39,15 @@ const Body = () => {
 		if (itemAlreadyExists(document.getElementById('item').value.toLowerCase()))
 			return alert('Item is already added. Add a new one');
 		const item = document.getElementById('item').value.toLowerCase();
-
+		const key = createObjectKey(item);
 		const quantity = document.getElementById('quantity').value;
-		setItems((prevState) => [ ...prevState, { name: item, quantity: quantity } ]);
+		setItems({ ...items, [key]: { name: item, quantity: quantity } });
 	};
 
 	//Prevent the user from adding the same item in the state by accident
 	const itemAlreadyExists = (input) => {
-		const results = items.filter((item) => item.name === input);
+		const key = createObjectKey(input);
+		const results = Object.keys(items).filter((item) => items[item] === key);
 		return results.length > 0 ? true : false;
 	};
 
@@ -59,19 +58,21 @@ const Body = () => {
 	};
 
 	//Delete the item from the state
-	const onDelete = (e, position) => {
+	const onDelete = (e, key) => {
 		e.preventDefault();
-		const filtered_array = items.filter((item, index) => index !== position);
-		setItems(filtered_array);
+		let copy = items;
+		delete copy[key];
+		setItems(copy);
 	};
 
 	//Log the current state of the files uploaded to the console
-	const onFilesChange = (files, avi, name) => {
+	const onFilesChange = (files, avi, key) => {
 		console.table(files);
 		console.table(avi);
-		// const key = createObjectKey(name).toLowerCase();
-		// const data = { [key]: { files: files, avi: avi } };
-		// console.log(data);
+		let copy = items[key];
+		copy['files'] = files;
+		copy['avi'] = avi;
+		setItems({ ...items, [key]: copy });
 	};
 
 	//Change the casing of every word in the string
@@ -122,13 +123,15 @@ const Body = () => {
 			</form>
 			<br />
 			<div className="pt-5">
-				{items.map((item, index) => {
-					const name = formatString(item.name);
+				{Object.keys(items).map((key) => {
+					const name = formatString(items[key].name);
+					const quantity = items[key].quantity;
 					return (
 						<FileInput
+							itemKey={key}
 							itemName={name}
-							quantity={item.quantity}
-							onDelete={(e) => onDelete(e, index)}
+							quantity={quantity}
+							onDelete={(e) => onDelete(e, key)}
 							onFilesChange={onFilesChange.bind(this)}
 						/>
 					);
