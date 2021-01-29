@@ -10,7 +10,7 @@ import { Config } from '../../data/Config';
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
-const Order = () => <Wrapper children={<Body />} current="New Client" />;
+const Order = () => <Wrapper children={<Body />} current="New Client" active="new" />;
 
 const Body = () => {
 	const [ img, setImg ] = useState('fas fa-spinner fa-pulse');

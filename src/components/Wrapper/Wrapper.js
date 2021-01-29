@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Drawer from '../Drawer/Drawer';
 import './Wrapper.css';
 
-const Wrapper = ({ children, current }) => {
+const Wrapper = ({ children, current, active }) => {
 	const Wrap = () => {
 		const [ toggle, setToggle ] = useState('');
 
@@ -13,7 +13,7 @@ const Wrapper = ({ children, current }) => {
 
 		return (
 			<div className={`d-flex${toggle}`} id="wrapper">
-				<Drawer />
+				<Drawer active={active} />
 				<div id="page-content-wrapper">
 					<nav className="navbar navbar-expand-lg navbar-light bg-light text-light border-bottom bg-nav">
 						<button className="btn" id="menu-toggle" onClick={(event) => onClick(event)}>

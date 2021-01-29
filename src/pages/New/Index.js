@@ -2,7 +2,7 @@ import React from 'react';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import '../../css/index.css';
 
-const Index = () => <Wrapper children={<Body />} current="New Order" />;
+const Index = () => <Wrapper children={<Body />} current="New Order" active="new" />;
 
 const Body = () => {
 	return (

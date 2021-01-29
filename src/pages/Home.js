@@ -9,7 +9,7 @@ import '../css/index.css';
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
 const Home = () => {
-	return <Wrapper children={<Body />} current="Home" />;
+	return <Wrapper children={<Body />} current="Home" active="dashboard" />;
 };
 
 const Body = () => {
