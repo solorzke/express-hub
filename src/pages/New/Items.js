@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Wrapper from '../../components/Wrapper/Wrapper';
-import { useLocation, Redirect } from 'react-router-dom';
+import { useLocation, useHistory, Redirect } from 'react-router-dom';
 import Input from '../../components/Inputs/Input';
 import FileInput from '../../components/Inputs/Files';
+import Prompt from '../../components/Inputs/Prompt';
 
 //Wrapper for the Body component
 const Items = () => <Wrapper children={<Body />} current="New Order" active="new" />;
@@ -10,7 +11,10 @@ const Items = () => <Wrapper children={<Body />} current="New Order" active="new
 const Body = () => {
 	//Location declared to determine if the page has form data passed into it or else redirect it to another page
 	const location = useLocation();
+	const history = useHistory();
 	const [ items, setItems ] = useState({});
+	const [ promptKey, setPromptKey ] = useState(null);
+	const [ prompt, setPrompt ] = useState(false);
 	/* BLUEPRINT OF THE ITEMS ARRAY TO DETERMINE HOW TO STRUCTURE ITS IMPORTANT FEATURES
 		items: {
 				createObjectKey('Item Name') => 'itemname' : {
@@ -47,7 +51,7 @@ const Body = () => {
 	//Prevent the user from adding the same item in the state by accident
 	const itemAlreadyExists = (input) => {
 		const key = createObjectKey(input);
-		const results = Object.keys(items).filter((item) => items[item] === key);
+		const results = Object.keys(items).filter((item) => item === key);
 		return results.length > 0 ? true : false;
 	};
 
@@ -57,12 +61,27 @@ const Body = () => {
 		addItem();
 	};
 
+	//Once the Continue button is clicked, move on to the next page with the state item data passed in
+	const onFinish = (e) => {
+		e.preventDefault();
+		const data = { items: items, form: location.state };
+		console.log(data);
+		history.push('/new-order/add-order/submit', data);
+	};
+
 	//Delete the item from the state
 	const onDelete = (e, key) => {
 		e.preventDefault();
 		let copy = items;
 		delete copy[key];
 		setItems(copy);
+	};
+
+	//Update the item name, quantity or both
+	const onUpdate = (e, key) => {
+		e.preventDefault();
+		setPrompt(true);
+		setPromptKey(key);
 	};
 
 	//Log the current state of the files uploaded to the console
@@ -75,6 +94,30 @@ const Body = () => {
 		setItems({ ...items, [key]: copy });
 	};
 
+	const onPromptSubmission = (quantity, itemName, key) => {
+		if (itemName !== '') {
+			if (itemAlreadyExists(itemName)) return alert('That item already exists.');
+			//Change the key name by creating a new object with the same properties and deleting the old one
+			const newKey = createObjectKey(itemName.toLowerCase());
+			let itemsCopy = items;
+			itemsCopy[newKey] = items[key];
+			//Delete the old key obj from the new obj
+			delete itemsCopy[key];
+			//assign the updated values to the new obj key
+			itemsCopy[newKey]['name'] = itemName.toLowerCase();
+			// //Update the new updated items state
+			setItems({ ...itemsCopy });
+			//Reassign the key value for the quantity code below to find the new key if updated
+			key = newKey;
+		}
+		if (quantity !== '') {
+			let copy = items[key];
+			copy['quantity'] = quantity;
+			setItems({ ...items, [key]: copy });
+		}
+		setPrompt(false);
+	};
+
 	//Change the casing of every word in the string
 	const formatString = (str) => {
 		//Check if its multi-word
@@ -83,11 +126,31 @@ const Body = () => {
 		return newString.join(' ');
 	};
 
+	//Create a key for the state item
 	const createObjectKey = (name) => name.split(' ').join('');
+
+	//Warn the user before proceeding back to the first page that the current form data here will be lost
+	const warnBeforeProceeding = (e) => {
+		e.preventDefault();
+		if (window.confirm('Are you sure you want to go back to the previous page? All current data will be lost.')) {
+			window.location.href = '/new-order/add-order';
+		}
+	};
 
 	return (
 		<main className="container p-3">
 			{location.state !== undefined ? '' : <Redirect to="error" />}
+			<div class="row">
+				<div class="col-md-12 w-100 client-pane">
+					<button
+						class="float-sm-right btn btn-link btn-sm text-primary mx-2 px-3"
+						onClick={(e) => warnBeforeProceeding(e)}
+					>
+						<i class="fas fa-arrow-left pr-2" />
+						Go Back To Form
+					</button>
+				</div>
+			</div>
 			<h1>Add Items to Order</h1>
 			<p>
 				Enter all of the items you'd like to add to this order before finalizing. Take this opportunity to
@@ -117,7 +180,7 @@ const Body = () => {
 					/>
 				</div>
 				<input type="submit" className="btn btn-primary float-right d-inline" value="Add Item" />
-				<button className="btn-success btn float-right d-inline mr-3" onClick={() => alert('hello')}>
+				<button className="btn-success btn float-right d-inline mr-3" onClick={(e) => onFinish(e)}>
 					Continue
 				</button>
 			</form>
@@ -131,12 +194,21 @@ const Body = () => {
 							itemKey={key}
 							itemName={name}
 							quantity={quantity}
+							onUpdate={(e) => onUpdate(e, key)}
 							onDelete={(e) => onDelete(e, key)}
 							onFilesChange={onFilesChange.bind(this)}
 						/>
 					);
 				})}
 			</div>
+			<Prompt
+				modalShow={prompt}
+				onHide={() => setPrompt(false)}
+				currentItem={items[promptKey] !== undefined ? items[promptKey].name : 'NULL'}
+				currentQuantity={items[promptKey] !== undefined ? items[promptKey].quantity : 'NULL'}
+				onPromptSubmission={onPromptSubmission.bind(this)}
+				itemKey={promptKey}
+			/>
 		</main>
 	);
 };

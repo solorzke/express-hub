@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Accordion, Card, Button, ListGroup } from 'react-bootstrap';
 import './Files.css';
 
-const FileInput = ({ itemName, quantity, onDelete, onFilesChange, itemKey }) => {
+const FileInput = ({ itemName, quantity, onDelete, onFilesChange, itemKey, onUpdate }) => {
 	//Refs target the hidden inputs for avi and files, and the avi image element
 	let aviRef = useRef(null);
 	let aviInputRef = useRef(null);
@@ -110,6 +110,9 @@ const FileInput = ({ itemName, quantity, onDelete, onFilesChange, itemKey }) => 
 													style={{ display: 'none' }}
 												/>
 												Add File(s)
+											</button>
+											<button className="btn btn-link" type="button" onClick={onUpdate}>
+												Update Item
 											</button>
 											<button className="btn btn-link" type="button" onClick={onDelete}>
 												Remove Item
