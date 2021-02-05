@@ -1,0 +1,198 @@
+ .receipt a {
+    color: #3ba4ff;
+    text-decoration: none;
+}
+
+.view-design {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+}
+
+
+.circle {
+    display: none;
+}
+@media (min-width: 768px) {
+    .circle {
+        height: 1600px;
+        width: 1100px;
+        background: linear-gradient(180deg, #3ba4ff, #66a5ff);
+        position: absolute;
+        top: -400px;
+        right: -300px;
+        z-index: -1;
+        border-radius: 50%;
+        display: block;
+    }
+}
+
+.receipt {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    width: 900px;
+    box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, 0.1);
+    vertical-align: top;
+}
+
+.receipt-breakdown {
+    background: linear-gradient(180deg, #2a1e5c, #ee4266);
+    color: #fff;
+    width: 220px;
+    display: inline-block;
+    position: relative;
+    padding: 40px 30px;
+    border-radius: 5px 0 0 5px;
+}
+.receipt-breakdown .receipt-breakdown--list {
+    text-indent: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.receipt-breakdown .receipt-breakdown--list:before {
+    display: none;
+    content: "";
+}
+.receipt-breakdown .receipt-breakdown--list li {
+    padding: 25px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+.receipt-breakdown .receipt-breakdown--list li:last-of-type {
+    border-bottom: none;
+}
+.receipt-breakdown .receipt-breakdown--list .fa {
+    display: inline-block;
+    width: 15%;
+}
+.receipt-breakdown .receipt-breakdown--list .list-content {
+    width: 75%;
+    display: inline-block;
+}
+.receipt-breakdown .receipt-breakdown--list p {
+    font-weight: 300;
+    font-size: 13px;
+    margin: 0;
+}
+.receipt-breakdown .receipt-breakdown--list p .list-bold {
+    font-weight: 600;
+    display: block;
+    font-size: 15px;
+    padding-top: 5px;
+}
+
+.receipt-breakdown--header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 10px 0;
+}
+.receipt-breakdown--header h2 {
+    margin: 0;
+    font-size: 22px;
+    padding-bottom: 15px;
+}
+.receipt-breakdown--header p {
+    padding: 0 0 7px 0;
+    margin: 0;
+}
+
+.receipt-overview {
+    width: 600px;
+    display: inline-block;
+    border-radius: 0 5px 5px 0;
+    padding: 0 30px;
+    background-color: #fff;
+}
+.receipt-overview hr {
+    margin-top: 20px;
+    border-top: 1px solid #c0c5c9;
+    box-shadow: none;
+}
+.receipt-overview .user-info {
+    padding-top: 15px;
+}
+
+.overview-header {
+    padding: 38px 0 20px 0;
+}
+
+.logo {
+    display: inline-block;
+    width: 70px;
+}
+
+.timestamp {
+    display: inline-block;
+    padding-top: 15px;
+}
+.timestamp span {
+    color: #b2b8be;
+    font-size: 15px;
+    font-family: inherit;
+    font-weight: 600;
+}
+.timestamp span:first-of-type {
+    padding: 15px;
+}
+
+.descriptor {
+    width: 60%;
+    padding-top: 8px;
+}
+.descriptor p {
+    font-size: 13px;
+    color: #6e7882;
+    line-height: 1.5;
+}
+
+.overview-body {
+    color: #6e7882;
+}
+.overview-body span {
+    color: #000;
+}
+
+.salutation {
+    text-align: center;
+    font-style: italic;
+    font-size: 130%;
+}
+
+.salutation img {
+    height: 55px;
+    padding-top: 8px;
+}
+
+.user-info-name {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.user-info-text {
+    line-height: 1.5;
+    font-weight: 500;
+}
+.user-info-text a {
+    color: #3ba4ff;
+    text-decoration: none;
+}
+
+.purchase-overview {
+    color: #525961;
+}
+
+.overview-footer {
+    padding: 20px 0 15px;
+    margin-top: 30px;
+    border-top: 1px solid #c0c5c9;
+}
+.overview-footer a {
+    font-size: 13px;
+    font-weight: 600;
+}
+.overview-footer .invoice-id {
+    float: right;
+    font-size: 13px;
+    color: #6e7882;
+    font-weight: 600;
+}
