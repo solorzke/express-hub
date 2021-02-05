@@ -4,6 +4,7 @@ import { useLocation, useHistory, Redirect } from 'react-router-dom';
 import Input from '../../components/Inputs/Input';
 import FileInput from '../../components/Inputs/Files';
 import Prompt from '../../components/Inputs/Prompt';
+import BackButton from '../../components/BackButton/Back';
 
 //Wrapper for the Body component
 const Items = () => <Wrapper children={<Body />} current="New Order" active="new" />;
@@ -129,28 +130,14 @@ const Body = () => {
 	//Create a key for the state item
 	const createObjectKey = (name) => name.split(' ').join('');
 
-	//Warn the user before proceeding back to the first page that the current form data here will be lost
-	const warnBeforeProceeding = (e) => {
-		e.preventDefault();
-		if (window.confirm('Are you sure you want to go back to the previous page? All current data will be lost.')) {
-			window.location.href = '/new-order/add-order';
-		}
-	};
-
 	return (
 		<main className="container p-3">
 			{location.state !== undefined ? '' : <Redirect to="error" />}
-			<div class="row">
-				<div class="col-md-12 w-100 client-pane">
-					<button
-						class="float-sm-right btn btn-link btn-sm text-primary mx-2 px-3"
-						onClick={(e) => warnBeforeProceeding(e)}
-					>
-						<i class="fas fa-arrow-left pr-2" />
-						Go Back To Form
-					</button>
-				</div>
-			</div>
+			<BackButton
+				value="Go Back To Form"
+				message="Are you sure you want to go back to the previous page? All current data will be lost."
+				path="/new-order/add-order"
+			/>
 			<h1>Add Items to Order</h1>
 			<p>
 				Enter all of the items you'd like to add to this order before finalizing. Take this opportunity to
