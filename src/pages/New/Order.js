@@ -15,6 +15,7 @@ const Body = () => {
 	let countryRef = useRef(null);
 	let provinceRef = useRef(null);
 	const history = useHistory();
+	let value = '';
 
 	//State for the texteditor to get all text data, including rich text elements
 	const [ editorValue, setEditorValue ] = useState('No notes written down.');
@@ -41,7 +42,7 @@ const Body = () => {
 			const country = countryRef.current.selectedOptions[0].text;
 			const province = provinceRef.current.selectedOptions[0].text;
 			const address = document.getElementById('address').value.toLowerCase();
-			const editor = editorValue.length !== 0 ? editorValue : 'No notes written down.';
+			// const editor = editorValue.length !== 0 ? editorValue : 'No notes written down.';
 			//Store data into a obj
 			let data = {
 				orderId: orderId,
@@ -51,7 +52,7 @@ const Body = () => {
 				country: country,
 				province: province,
 				address: address,
-				notes: editor
+				notes: value
 			};
 
 			history.push('/new-order/add-order/add-items', data);
@@ -140,20 +141,13 @@ const Body = () => {
 						Address
 					</label>
 					<div className="col-sm-10">
-						<input
-							required
-							type="text"
-							className="form-control"
-							id="address"
-							placeholder="Address"
-							name="address"
-						/>
+						<input type="text" className="form-control" id="address" placeholder="Address" name="address" />
 					</div>
 				</div>
 				<h3 className="py-3">Additional Notes</h3>
 				<div className="form-group row">
 					<div className="col-md-12">
-						<Editor onChange={(data) => setEditorValue(data)} />
+						<Editor onChange={(data) => (value = data)} />
 					</div>
 				</div>
 				<div className="form-group row">
