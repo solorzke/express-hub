@@ -167,7 +167,7 @@ const Item = ({ data }) => {
 	let aviRef = useRef(null);
 	useEffect(() => {
 		if (aviRef !== null) {
-			const url = URL.createObjectURL(data.avi);
+			const url = typeof data.avi === 'object' ? URL.createObjectURL(data.avi) : data.avi;
 			aviRef.current.src = url;
 		}
 	});

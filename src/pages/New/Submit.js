@@ -85,7 +85,7 @@ const Body = () => {
 			let avi = { name: `${key}-avi`, file: item.avi };
 			let allFiles = item.files.map((file) => ({ name: `${key}-${file.name}`, file: file }));
 			documents.push(...allFiles);
-			documents.push(avi);
+			typeof item.avi === 'object' ? documents.push(avi) : urls.push({ name: avi.name, url: avi.file });
 			for (let i = 0; i < documents.length; i++) {
 				const file = documents[i]; //<- { ...file-data }
 				const url = await uploadFile({ name: file.name, file: file.file }, orderId);

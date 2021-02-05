@@ -33,7 +33,10 @@ const FileInput = ({ itemName, quantity, onDelete, onFilesChange, itemKey, onUpd
 	//Set a default image from a url to the avi as a placeholder until it is changed
 	const setDefaultImage = () => {
 		const url = 'https://www.nbmchealth.com/wp-content/uploads/rem/2018/04/default-placeholder.png';
-		if (aviRef.current.src === '') aviRef.current.src = url;
+		if (aviRef.current.src === '') {
+			aviRef.current.src = url;
+			setAvi(url);
+		}
 	};
 
 	//Track what type of action the onClick function was triggered for and execute its case subroutine
