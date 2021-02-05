@@ -17,7 +17,7 @@ const Body = () => {
 	//State data that control the toast message
 	const [ toast, setToast ] = useState(false);
 	const [ img, setImg ] = useState('fas fa-spinner fa-pulse');
-	const [ message, setMessage ] = useState('Adding Client...');
+	const [ message, setMessage ] = useState('Adding Order...');
 	const [ heading, setHeading ] = useState('Processing');
 	const location = useLocation();
 
