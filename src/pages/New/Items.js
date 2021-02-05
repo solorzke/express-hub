@@ -75,7 +75,7 @@ const Body = () => {
 		e.preventDefault();
 		let copy = items;
 		delete copy[key];
-		setItems(copy);
+		setItems({ ...copy });
 	};
 
 	//Update the item name, quantity or both
