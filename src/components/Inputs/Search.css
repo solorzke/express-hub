@@ -1,0 +1,15 @@
+.search-bar {
+    width: 100%;
+    max-height: 200px;
+    overflow: scroll;
+    background-color: #E0E0E2;
+}
+
+.search-bar p:hover {
+    background-color: aliceblue;
+}
+
+.search-bar a:hover {
+    text-decoration: none;
+}
+
