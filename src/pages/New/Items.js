@@ -65,6 +65,10 @@ const Body = () => {
 	//Once the Continue button is clicked, move on to the next page with the state item data passed in
 	const onFinish = (e) => {
 		e.preventDefault();
+		location.state['items'] = [];
+		Object.keys(items).forEach(
+			(item) => (location.state['items'] = [ ...location.state['items'], items[item].name ])
+		);
 		const data = { items: items, form: location.state };
 		console.log(data);
 		history.push('/new-order/add-order/submit', data);
