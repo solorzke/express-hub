@@ -1,9 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import Editor from '../../components/TextEditor/Editor';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
-import 'firebase/storage';
 import Async from 'react-async';
 import { useHistory } from 'react-router-dom';
 
@@ -17,9 +16,6 @@ const Body = () => {
 	const history = useHistory();
 	let value = '';
 
-	//State for the texteditor to get all text data, including rich text elements
-	const [ editorValue, setEditorValue ] = useState('No notes written down.');
-
 	//Request a list of clients from the firestore
 	const getClients = async () => {
 		const snapshot = await Firebase.firestore().collection('clients').get();
@@ -30,6 +26,8 @@ const Body = () => {
 
 	//Format the selected names to first letter uppercase followed by lowercase
 	const formatName = (str = '') => str.charAt(0).toUpperCase() + str.slice(1);
+
+	const setText = (data) => (value = data);
 
 	//Add all the form data and files to the firestore request to create a new order
 	const onSubmit = (e) => {
@@ -63,104 +61,144 @@ const Body = () => {
 
 	return (
 		<main className="container p-3 toast-div">
-			<h1>Add New Order</h1>
-			<p>
-				Select the client that wishes to make a new order, and set the order date when they requested it. Type
-				details about the order's destination including their country, province, and address.
-			</p>
-			<p className="mb-5">
-				You may add additional notes that are pertinent to the order if you wish. Click 'Continue' to proceed to
-				the next page.
-			</p>
-			<form onSubmit={(e) => onSubmit(e)}>
-				<div className="form-group row">
-					<div className="form-group col-md-6">
-						<label>Client</label>
-						<select required ref={clientRef} className="custom-select" id="client">
-							<option value="" disabled selected>
-								Select a client
-							</option>
-							<Async promiseFn={getClients} onReject={(e) => console.log(e.message)}>
-								{({ data, err, isLoading }) => {
-									if (isLoading) return 'Loading...';
-									if (err) return `Something went wrong: ${err.message}`;
-									if (data) {
-										return data.map((item, index) => {
-											let fname = formatName(item.fname);
-											let lname = formatName(item.lname);
-											let full_name = `${fname} ${lname}`;
-											return (
-												<option value={item.id} key={index}>
-													{full_name}
-												</option>
-											);
-										});
-									}
-									return null;
-								}}
-							</Async>
-						</select>
-					</div>
-					<div className="form-group col-md-6">
-						<label htmlFor="order-date">Order Date</label>
-						<input
-							type="date"
-							className="form-control"
-							id="order-date"
-							defaultValue={new Date().toISOString().slice(0, 10)}
-							name="order-date"
-							required
-						/>
-					</div>
-				</div>
-				<h3 className="py-3">Destination</h3>
-				<div className="form-group row">
-					<label htmlFor="country" className="col-sm-2 col-form-label">
-						Country
-					</label>
-					<div className="col-sm-10">
-						<select
-							ref={countryRef}
-							required
-							className="custom-select crs-country"
-							id="country"
-							data-region-id="province"
-						/>
-					</div>
-				</div>
-				<div className="form-group row">
-					<label htmlFor="province" className="col-sm-2 col-form-label">
-						Province
-					</label>
-					<div className="col-sm-10">
-						<select ref={provinceRef} required className="custom-select" id="province" />
-					</div>
-				</div>
-				<div className="form-group row">
-					<label htmlFor="address" className="col-sm-2 col-form-label">
-						Address
-					</label>
-					<div className="col-sm-10">
-						<input type="text" className="form-control" id="address" placeholder="Address" name="address" />
-					</div>
-				</div>
-				<h3 className="py-3">Additional Notes</h3>
-				<div className="form-group row">
-					<div className="col-md-12">
-						<Editor onChange={(data) => (value = data)} />
-					</div>
-				</div>
-				<div className="form-group row">
-					<div className="col-md d-flex justify-content-end align-items-center">
-						<a href="/new-order" className="mr-2 btn btn-md btn-secondary">
-							Cancel
-						</a>
-						<input type="submit" value="Continue" className="btn btn-primary" id="btn-modal" />
-					</div>
-				</div>
-			</form>
+			<Description />
+			<OrderForm
+				formatName={formatName.bind(this)}
+				onSubmit={onSubmit.bind(this)}
+				getClients={getClients.bind(this)}
+				refs={{ client: clientRef, country: countryRef, province: provinceRef }}
+				setText={setText.bind(this)}
+			/>
 		</main>
 	);
 };
+
+const OrderForm = ({ formatName, onSubmit, getClients, refs, setText }) => (
+	<form onSubmit={onSubmit}>
+		<div className="form-group row">
+			<Clients refs={refs} formatName={formatName} getClients={getClients} />
+			<DatePicker />
+		</div>
+		<Destination refs={refs} />
+		<TextEditor setText={setText} />
+		<ConfirmButtons />
+	</form>
+);
+
+const Clients = ({ refs, getClients, formatName }) => (
+	<div className="form-group col-md-6">
+		<label>Client</label>
+		<select required ref={refs.client} className="custom-select" id="client">
+			<option value="" disabled selected>
+				Select a client
+			</option>
+			<Async promiseFn={getClients} onReject={(e) => console.log(e.message)}>
+				{({ data, err, isLoading }) => {
+					if (isLoading) return 'Loading...';
+					if (err) return `Something went wrong: ${err.message}`;
+					if (data) {
+						return data.map((item, index) => {
+							let fname = formatName(item.fname);
+							let lname = formatName(item.lname);
+							let full_name = `${fname} ${lname}`;
+							return (
+								<option value={item.id} key={index}>
+									{full_name}
+								</option>
+							);
+						});
+					}
+					return null;
+				}}
+			</Async>
+		</select>
+	</div>
+);
+
+const DatePicker = () => (
+	<div className="form-group col-md-6">
+		<label htmlFor="order-date">Order Date</label>
+		<input
+			type="date"
+			className="form-control"
+			id="order-date"
+			defaultValue={new Date().toISOString().slice(0, 10)}
+			name="order-date"
+			required
+		/>
+	</div>
+);
+
+const Destination = ({ refs }) => (
+	<div id="destination">
+		<h3 className="py-3">Destination</h3>
+		<div className="form-group row">
+			<label htmlFor="country" className="col-sm-2 col-form-label">
+				Country
+			</label>
+			<div className="col-sm-10">
+				<select
+					ref={refs.country}
+					required
+					className="custom-select crs-country"
+					id="country"
+					data-region-id="province"
+				/>
+			</div>
+		</div>
+		<div className="form-group row">
+			<label htmlFor="province" className="col-sm-2 col-form-label">
+				Province
+			</label>
+			<div className="col-sm-10">
+				<select ref={refs.province} required className="custom-select" id="province" />
+			</div>
+		</div>
+		<div className="form-group row">
+			<label htmlFor="address" className="col-sm-2 col-form-label">
+				Address
+			</label>
+			<div className="col-sm-10">
+				<input type="text" className="form-control" id="address" placeholder="Address" name="address" />
+			</div>
+		</div>
+	</div>
+);
+
+const TextEditor = ({ setText }) => (
+	<div id="editor">
+		<h3 className="py-3">Additional Notes</h3>
+		<div className="form-group row">
+			<div className="col-md-12">
+				<Editor onChange={setText} />
+			</div>
+		</div>
+	</div>
+);
+
+const ConfirmButtons = () => (
+	<div className="form-group row">
+		<div className="col-md d-flex justify-content-end align-items-center">
+			<a href="/new-order" className="mr-2 btn btn-md btn-secondary">
+				Cancel
+			</a>
+			<input type="submit" value="Continue" className="btn btn-primary" id="btn-modal" />
+		</div>
+	</div>
+);
+
+const Description = () => (
+	<div id="description">
+		<h1>Add New Order</h1>
+		<p>
+			Select the client that wishes to make a new order, and set the order date when they requested it. Type
+			details about the order's destination including their country, province, and address.
+		</p>
+		<p className="mb-5">
+			You may add additional notes that are pertinent to the order if you wish. Click 'Continue' to proceed to the
+			next page.
+		</p>
+	</div>
+);
 
 export default Order;

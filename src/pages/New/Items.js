@@ -65,6 +65,7 @@ const Body = () => {
 	//Once the Continue button is clicked, move on to the next page with the state item data passed in
 	const onFinish = (e) => {
 		e.preventDefault();
+		if (Object.keys(items).length === 0) return alert('Please add at least one item for your order.');
 		location.state['items'] = [];
 		Object.keys(items).forEach(
 			(item) => (location.state['items'] = [ ...location.state['items'], items[item].name ])
@@ -137,61 +138,15 @@ const Body = () => {
 	return (
 		<main className="container p-3">
 			{location.state !== undefined ? '' : <Redirect to="error" />}
-			<BackButton
-				value="Go Back To Form"
-				message="Are you sure you want to go back to the previous page? All current data will be lost."
-				path="/new-order/add-order"
+			<Description />
+			<ItemsForm onSubmit={onSubmit.bind(this)} onFinish={onFinish.bind(this)} />
+			<OrderItems
+				items={items}
+				onUpdate={onUpdate.bind(this)}
+				onDelete={onDelete.bind(this)}
+				onFilesChange={onFilesChange.bind(this)}
+				formatString={formatString.bind(this)}
 			/>
-			<h1>Add Items to Order</h1>
-			<p>
-				Enter all of the items you'd like to add to this order before finalizing. Take this opportunity to
-				upload any files or documents that are pertinent to each of your items before proceeding.
-			</p>
-			<p>You can update this information later if you wish.</p>
-			<p className="mb-5">Press 'Continue' when you are done adding items/files to proceed to the final step.</p>
-			<form onSubmit={(e) => onSubmit(e)}>
-				<div className="form-group row">
-					<Input
-						required={false}
-						column="col-md-10"
-						id="item"
-						label="Item"
-						type="text"
-						placeholder="Item Name"
-						name="item"
-					/>
-					<Input
-						required={false}
-						column="col-md-2"
-						id="quantity"
-						label="Quantity"
-						type="number"
-						placeholder="Quantity"
-						name="quantity"
-					/>
-				</div>
-				<input type="submit" className="btn btn-primary float-right d-inline" value="Add Item" />
-				<button className="btn-success btn float-right d-inline mr-3" onClick={(e) => onFinish(e)}>
-					Continue
-				</button>
-			</form>
-			<br />
-			<div className="pt-5">
-				{Object.keys(items).map((key) => {
-					const name = formatString(items[key].name);
-					const quantity = items[key].quantity;
-					return (
-						<FileInput
-							itemKey={key}
-							itemName={name}
-							quantity={quantity}
-							onUpdate={(e) => onUpdate(e, key)}
-							onDelete={(e) => onDelete(e, key)}
-							onFilesChange={onFilesChange.bind(this)}
-						/>
-					);
-				})}
-			</div>
 			<Prompt
 				modalShow={prompt}
 				onHide={() => setPrompt(false)}
@@ -203,5 +158,73 @@ const Body = () => {
 		</main>
 	);
 };
+
+const OrderItems = ({ items, onUpdate, onDelete, onFilesChange, formatString }) => (
+	<div id="order-items">
+		<br />
+		<div className="pt-5">
+			{Object.keys(items).map((key) => {
+				const name = formatString(items[key].name);
+				const quantity = items[key].quantity;
+				return (
+					<FileInput
+						itemKey={key}
+						itemName={name}
+						quantity={quantity}
+						onUpdate={(e) => onUpdate(e, key)}
+						onDelete={(e) => onDelete(e, key)}
+						onFilesChange={onFilesChange}
+					/>
+				);
+			})}
+		</div>
+	</div>
+);
+
+const ItemsForm = ({ onSubmit, onFinish }) => (
+	<form onSubmit={onSubmit}>
+		<div className="form-group row">
+			<Input
+				required={false}
+				column="col-md-10"
+				id="item"
+				label="Item"
+				type="text"
+				placeholder="Item Name"
+				name="item"
+			/>
+			<Input
+				required={false}
+				column="col-md-2"
+				id="quantity"
+				label="Quantity"
+				type="number"
+				placeholder="Quantity"
+				name="quantity"
+			/>
+		</div>
+		<input type="submit" className="btn btn-primary float-right d-inline" value="Add Item" />
+		<button className="btn-success btn float-right d-inline mr-3" onClick={onFinish}>
+			Continue
+		</button>
+	</form>
+);
+
+const Description = () => (
+	<div id="description">
+		<BackButton
+			value="Go Back To Form"
+			message="Are you sure you want to go back to the previous page? All current data will be lost."
+			path="/new-order/add-order"
+		/>
+		<h1>Add Items to Order</h1>
+		<p>
+			Enter all of the items you'd like to add to this order before finalizing. Take this opportunity to upload
+			any files or documents that are pertinent to each of your items before proceeding.
+		</p>
+		<p>You can update this information later if you wish.</p>
+		<p className="mb-5">Press 'Continue' when you are done adding items/files to proceed to the final step.</p>
+	</div>
+);
 
 export default Items;

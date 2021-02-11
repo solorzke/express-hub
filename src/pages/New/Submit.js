@@ -108,7 +108,7 @@ const Body = () => {
 				img={<i className={`${img} p-3`} />}
 			/>
 			<h1>Confirm Order</h1>
-			<p className="mb-2">
+			<p className="mb-2 w-50">
 				Review all the items and form data added to this shipment order before adding it to the system. Keep in
 				mind, you can update or delete this information later.
 			</p>
