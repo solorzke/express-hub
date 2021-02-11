@@ -3,7 +3,7 @@ import './Search.css';
 
 const SearchBar = (props) => {
 	return (
-		<div>
+		<div id="search">
 			<input
 				type="text"
 				class="form-control"
