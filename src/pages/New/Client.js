@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -18,7 +17,6 @@ const Body = () => {
 	const [ message, setMessage ] = useState('Adding Client...');
 	const [ heading, setHeading ] = useState('Processing');
 	const [ gender, setGender ] = useState('other');
-	const history = useHistory();
 	let countryRef = useRef(null);
 	let provinceRef = useRef(null);
 
@@ -30,7 +28,7 @@ const Body = () => {
 		console.log(log);
 		setTimeout(() => {
 			setToast(false);
-			if (action) history.push('/new-order');
+			if (action) window.location.href = '/new-order';
 		}, 3000);
 	};
 
@@ -43,13 +41,14 @@ const Body = () => {
 			let fname = document.getElementById('fname').value.toLowerCase();
 			let lname = document.getElementById('lname').value.toLowerCase();
 			let email = document.getElementById('email').value.toLowerCase();
+			let address = document.getElementById('address').value.toLowerCase();
 			let phone = document.getElementById('phone').value;
 			const country = countryRef.current.selectedOptions[0].text;
 			const province = provinceRef.current.selectedOptions[0].text;
 			let id = Number(new Date()).toString();
 			let clientSince = new Date().toLocaleString().split(',')[0];
 			const data = {
-				fname: fname,  
+				fname: fname,
 				lname: lname,
 				email: email,
 				phone: phone,
@@ -57,7 +56,8 @@ const Body = () => {
 				clientSince: clientSince,
 				country: country,
 				province: province,
-				gender: gender
+				gender: gender,
+				address: address
 			};
 			//Add data to a new document from the collection 'clients' in the firestore
 			await Firebase.firestore().collection('clients').doc(id).set(data);
@@ -82,7 +82,6 @@ const Body = () => {
 
 	//Handle the radio button click for gender selection
 	const onGenderClick = (e, id) => {
-		e.preventDefault();
 		setGender(id);
 	};
 
@@ -110,17 +109,15 @@ const Body = () => {
 
 export default Order;
 
-const ClientForm = ({ refs, onSubmit, onGenderClick }) => {
-	return (
-		<form onSubmit={onSubmit}>
-			<Names />
-			<ContactInfo />
-			<Location refs={refs} />
-			<Gender onClick={onGenderClick} />
-			<ButtonGroup />
-		</form>
-	);
-};
+const ClientForm = ({ refs, onSubmit, onGenderClick }) => (
+	<form onSubmit={onSubmit}>
+		<Names />
+		<ContactInfo />
+		<Location refs={refs} />
+		<Gender onClick={onGenderClick} />
+		<ButtonGroup />
+	</form>
+);
 
 const Gender = ({ onClick }) => {
 	const genders = [
@@ -129,8 +126,8 @@ const Gender = ({ onClick }) => {
 		{ name: 'Other', value: 'other' }
 	];
 	return (
-		<>
-			<label className="pr-5">Gender</label>	
+		<div id="genders">
+			<label className="pr-5">Gender</label>
 			{genders.map((item, index) => (
 				<div className="form-check form-check-inline" key={index}>
 					<input
@@ -146,80 +143,65 @@ const Gender = ({ onClick }) => {
 					</label>
 				</div>
 			))}
-		</>
-	)
-};
-
-const Names = () => {
-	return (
-		<div className="form-group row">
-			<InputCol
-				column="col-md-6"
-				label="First Name"
-				type="text"
-				id="fname"
-				placeholder="First Name"
-				name="fname"
-			/>
-			<InputCol column="col-md-6" label="Last Name" type="text" id="lname" placeholder="Last Name" name="lname" />
 		</div>
 	);
 };
 
-const ContactInfo = () => {
-	return (
-		<>
-			<div className="form-group row">
-				<Input label="Email" type="email" id="email" placeholder="Email Address" name="email" />
-			</div>
-			<div className="form-group row">
-				<Input label="Phone Number" type="tel" id="phone" placeholder="Phone Number" name="phone" />
-			</div>
-		</>
-	);
-};
+const Names = () => (
+	<div className="form-group row">
+		<InputCol column="col-md-6" label="First Name" type="text" id="fname" placeholder="First Name" name="fname" />
+		<InputCol column="col-md-6" label="Last Name" type="text" id="lname" placeholder="Last Name" name="lname" />
+	</div>
+);
 
-const ButtonGroup = () => {
-	return (
+const ContactInfo = () => (
+	<div id="contact">
 		<div className="form-group row">
-			<div className="col-md d-flex justify-content-end align-items-center">
-				<a href="/new-order" className="mr-2 btn btn-md btn-secondary">
-					Cancel
-				</a>
-				<input value="Add Client" type="submit" className="btn btn-primary" id="btn-modal" />
+			<Input label="Email" type="email" id="email" placeholder="Email Address" name="email" />
+		</div>
+		<div className="form-group row">
+			<Input label="Phone Number" type="tel" id="phone" placeholder="Phone Number" name="phone" />
+		</div>
+	</div>
+);
+
+const ButtonGroup = () => (
+	<div className="form-group row">
+		<div className="col-md d-flex justify-content-end align-items-center">
+			<a href="/new-order" className="mr-2 btn btn-md btn-secondary">
+				Cancel
+			</a>
+			<input value="Add Client" type="submit" className="btn btn-primary" id="btn-modal" />
+		</div>
+	</div>
+);
+
+const Location = ({ refs }) => (
+	<div id="location">
+		<div className="form-group row">
+			<label htmlFor="country" className="col-sm-2 col-form-label">
+				Country
+			</label>
+			<div className="col-sm-10">
+				<select
+					ref={refs.country}
+					required
+					className="custom-select crs-country"
+					id="country"
+					data-region-id="province"
+				/>
 			</div>
 		</div>
-	);
-};
-
-const Location = ({ refs }) => {
-	return (
-		<>
-			<div className="form-group row">
-				<label htmlFor="country" className="col-sm-2 col-form-label">
-					Country
-				</label>
-				<div className="col-sm-10">
-					<select
-						ref={refs.country}
-						required
-						className="custom-select crs-country"
-						id="country"
-						data-region-id="province"
-					/>
-				</div>
+		<div className="form-group row">
+			<label htmlFor="province" className="col-sm-2 col-form-label">
+				Province
+			</label>
+			<div className="col-sm-10">
+				<select ref={refs.province} required className="custom-select" id="province" />
 			</div>
-			<div className="form-group row">
-				<label htmlFor="province" className="col-sm-2 col-form-label">
-					Province
-				</label>
-				<div className="col-sm-10">
-					<select ref={refs.province} required className="custom-select" id="province" />
-				</div>
-			</div>
-			<div className="form-group row">
-				<Input label="Address" type="text" id="address" placeholder="Address" name="address" />
-			</div>
-		</>
-	);
-};
+		</div>
+		<div className="form-group row">
+			<Input label="Address" type="text" id="address" placeholder="Address" name="address" />
+		</div>
+	</div>
+);
