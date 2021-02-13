@@ -3,6 +3,8 @@ import { Dropdown } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import File from '../../components/Files/File';
+import Field from '../../components/SlideCard/Field';
+import Empty from '../../components/Placeholders/Empty';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/storage';
@@ -93,7 +95,7 @@ const Body = () => {
 			<hr />
 			<section className="row">
 				<Fields state={client} formatString={formatString.bind(this)} />
-				<Orders state={orders} />
+				<Orders state={orders} names={client} />
 			</section>
 		</main>
 	);
@@ -135,7 +137,7 @@ const Description = ({ state, formatString }) => (
 const ButtonsPane = () => (
 	<div id="buttons-pane">
 		<Menu />
-		<a href="index.php?action=clients" className="float-sm-right btn btn-link btn-sm text-primary mx-2 px-3">
+		<a href="/clients" className="float-sm-right btn btn-link btn-sm text-primary mx-2 px-3">
 			<i className="fas fa-arrow-left pr-3" />Go Back
 		</a>
 	</div>
@@ -175,28 +177,10 @@ const Fields = ({ state, formatString }) => {
 	return <Empty />;
 };
 
-const Field = ({ types, index, item, formatString }) => (
-	<div className={`row border ${types.length !== index + 1 ? 'border-bottom-0' : ''} border-light ml-2`} key={index}>
-		<div
-			className="col-sm-1 d-flex justify-content-center align-items-center"
-			style={{ backgroundColor: '#2a1e5c' }}
-		>
-			<i className={`${item.img}`} style={{ color: '#ee4266' }} />
-		</div>
-		<div className="col-sm-11" style={{ backgroundColor: '#FFFCF2' }}>
-			<h6 className="mb-0 mt-2">{item.name}</h6>
-			<p>
-				<i className="fas fa-chevron-right float-right pr-5" />
-			</p>
-			<p className="text-secondary mb-1">
-				{item.value !== undefined ? formatString(item.value) : 'No Information Available'}
-			</p>
-		</div>
-	</div>
-);
-
-const Orders = ({ state }) => {
-	if (state !== null) {
+const Orders = ({ state, names }) => {
+	if (state !== null && names !== null) {
+		names.fname = names.fname.replace(' ', '%20');
+		names.lname = names.lname.replace(' ', '%20');
 		return (
 			<div className="col-md-6">
 				<h4>Recent Orders</h4>
@@ -207,8 +191,8 @@ const Orders = ({ state }) => {
 				>
 					{Object.keys(state).map((item, index) => {
 						const order = state[item];
-						const items = order.items.length !== 0 ? order.items.join(',') : 'No Items Available';
-						return <File key={index} id={order.orderId} date={order.date} items={items} />;
+						const items = order.items.map((item) => item.name).join(', ');
+						return <File key={index} id={order.orderId} date={order.date} items={items} names={names} />;
 					})}
 				</ol>
 			</div>
@@ -217,12 +201,5 @@ const Orders = ({ state }) => {
 
 	return <Empty />;
 };
-
-const Empty = () => (
-	<div className="col-md-6 d-flex flex-column justify-content-center align-items-center text-secondary">
-		<i className="fas fa-clipboard-list p-5" style={{ fontSize: '50px' }} />
-		<p>No Information Available</p>
-	</div>
-);
 
 export default Client;
