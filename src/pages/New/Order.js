@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import Editor from '../../components/TextEditor/Editor';
 import Firebase from 'firebase/app';
@@ -13,6 +13,7 @@ const Body = () => {
 	let clientRef = useRef(null);
 	let countryRef = useRef(null);
 	let provinceRef = useRef(null);
+	const [ SHIPPING, setShipping ] = useState(false);
 	const history = useHistory();
 	let value = '';
 
@@ -29,6 +30,15 @@ const Body = () => {
 
 	const setText = (data) => (value = data);
 
+	//Format the date from the date picker to MM/DD/YYYY
+	const formatDate = (date) => {
+		const bytes = date.split('-');
+		const month = bytes[1];
+		const day = bytes[2];
+		const year = bytes[0];
+		return `${month}/${day}/${year}`;
+	};
+
 	//Add all the form data and files to the firestore request to create a new order
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -40,17 +50,21 @@ const Body = () => {
 			const country = countryRef.current.selectedOptions[0].text;
 			const province = provinceRef.current.selectedOptions[0].text;
 			const address = document.getElementById('address').value.toLowerCase();
+			const shippingStatus = SHIPPING;
+			const tracking = document.getElementById('tracking').value;
 			// const editor = editorValue.length !== 0 ? editorValue : 'No notes written down.';
 			//Store data into a obj
 			let data = {
 				orderId: orderId,
 				clientId: clientId,
 				clientName: clientName,
-				date: orderDate,
+				date: formatDate(orderDate),
 				country: country,
 				province: province,
 				address: address,
-				notes: value
+				notes: value,
+				shippingStatus: shippingStatus,
+				trackingNum: tracking.length === 0 ? '' : tracking
 			};
 
 			history.push('/new-order/add-order/add-items', data);
@@ -66,6 +80,7 @@ const Body = () => {
 				formatName={formatName.bind(this)}
 				onSubmit={onSubmit.bind(this)}
 				getClients={getClients.bind(this)}
+				setShipping={setShipping.bind(this)}
 				refs={{ client: clientRef, country: countryRef, province: provinceRef }}
 				setText={setText.bind(this)}
 			/>
@@ -73,13 +88,14 @@ const Body = () => {
 	);
 };
 
-const OrderForm = ({ formatName, onSubmit, getClients, refs, setText }) => (
+const OrderForm = ({ formatName, onSubmit, getClients, refs, setText, setShipping }) => (
 	<form onSubmit={onSubmit}>
 		<div className="form-group row">
 			<Clients refs={refs} formatName={formatName} getClients={getClients} />
 			<DatePicker />
 		</div>
 		<Destination refs={refs} />
+		<ShippingStatus onClick={setShipping} />
 		<TextEditor setText={setText} />
 		<ConfirmButtons />
 	</form>
@@ -164,6 +180,51 @@ const Destination = ({ refs }) => (
 		</div>
 	</div>
 );
+
+const ShippingStatus = ({ onClick }) => {
+	const [ SHOW, setShow ] = useState(false);
+	const OPTIONS = [ { name: 'Shipped', value: true }, { name: 'Not Yet Shipped', value: false } ];
+	return (
+		<div id="shipping-tracking">
+			<h3 className="py-3">Shipping Status</h3>
+
+			<label htmlFor="status" className="pr-5">
+				Status
+			</label>
+			{OPTIONS.map((item, index) => (
+				<div className="form-check form-check-inline" key={index}>
+					<input
+						required
+						className="form-check-input"
+						type="radio"
+						name="inlineRadioOptions"
+						id={item.value}
+						value={item.value}
+						onClick={() => {
+							setShow(item.value);
+							onClick(item.value);
+						}}
+					/>
+					<label className="form-check-label" for={item.value}>
+						{item.name}
+					</label>
+				</div>
+			))}
+			<div className={`form-group row${SHOW ? '' : ' d-none'}`}>
+				<label htmlFor="tracking" className="col-sm-2 col-form-label">
+					Tracking Number
+				</label>
+				<input
+					className="col-sm-10 form-control"
+					id="tracking"
+					type="text"
+					placeholder="Enter a tracking number, if available."
+					name="tracking"
+				/>
+			</div>
+		</div>
+	);
+};
 
 const TextEditor = ({ setText }) => (
 	<div id="editor">
