@@ -9,6 +9,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "firebase": "^8.2.2",
+    "html-react-parser": "^1.2.4",
     "react": "^17.0.1",
     "react-async": "^10.0.1",
     "react-bootstrap": "^1.4.3",
