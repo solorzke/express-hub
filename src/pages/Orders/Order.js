@@ -85,7 +85,7 @@ const Body = () => {
 				/>
 			</div>
 
-			<ButtonsPane />
+			<ButtonsPane client={ORDER} />
 			<div className="row">
 				<SlideCard
 					children={<Details state={ORDER} formatString={formatString.bind(this)} />}
@@ -172,9 +172,12 @@ const Details = ({ state, formatString }) => {
 	return <Empty />;
 };
 
-const ButtonsPane = () => (
+const ButtonsPane = ({ client }) => (
 	<div id="buttons-pane" className="p-3">
-		<a href="/clients" className="float-sm-right btn btn-link btn-sm text-primary mx-2 px-3">
+		<a
+			href={`/clients/${client !== null ? client.clientId : ''}`}
+			className="float-sm-right btn btn-link btn-sm text-primary mx-2 px-3"
+		>
 			<i className="fas fa-arrow-left pr-3" />Go Back
 		</a>
 	</div>
