@@ -21,6 +21,18 @@ const Body = () => {
 	const [ heading, setHeading ] = useState('Processing');
 	const location = useLocation();
 
+	//Set the state for the toast props
+	const setToastProps = (toastImg, toastHeading, toastMessage, log, action) => {
+		setImg(toastImg);
+		setHeading(toastHeading);
+		setMessage(toastMessage);
+		console.log(log);
+		setTimeout(() => {
+			setToast(false);
+			if (action) window.location.href = '/new-order';
+		}, 3000);
+	};
+
 	//Upload the files and form data to firebase
 	const onConfirm = (e) => {
 		e.preventDefault();
@@ -38,24 +50,23 @@ const Body = () => {
 				delete data.form.clientName;
 				console.log(data);
 				Firebase.firestore().collection('orders').doc(data.form.orderId).set(data.form).then(() => {
-					setImg('fas fa-check-circle toast-success');
-					setHeading('Order Added!');
-					setMessage(`${message}\n The order was added to the cloud!`);
-					console.log(`> Firebase: order data added`);
-					setTimeout(() => {
-						setToast(false);
-						window.location.href = '/new-order';
-					}, 3000);
+					setToastProps(
+						'fas fa-check-circle toast-success',
+						'Order Added!',
+						`${message}\n The order was added to the cloud!`,
+						'> Firebase: order data added',
+						true
+					);
 				});
 			});
 		} catch (error) {
-			setImg('fas fa-window-close toast-fail');
-			setHeading('Failed');
-			setMessage("Order couldn't be added!");
-			console.log(`> Firebase: Error couldnt send request.\n ${error.message}`);
-			setTimeout(() => {
-				setToast(false);
-			}, 3000);
+			setToastProps(
+				'fas fa-window-close toast-fail',
+				'Failed',
+				`Order couldn't be added!`,
+				`> Firebase: Error couldnt send request.\n ${error.message}`,
+				false
+			);
 		}
 	};
 
