@@ -2,7 +2,7 @@ import React from 'react';
 import { Accordion, Button } from 'react-bootstrap';
 
 const SlideCard = ({ children, title }) => (
-	<Accordion defaultActiveKey="0" className="col-md-6 mb-4 w-50">
+	<Accordion defaultActiveKey="0" className="col-md-12 mb-4 w-50">
 		<h4>
 			{title}
 			<Accordion.Toggle as={Button} variant="link" eventKey="0">
