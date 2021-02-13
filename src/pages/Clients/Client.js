@@ -178,9 +178,18 @@ const Fields = ({ state, formatString }) => {
 };
 
 const Orders = ({ state, names }) => {
+	const sortOrdersByDate = (orders) => {
+		const filteredDates = orders.sort((a, b) => {
+			a = a.date.split('/');
+			b = b.date.split('/');
+			return b[2] - a[2] || b[1] - a[1] || b[0] - a[0];
+		});
+		return filteredDates;
+	};
 	if (state !== null && names !== null) {
 		names.fname = names.fname.replace(' ', '%20');
 		names.lname = names.lname.replace(' ', '%20');
+		const sortedOrders = sortOrdersByDate(state);
 		return (
 			<div className="col-md-6">
 				<h4>Recent Orders</h4>
@@ -189,7 +198,7 @@ const Orders = ({ state, names }) => {
 					id="clients"
 					style={{ backgroundColor: '#FDFFFC' }}
 				>
-					{Object.keys(state).map((item, index) => {
+					{Object.keys(sortedOrders).map((item, index) => {
 						const order = state[item];
 						const items = order.items.map((item) => item.name).join(', ');
 						return <File key={index} id={order.orderId} date={order.date} items={items} names={names} />;
