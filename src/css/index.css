@@ -110,22 +110,7 @@ form > input {
   
 .client-lists {
     width: 100%;
-    max-height: 450px;
+    max-height: 100%;
     overflow: scroll;
     overflow-x: hidden;
 }
-
-.client-lists li::before {
-    color: #ee4266;
-    /* content: counter(my-awesome-counter); */
-}
-
-.client-lists {
-    counter-reset: my-awesome-counter;
-}
-
-.client-lists li {
-    counter-increment: my-awesome-counter;
-}
-
-
