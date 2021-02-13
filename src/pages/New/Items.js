@@ -67,9 +67,14 @@ const Body = () => {
 		e.preventDefault();
 		if (Object.keys(items).length === 0) return alert('Please add at least one item for your order.');
 		location.state['items'] = [];
-		Object.keys(items).forEach(
-			(item) => (location.state['items'] = [ ...location.state['items'], items[item].name ])
-		);
+		Object.keys(items).forEach((item) => {
+			let currentItem = items[item];
+			location.state['items'] = [
+				...location.state['items'],
+				{ name: currentItem.name, quantity: currentItem.quantity }
+			];
+		});
+
 		const data = { items: items, form: location.state };
 		console.log(data);
 		history.push('/new-order/add-order/submit', data);
