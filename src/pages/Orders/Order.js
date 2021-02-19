@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Accordion, Card, ListGroup, Button } from 'react-bootstrap';
+import { fieldTypes } from '../../data/InputTypes';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import SlideCard from '../../components/SlideCard/Card';
 import Field from '../../components/SlideCard/Field';
 import Empty from '../../components/Placeholders/Empty';
+import Loading from '../../components/Placeholders/Loading';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/storage';
@@ -24,19 +26,21 @@ const Body = () => {
 	const [ FNAME, setFname ] = useState('');
 	const [ LNAME, setLname ] = useState('');
 	const [ ORDER, setOrder ] = useState(null);
-	const [ STATUSUPDATING, setStatusUpdating ] = useState(false);
+	const [ UPDATING, setUpdating ] = useState(false);
 
-	useEffect(() => {
-		setFname(QUERY.get('fname').replace('%20', ' '));
-		setLname(QUERY.get('lname').replace('%20', ' '));
-		getOrder();
-	}, []);
-
-	//
+	useEffect(
+		() => {
+			setFname(QUERY.get('fname').replace('%20', ' '));
+			setLname(QUERY.get('lname').replace('%20', ' '));
+			getOrder();
+		},
+		[ UPDATING ]
+	);
 
 	//Get the order data from the firestore based on the orderId
 	const getOrder = async () => {
 		try {
+			console.log('hello');
 			const snapshot = await Firebase.firestore().collection('orders').where('orderId', '==', ORDER_ID).get();
 			if (snapshot.empty) return alert("> Firebase: Didn't return any orders");
 			let order_doc = [];
@@ -48,15 +52,17 @@ const Body = () => {
 		}
 	};
 
-	//Confirm shipping status
-	const setShippingStatus = async (status) => {
+	//Update order to the firestore and refresh the page afterwards
+	const updateOrder = async (e, data) => {
+		e.preventDefault();
 		try {
-			setStatusUpdating(true);
-			await Firebase.firestore().collection('orders').doc(ORDER_ID).update({ shippingStatus: status });
-			setStatusUpdating(false);
+			setUpdating(true);
+			const value = Object.values(data)[0];
+			if (value === '' && typeof value !== 'boolean') return alert('Please enter a value before updating');
+			await Firebase.firestore().collection('orders').doc(ORDER_ID).update(data);
 			window.location.reload();
 		} catch (error) {
-			setStatusUpdating(false);
+			setUpdating(false);
 			console.log("> Firebase: Request couldn't go through");
 			console.error(error);
 		}
@@ -80,19 +86,25 @@ const Body = () => {
 				/>
 				<ShipmentConfirmation
 					shipped={ORDER !== null ? ORDER.shippingStatus : false}
-					onClick={setShippingStatus.bind(this)}
-					progress={STATUSUPDATING}
+					onClick={updateOrder.bind(this)}
+					progress={UPDATING}
 				/>
 			</div>
 
 			<ButtonsPane client={ORDER} />
 			<div className="row">
 				<SlideCard
-					children={<Details state={ORDER} formatString={formatString.bind(this)} />}
+					children={
+						<Details
+							state={ORDER}
+							formatString={formatString.bind(this)}
+							onUpdate={updateOrder.bind(this)}
+						/>
+					}
 					title="Order Details"
 				/>
 				<SlideCard
-					children={<Files state={ORDER} formatString={formatString.bind(this)} />}
+					children={<Documents state={ORDER} formatString={formatString.bind(this)} />}
 					title="Documents"
 				/>
 			</div>
@@ -123,7 +135,6 @@ const ShipmentConfirmation = ({ shipped, onClick, progress }) => {
 	const subtitle = shipped ? itHasShipped : hasNotShipped;
 	const btnText = shipped ? "Change to 'Not ready to ship'" : "Confirm 'Ready to Ship'";
 	const btnColor = shipped ? 'text-danger' : 'text-success';
-	const Loading = () => <i class="fas fa-spinner" />;
 	return (
 		<div id="shipment-confirmation" className="col-md-5 d-flex justify-content-center align-items-end">
 			<Card>
@@ -133,7 +144,12 @@ const ShipmentConfirmation = ({ shipped, onClick, progress }) => {
 					</Card.Title>
 					<Card.Subtitle className="mb-2 text-muted">{subtitle}</Card.Subtitle>
 					<Card.Text>Confirm this order is ready for shipping or revert its status.</Card.Text>
-					<Card.Link variant="link" className={btnColor} as={Button} onClick={() => onClick(!shipped)}>
+					<Card.Link
+						variant="link"
+						className={btnColor}
+						as={Button}
+						onClick={(e) => onClick(e, { shippingStatus: !shipped })}
+					>
 						{progress ? <Loading /> : btnText}
 					</Card.Link>
 				</Card.Body>
@@ -142,29 +158,20 @@ const ShipmentConfirmation = ({ shipped, onClick, progress }) => {
 	);
 };
 
-const Details = ({ state, formatString }) => {
+const Details = ({ state, formatString, onUpdate }) => {
 	if (state !== null) {
-		const item_names = state.items.map((item) => item.name).join(', ');
-		const types = [
-			{ name: 'Order Number', img: 'fas fa-barcode', value: state.orderId },
-			{ name: 'Client Number', img: 'fas fa-id-badge', value: state.clientId },
-			{ name: 'Tracking Number', img: 'fas fa-truck', value: state.trackingNum },
-			{
-				name: 'Shipment Status',
-				img: 'fas fa-passport',
-				value: state.shippingStatus ? 'Shipped' : 'Waiting to be shipped'
-			},
-			{ name: 'Date', img: 'fas fa-calendar-day', value: state.date },
-			{ name: 'Items', img: 'fas fa-box-open', value: item_names },
-			{ name: 'Country', img: 'fas fa-globe-americas pr-1', value: state.country },
-			{ name: 'Province', img: 'fas fa-city pr-1', value: state.province },
-			{ name: 'Address', img: 'far fa-address-card pr-1', value: state.address },
-			{ name: 'Notes', img: 'fas fa-sticky-note', value: state.notes }
-		];
+		const types = fieldTypes(state);
 		return (
 			<div className="client-lists">
 				{types.map((item, index) => (
-					<Field key={index} types={types} index={index} item={item} formatString={formatString} />
+					<Field
+						key={index}
+						types={types}
+						index={index}
+						item={item}
+						formatString={formatString}
+						onUpdate={onUpdate}
+					/>
 				))}
 			</div>
 		);
@@ -183,7 +190,7 @@ const ButtonsPane = ({ client }) => (
 	</div>
 );
 
-const Files = ({ state, formatString }) => {
+const Documents = ({ state, formatString }) => {
 	const findFiles = (data, delimeter) => {
 		let files = [];
 		for (let i = 0; i < data.length; i++) {
