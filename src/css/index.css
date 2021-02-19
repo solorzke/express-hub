@@ -114,3 +114,12 @@ form > input {
     overflow: scroll;
     overflow-x: hidden;
 }
+
+.edit-item {
+    cursor: pointer;
+}
+
+.update-item {
+    background-color: #FFFCF2;
+
+}
