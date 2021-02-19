@@ -1,10 +1,11 @@
 import React from 'react';
 
-const Input = ({ column, label, type, id, placeholder, name, required = true }) => {
+const Input = ({ refs, column, label, type, id, placeholder, name, required = true }) => {
 	return (
 		<div className={`form-group ${column}`}>
 			<label htmlFor={id}>{label}</label>
 			<input
+				ref={refs}
 				required={required}
 				type={type}
 				className="form-control"
