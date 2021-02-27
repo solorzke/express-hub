@@ -6,7 +6,7 @@ const SearchBar = (props) => {
 		<div id="search">
 			<input
 				type="text"
-				class="form-control"
+				className="form-control"
 				placeholder="Search client's name"
 				name="search"
 				id="search"

@@ -9,13 +9,13 @@ const ConfirmButton = ({ onConfirm }) => {
 	};
 
 	return (
-		<div class="row pb-3">
-			<div class="col-md-12 w-100 client-pane">
-				<button class="float-sm-right btn btn-success btn-md mx-2 px-3" onClick={onConfirm}>
+		<div className="row pb-3">
+			<div className="col-md-12 w-100 client-pane">
+				<button className="float-sm-right btn btn-success btn-md mx-2 px-3" onClick={onConfirm}>
 					Confirm
 				</button>
 				<button
-					class="float-sm-right btn btn-secondary btn-md mx-2 px-3"
+					className="float-sm-right btn btn-secondary btn-md mx-2 px-3"
 					onClick={(e) => warnBeforeProceeding(e)}
 				>
 					Cancel

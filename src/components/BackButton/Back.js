@@ -8,13 +8,13 @@ const BackButton = ({ value, message, path }) => {
 	};
 
 	return (
-		<div class="row">
-			<div class="col-md-12 w-100 client-pane">
+		<div className="row">
+			<div className="col-md-12 w-100 client-pane">
 				<button
-					class="float-sm-right btn btn-link btn-sm text-primary mx-2 px-3"
+					className="float-sm-right btn btn-link btn-sm text-primary mx-2 px-3"
 					onClick={(e) => warnBeforeProceeding(e)}
 				>
-					<i class="fas fa-arrow-left pr-2" />
+					<i className="fas fa-arrow-left pr-2" />
 					{value}
 				</button>
 			</div>

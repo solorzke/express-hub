@@ -1,5 +1,5 @@
 import React from 'react';
 
-const Loading = () => <i class="fas fa-spinner" />;
+const Loading = () => <i className="fas fa-spinner" />;
 
 export default Loading;
