@@ -10,12 +10,14 @@ import SubmitOrder from './pages/New/Submit';
 import ClientIndex from './pages/Clients/Index';
 import ClientSummary from './pages/Clients/Client';
 import Order from './pages/Orders/Order';
+import UpdateItems from './pages/Orders/UpdateItems';
 import Error404 from './pages/404';
 
 function App() {
 	return (
 		<Switch>
 			<Route path="/home" component={Home} />
+			<Route path="/order/update-items" component={UpdateItems} />
 			<Route path="/order" component={Order} />
 			<Route path="/clients/:id" component={ClientSummary} />
 			<Route path="/clients" component={ClientIndex} />
