@@ -40,7 +40,6 @@ const Body = () => {
 	//Get the order data from the firestore based on the orderId
 	const getOrder = async () => {
 		try {
-			console.log('hello');
 			const snapshot = await Firebase.firestore().collection('orders').where('orderId', '==', ORDER_ID).get();
 			if (snapshot.empty) return alert("> Firebase: Didn't return any orders");
 			let order_doc = [];
@@ -106,6 +105,11 @@ const Body = () => {
 				<SlideCard
 					children={<Documents state={ORDER} formatString={formatString.bind(this)} />}
 					title="Documents"
+					options={
+						<a href={`/order/update-items?id=${ORDER_ID}`} className="btn btn-link">
+							Add/Update Docs List
+						</a>
+					}
 				/>
 			</div>
 		</main>
@@ -140,7 +144,7 @@ const ShipmentConfirmation = ({ shipped, onClick, progress }) => {
 			<Card>
 				<Card.Body>
 					<Card.Title>
-						<i class="fas fa-dolly pr-3" />Shipment Status
+						<i className="fas fa-dolly pr-3" />Shipment Status
 					</Card.Title>
 					<Card.Subtitle className="mb-2 text-muted">{subtitle}</Card.Subtitle>
 					<Card.Text>Confirm this order is ready for shipping or revert its status.</Card.Text>
@@ -215,7 +219,7 @@ const Documents = ({ state, formatString }) => {
 						quantity: item.quantity,
 						name: formatString(item.name)
 					};
-					return <Item data={data} formatString={formatString} />;
+					return <Item key={index} data={data} formatString={formatString} />;
 				})}
 			</div>
 		);
@@ -249,7 +253,7 @@ const Item = ({ data, formatString }) => {
 		<Accordion.Collapse eventKey={'0'}>
 			<Card.Body className="p-0">
 				<ListGroup variant="flush">
-					{data.files.map((item, index) => <ListItem item={item} index={index} />)}
+					{data.files.map((item, index) => <ListItem key={index} item={item} index={index} />)}
 				</ListGroup>
 			</Card.Body>
 		</Accordion.Collapse>
@@ -257,7 +261,7 @@ const Item = ({ data, formatString }) => {
 
 	const ListItem = ({ item, index }) => (
 		<ListGroup.Item
-			key={index}
+			// key={index}
 			className="file-item"
 			style={{
 				borderBottom: index === data.files.length - 1 ? '1px solid #e8e8e8' : ''

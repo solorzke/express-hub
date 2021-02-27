@@ -74,11 +74,12 @@ const Body = () => {
 	const uploadFile = (doc, orderId) => {
 		return new Promise((resolve) => {
 			// const item = { name: doc.name, file: doc.ref.current.files[0] };
-			const path = `images/${orderId}/${doc.name}`;
+			const formatedDocName = doc.name.replace('.', '_');
+			const path = `images/${orderId}/${formatedDocName}`;
 			Firebase.storage().ref(path).put(doc.file).then((snapshot) => {
 				snapshot.ref.getDownloadURL().then((url) => {
-					console.log({ name: doc.name, url: url });
-					resolve({ name: doc.name, url: url });
+					console.log({ name: formatedDocName, url: url });
+					resolve({ name: formatedDocName, url: url });
 				});
 			});
 		});
