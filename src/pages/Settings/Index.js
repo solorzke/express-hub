@@ -51,28 +51,6 @@ const Body = () => {
 		}
 	};
 
-	const verifyAuthentication = (email, password) => {
-		return new Promise((resolve, reject) => {
-			Firebase.auth()
-				.signInWithEmailAndPassword(email, password)
-				.then((user) =>
-					resolve(() => {
-						console.log('> Firebase: Authentication successful!');
-						return user;
-					})
-				)
-				.catch((error) =>
-					reject(() => {
-						console.log('> Firebase: Authentication failed');
-						alert(
-							"Authentication wasn't sucessful. Please make sure you've entered the correct information."
-						);
-						return error;
-					})
-				);
-		});
-	};
-
 	const onUpdate = async (e, data) => {
 		e.preventDefault();
 		setToast(true);
