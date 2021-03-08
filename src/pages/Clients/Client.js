@@ -7,10 +7,13 @@ import File from '../../components/Files/File';
 import Field from '../../components/SlideCard/Field';
 import Empty from '../../components/Placeholders/Empty';
 import Loading from '../../components/Placeholders/Loading';
+import Toast from '../../components/Toast/Toast';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/storage';
 import { Config } from '../../data/Config';
+import { Button } from 'react-bootstrap';
+import { Fragment } from 'react';
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
@@ -18,14 +21,37 @@ const Client = () => <Wrapper children={<Body />} current="Clients" active="clie
 
 const Body = () => {
 	let { id } = useParams();
+	//State data that control the toast message
+	const [ toast, setToast ] = useState(false);
+	const [ img, setImg ] = useState('fas fa-spinner fa-pulse');
+	const [ message, setMessage ] = useState('Deleting Client and their orders...');
+	const [ heading, setHeading ] = useState('Deleting Client');
+	//State data that controls client and order info
 	const [ client, setClient ] = useState(null);
 	const [ orders, setOrders ] = useState([]);
 	const [ empty, setEmpty ] = useState(false);
+
 	useEffect(() => {
 		console.log(id);
 		getClient();
 		getOrders();
 	}, []);
+
+	//Set the state for the toast props
+	const setToastProps = (toastImg, toastHeading, toastMessage, log, action) => {
+		setImg(toastImg);
+		setHeading(toastHeading);
+		setMessage(toastMessage);
+		console.log(log);
+		setTimeout(() => {
+			setToast(false);
+			setImg('fas fa-spinner fa-pulse');
+			setHeading('Deleting Client and their orders...');
+			setMessage('Deleting Client');
+			console.log('Toast Props set to normal.');
+			if (action) window.location.href = document.referrer;
+		}, 3000);
+	};
 
 	//Get info of the selected client from the firestore
 	const getClient = async () => {
@@ -73,26 +99,41 @@ const Body = () => {
 	};
 
 	//Delete the client from the firestore
-	//1. Delete all files associated with the order id in the storage collection.
+	//1. Delete all files associated with the order id in the 'storage' collection.
 	//2. Delete all orders associated with the client first in the 'Orders' collection.
 	//3. Delete the client document in the 'Clients' collection.
 	const deleteClient = async (e) => {
 		e.preventDefault();
 		try {
-			if (orders.length === 0) throw new Error('No new items found.');
-			for (let i = 0; i < orders.length; i++) {
-				const orderId = orders[i].orderId;
-				await Firebase.storage().ref(`images/${orderId}`).delete();
-				await Firebase.firestore().collection('orders').doc(orderId).delete();
+			const answer = window.confirm(
+				`Are you sure you want to delete this client? All orders, information, and files associated with this account will be erased & cannot be recovered.`
+			);
+			if (answer) {
+				setToast(true);
+				for (let i = 0; i < orders.length; i++) {
+					const orderId = orders[i].orderId;
+					await Firebase.storage().ref(`images/${orderId}`).delete();
+					await Firebase.firestore().collection('orders').doc(orderId).delete();
+				}
+				await Firebase.firestore().collection('clients').doc(id).delete();
+				setToastProps(
+					'fas fa-check-circle toast-success',
+					'Client Deleted!',
+					`The client was deleted from the cloud!`,
+					`> Firebase: Client: ${id} and all his/her orders are deleted from the system.`,
+					true
+				);
 			}
-			await Firebase.firestore().collection('clients').doc(id).delete();
-			console.log(`> Firebase: Client: ${id} and all his/her orders are deleted from the system.`);
-			setTimeout(() => {
-				window.location.href = '/clients';
-			}, 3000);
 		} catch (error) {
-			console.log(`> Firebase: error`);
-			console.log(error);
+			console.error(`> Firebase: Couldn\'t delete the user from Firebase`);
+			console.error(error);
+			setToastProps(
+				'fas fa-window-close toast-fail',
+				'Failed',
+				`Order couldn't be added!`,
+				`> Firebase: Error couldnt send request.\n ${error.message}`,
+				false
+			);
 		}
 	};
 
@@ -107,10 +148,17 @@ const Body = () => {
 	if (client !== null) {
 		return (
 			<main className="container-fluid pt-3">
+				<Toast
+					onClose={() => setToast(false)}
+					show={toast}
+					message={message}
+					heading={heading}
+					img={<i className={`${img} p-3`} />}
+				/>
 				<div className="row">
 					<div className="col-md-12 w-100 client-pane">
 						<Description state={client} formatString={formatString.bind(this)} />
-						<ButtonsPane />
+						<ButtonsPane onDelete={deleteClient.bind(this)} />
 					</div>
 				</div>
 				<hr />
@@ -136,7 +184,7 @@ const Body = () => {
 	}
 };
 
-const Menu = () => (
+const Menu = ({ onDelete }) => (
 	<Dropdown className="float-sm-right">
 		<Dropdown.Toggle id="dropdown-basic">
 			<i className="fas fa-cog" />
@@ -150,7 +198,7 @@ const Menu = () => (
 				<i className="fas fa-download pr-2" />
 				Download Order History
 			</Dropdown.Item>
-			<Dropdown.Item href="#/action-3">
+			<Dropdown.Item as={Button} onClick={onDelete}>
 				<i className="fas fa-trash-alt pr-2" />
 				Delete Client
 			</Dropdown.Item>
@@ -169,9 +217,9 @@ const Description = ({ state, formatString }) => (
 	</div>
 );
 
-const ButtonsPane = () => (
+const ButtonsPane = ({ onDelete }) => (
 	<div id="buttons-pane">
-		<Menu />
+		<Menu onDelete={onDelete} />
 		<a href="/clients" className="float-sm-right btn btn-link btn-sm text-primary mx-2 px-3">
 			<i className="fas fa-arrow-left pr-3" />Go Back
 		</a>
@@ -219,14 +267,23 @@ const Orders = ({ state, names }) => {
 			<div className="col-md-6">
 				<h4>Recent Orders</h4>
 				<ol
-					className="list-group list-group-flush client-lists"
+					className="list-group list-group-flush order-lists"
 					id="clients"
 					style={{ backgroundColor: '#FDFFFC' }}
 				>
 					{Object.keys(sortedOrders).map((item, index) => {
 						const order = state[item];
 						const items = order.items.map((item) => item.name).join(', ');
-						return <File key={index} id={order.orderId} date={order.date} items={items} names={names} />;
+						return (
+							<Fragment>
+								<File key={index} id={order.orderId} date={order.date} items={items} names={names} />
+								<File key={index} id={order.orderId} date={order.date} items={items} names={names} />
+								<File key={index} id={order.orderId} date={order.date} items={items} names={names} />
+								<File key={index} id={order.orderId} date={order.date} items={items} names={names} />
+								<File key={index} id={order.orderId} date={order.date} items={items} names={names} />
+								<File key={index} id={order.orderId} date={order.date} items={items} names={names} />
+							</Fragment>
+						);
 					})}
 				</ol>
 			</div>
