@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -10,7 +9,7 @@ import '../css/login.css';
 
 const Index = () => {
 	const [ progress, setProgress ] = useState(false);
-	const history = useHistory();
+	const [ area, setArea ] = useState('login');
 
 	useEffect(() => {
 		//Initialize Firebase app if it hasn't already
@@ -27,11 +26,28 @@ const Index = () => {
 			Cookie.setCookie('fname', store.data().fname);
 			Cookie.setCookie('uid', user.user.uid);
 			setProgress(false);
-			history.push('/home');
+			window.location.href = '/home';
 		} catch (error) {
 			setProgress(false);
 			alert(error.message);
 		}
+	};
+
+	const onPasswordReset = (e, setFinish) => {
+		const email = document.getElementById('email-for-request').value;
+		//Send password reset request here
+		firebase
+			.auth()
+			.sendPasswordResetEmail(email)
+			.then(() => {
+				console.log('> Firebase: Password reset request sent to the email associated with the account');
+				setFinish(true);
+			})
+			.catch((error) => {
+				console.error("> Firebase: Password reset request couldn't be sent.");
+				setFinish(false);
+				alert('Password request failed. Check your email address and type it again.');
+			});
 	};
 
 	return (
@@ -41,37 +57,20 @@ const Index = () => {
 					<div className="row">
 						<div className="col">
 							<i className="fas fa-dolly login-logo" />
-							<h2 className="pt-5">
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.
-							</h2>
+							<h2 className="pt-5">Come to Mtech Express Shipping, &amp; Let's Get It Done!</h2>
+							<p className="pt-5">A Different Kind Of Company. A Different Kind Of Express Shipping.</p>
 						</div>
-						<div className="col d-flex justify-content-center align-content-center flex-column">
-							<h1 className="text-center">Mtech Express</h1>
-							<form>
-								<input
-									type="email"
-									id="email"
-									name="email"
-									placeholder="Enter your email address"
-									required
+						<div className="col d-flex justify-content-center align-content-end flex-column">
+							{area === 'login' && (
+								<LoginBox
+									authenticate={authenticate.bind(this)}
+									progress={progress}
+									onClick={setArea}
 								/>
-								<br />
-								<input
-									type="password"
-									id="password"
-									name="password"
-									placeholder="Enter your password"
-									required
-								/>
-								<br />
-								{progress && <i className="fas fa-spinner fa-pulse py-3" />}
-								<Button onClick={() => authenticate()} className="login-login-btn">
-									Sign In
-								</Button>
-							</form>
-							<p className="p-3 text-center">
-								Forgot Password? <a href="index.php?action=recover">Recover it now!</a>
-							</p>
+							)}
+							{area === 'forgot-pw' && (
+								<ForgotPasswordBox onPasswordReset={onPasswordReset.bind(this)} onClick={setArea} />
+							)}
 						</div>
 					</div>
 				</div>
@@ -82,5 +81,72 @@ const Index = () => {
 		</div>
 	);
 };
+
+const LoginBox = ({ authenticate, progress, onClick }) => (
+	<React.Fragment>
+		<h1 className="text-center">Mtech Express</h1>
+		<form>
+			<input type="email" id="email" name="email" placeholder="Enter your email address" required />
+			<br />
+			<input type="password" id="password" name="password" placeholder="Enter your password" required />
+			<br />
+			{progress && <i className="fas fa-spinner fa-pulse py-3" />}
+			<Button onClick={() => authenticate()} className="login-login-btn">
+				Sign In
+			</Button>
+		</form>
+		<p className="p-3 text-center">
+			Forgot Password?
+			<button className="btn btn-link p-0 mx-2 my-0 confirm-login-btn" onClick={() => onClick('forgot-pw')}>
+				Recover it now!
+			</button>
+		</p>
+	</React.Fragment>
+);
+
+const ForgotPasswordBox = ({ onPasswordReset, onClick }) => {
+	const [ FINISHED, setFinish ] = useState(false);
+
+	const handleFormSubmit = (e) => {
+		e.preventDefault();
+		onPasswordReset(e, setFinish);
+	};
+
+	return (
+		<div className="animate__animated animate__fadeInRight text-center">
+			<h1 className="text-center">Reset Password</h1>
+			{!FINISHED && <PasswordForm onSubmit={handleFormSubmit.bind(this)} onClick={onClick} />}
+			{FINISHED && <h1 className="text-center">Password reset request was sent to your email address.</h1>}
+			{FINISHED && (
+				<button onClick={() => onClick('login')} className="btn btn-link p-0 mx-2 my-0 confirm-login-btn">
+					Go Back to Login
+				</button>
+			)}
+		</div>
+	);
+};
+
+const PasswordForm = (props) => (
+	<React.Fragment>
+		<form>
+			<input
+				name="email-for-request"
+				id="email-for-request"
+				placeholder="Enter your email address"
+				type="email"
+				required
+			/>
+			<Button onClick={(e) => props.onSubmit(e)} className="login-login-btn my-3">
+				Recover Password
+			</Button>
+		</form>
+		<p className="p-3 text-center">
+			Remember Password?
+			<button className="btn btn-link p-0 mx-2 my-0 confirm-login-btn" onClick={() => props.onClick('login')}>
+				Login In
+			</button>
+		</p>
+	</React.Fragment>
+);
 
 export default Index;
