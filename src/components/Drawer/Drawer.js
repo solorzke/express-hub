@@ -29,11 +29,11 @@ const Drawer = ({ active = '' }) => {
 		<div className="border-right" id="sidebar-wrapper">
 			<div className="sidebar-heading">Mtech Express</div>
 			<div className="list-group list-group-flush">
-				<a href="/home" className="list-group-item list-group-item-action">
+				{/* <a href="/home" className="list-group-item list-group-item-action">
 					<span className={active === 'dashboard' ? 'activated' : ''}>
 						<i className="fas fa-home pr-2" />Dashboard
 					</span>
-				</a>
+				</a> */}
 				<a href="/new-order" className="list-group-item list-group-item-action">
 					<span className={active === 'new' ? 'activated' : ''}>
 						<i className="far fa-plus-square pr-2" />

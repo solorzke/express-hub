@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Cookie } from './data/Cookie';
 import Index from './pages/Index';
-import Home from './pages/Home';
+// import Home from './pages/Home';
 import NewIndex from './pages/New/Index';
 import AddClient from './pages/New/Client';
 import AddOrder from './pages/New/Order';
@@ -25,7 +25,7 @@ function App() {
 		return (
 			<Switch>
 				<Route path="/auth" component={ResetPassword} />
-				<Route path="/home" component={Home} />
+				{/* <Route path="/home" component={Home} /> */}
 				<Route path="/settings" component={SettingsIndex} />
 				<Route path="/search" component={SearchIndex} />
 				<Route path="/order/update-items" component={UpdateItems} />

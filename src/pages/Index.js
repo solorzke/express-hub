@@ -26,7 +26,7 @@ const Index = () => {
 			Cookie.setCookie('fname', store.data().fname);
 			Cookie.setCookie('uid', user.user.uid);
 			setProgress(false);
-			window.location.href = '/home';
+			window.location.href = '/new-order';
 		} catch (error) {
 			setProgress(false);
 			alert(error.message);
