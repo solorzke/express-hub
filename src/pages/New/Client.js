@@ -86,7 +86,7 @@ const Body = () => {
 	};
 
 	return (
-		<main className="container p-3">
+		<main className="container-fluid p-3">
 			<h1>Add New Client</h1>
 			<p className="mb-5">
 				Enter the client's information before proceeding to adding their new shipment order to the database.
