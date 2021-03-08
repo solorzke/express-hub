@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import parse from 'html-react-parser';
-import { TextField, ToggleField, DateField, RichTextField } from './UpdateField';
+import { TextField, ToggleField, DateField, RichTextField, UserEmailField, PasswordField } from './UpdateField';
 
 const Field = ({ types, index, item, formatString, onUpdate }) => {
 	//Trigger a change in the DOM to rerender this component with the update field component
@@ -42,6 +42,26 @@ const Field = ({ types, index, item, formatString, onUpdate }) => {
 						onClick={onUpdate}
 						onCancel={() => setSlide(false)}
 						value={item.value}
+					/>
+				);
+			case 'user-email':
+				return (
+					<UserEmailField
+						storeKey={item.key}
+						heading={item.name}
+						id={`${item.value}-update`}
+						onClick={onUpdate}
+						onCancel={() => setSlide(false)}
+					/>
+				);
+			case 'password':
+				return (
+					<PasswordField
+						storeKey={item.key}
+						heading={item.name}
+						onClick={onUpdate}
+						id={item.value}
+						onCancel={() => setSlide(false)}
 					/>
 				);
 			case 'rich-text':

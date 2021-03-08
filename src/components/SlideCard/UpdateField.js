@@ -122,15 +122,65 @@ export const NumberField = ({ onClick, id, value, heading, onCancel }) => (
 	</div>
 );
 
-export const EmailField = ({ onClick, id, value, heading, onCancel }) => (
-	<div className="form-group row">
-		<Input label={heading} type="email" id={id} placeholder={value} name={id} />
-		<button className="btn btn-link text-danger" onClick={onCancel}>
-			Cancel
-		</button>
-		<button onClick={(e) => onClick(document.getElementById(id).value.toLowerCase())}>Update</button>
-	</div>
-);
+export const UserEmailField = ({ storeKey, heading, onClick, id, onCancel }) => {
+	let oldEmailRef = useRef(null);
+	let newEmailRef = useRef(null);
+	let passwordRef = useRef(null);
+
+	return (
+		<div className="col-md-11 py-1 update-item">
+			<div className="row">
+				<div className="col-md">
+					<label htmlFor={id}>{heading}</label>
+					<input
+						ref={newEmailRef}
+						type="email"
+						className="form-control my-1"
+						id="old-email"
+						placeholder="Enter new email address"
+						name={id}
+						required
+					/>
+					<input
+						ref={oldEmailRef}
+						type="email"
+						className="form-control my-1"
+						id={id}
+						placeholder="Enter current email address"
+						name="old-email"
+						required
+					/>
+
+					<input
+						ref={passwordRef}
+						type="password"
+						className="form-control my-1"
+						id="password"
+						placeholder="Enter current password"
+						name="password"
+						required
+					/>
+				</div>
+				<div className="col-md align-items-center justify-content-start d-flex">
+					<button className="btn btn-link text-danger" onClick={onCancel}>
+						Cancel
+					</button>
+					<button
+						className="btn btn-link"
+						onClick={(e) =>
+							onClick(e, {
+								[storeKey]: newEmailRef.current.value,
+								'old-email': oldEmailRef.current.value,
+								password: passwordRef.current.value
+							})}
+					>
+						Update
+					</button>
+				</div>
+			</div>
+		</div>
+	);
+};
 
 export const RichTextField = ({ storeKey, onClick, onCancel }) => {
 	const [ TEXT, setText ] = useState('');
@@ -146,6 +196,54 @@ export const RichTextField = ({ storeKey, onClick, onCancel }) => {
 						Cancel
 					</button>
 					<button className="btn btn-link" onClick={(e) => onClick(e, { [storeKey]: TEXT })}>
+						Update
+					</button>
+				</div>
+			</div>
+		</div>
+	);
+};
+
+export const PasswordField = ({ storeKey, heading, onClick, id, onCancel }) => {
+	let oldPasswordRef = useRef(null);
+	let newPasswordRef = useRef(null);
+
+	return (
+		<div className="col-md-11 py-1 update-item">
+			<div className="row">
+				<div className="col-md">
+					<label htmlFor={id}>{heading}</label>
+					<input
+						ref={newPasswordRef}
+						type="password"
+						className="form-control my-1"
+						id={id}
+						placeholder="Enter new password"
+						name="new-password"
+						required
+					/>
+					<input
+						ref={oldPasswordRef}
+						type="password"
+						className="form-control my-1"
+						id="old-password"
+						placeholder="Enter old password"
+						name="old-password"
+						required
+					/>
+				</div>
+				<div className="col-md align-items-center justify-content-start d-flex">
+					<button className="btn btn-link text-danger" onClick={onCancel}>
+						Cancel
+					</button>
+					<button
+						className="btn btn-link"
+						onClick={(e) =>
+							onClick(e, {
+								[storeKey]: newPasswordRef.current.value,
+								'old-password': oldPasswordRef.current.value
+							})}
+					>
 						Update
 					</button>
 				</div>
