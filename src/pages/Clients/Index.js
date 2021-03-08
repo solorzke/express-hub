@@ -62,7 +62,7 @@ const Body = () => {
 	};
 
 	return (
-		<main className="container p-3">
+		<main className="container-fluid p-3">
 			<h1>Client Search</h1>
 			<p className="pb-5">
 				Find a client by search or selection to bring up their information and recent orders.
