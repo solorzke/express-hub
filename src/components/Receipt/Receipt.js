@@ -73,7 +73,7 @@ const Overview = (props) => {
 };
 
 const OverviewHeader = ({ logo }) => {
-	const day = new Date().getDay();
+	const day = new Date().getDate();
 	const year = new Date().getFullYear();
 	const month = () => {
 		const months = [
