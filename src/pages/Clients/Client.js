@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import { fieldTypes } from '../../data/ClientInputTypes';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import File from '../../components/Files/File';
 import Field from '../../components/SlideCard/Field';
 import Empty from '../../components/Placeholders/Empty';
+import Loading from '../../components/Placeholders/Loading';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/storage';
@@ -18,6 +20,7 @@ const Body = () => {
 	let { id } = useParams();
 	const [ client, setClient ] = useState(null);
 	const [ orders, setOrders ] = useState([]);
+	const [ empty, setEmpty ] = useState(false);
 	useEffect(() => {
 		console.log(id);
 		getClient();
@@ -28,13 +31,14 @@ const Body = () => {
 	const getClient = async () => {
 		try {
 			const snapshot = await Firebase.firestore().collection('clients').where('id', '==', id).get();
-			if (snapshot.empty) return alert("> Firebase: User doesn't exist");
+			if (snapshot.empty)
+				return alert('There is no user that matches this client id. Please go back and try again.');
 			let client = [];
 			snapshot.forEach((doc) => client.push(doc.data()));
 			setClient(client[0]);
 		} catch (error) {
-			console.log(`> Firebase: error`);
-			console.log(error);
+			console.error(`> Firebase: Couldn\'t get user information`);
+			console.error(error);
 		}
 	};
 
@@ -42,13 +46,29 @@ const Body = () => {
 	const getOrders = async () => {
 		try {
 			const snapshot = await Firebase.firestore().collection('orders').where('clientId', '==', id).get();
-			if (snapshot.empty) return alert("> Firebase: User doesn't exist");
+			if (snapshot.empty) return setEmpty(true);
 			let orders = [];
 			snapshot.forEach((doc) => orders.push(doc.data()));
 			setOrders(orders);
 		} catch (error) {
-			console.log(`> Firebase: error`);
-			console.log(error);
+			console.error(`> Firebase: Couldn\'t get orders.`);
+			console.error(error);
+		}
+	};
+
+	//Update order to the firestore and refresh the page afterwards
+	const updateClient = async (e, data) => {
+		e.preventDefault();
+		try {
+			// setUpdating(true);
+			const value = Object.values(data)[0].toLowerCase();
+			if (value === '' && typeof value !== 'boolean') return alert('Please enter a value before updating');
+			await Firebase.firestore().collection('clients').doc(id).update(data);
+			window.location.reload();
+		} catch (error) {
+			// setUpdating(false);
+			console.log("> Firebase: Request couldn't go through");
+			console.error(error);
 		}
 	};
 
@@ -84,21 +104,36 @@ const Body = () => {
 		return newString.join(' ');
 	};
 
-	return (
-		<main className="container-fluid pt-3">
-			<div className="row">
-				<div className="col-md-12 w-100 client-pane">
-					<Description state={client} formatString={formatString.bind(this)} />
-					<ButtonsPane />
+	if (client !== null) {
+		return (
+			<main className="container-fluid pt-3">
+				<div className="row">
+					<div className="col-md-12 w-100 client-pane">
+						<Description state={client} formatString={formatString.bind(this)} />
+						<ButtonsPane />
+					</div>
 				</div>
-			</div>
-			<hr />
-			<section className="row">
-				<Fields state={client} formatString={formatString.bind(this)} />
-				<Orders state={orders} names={client} />
-			</section>
-		</main>
-	);
+				<hr />
+				<section className="row">
+					<Fields state={client} formatString={formatString.bind(this)} onUpdate={updateClient.bind(this)} />
+					{!empty && <Orders state={orders} names={client} />}
+					{empty && <EmptyBox />}
+				</section>
+			</main>
+		);
+	} else {
+		return (
+			<main
+				className="container-fluid pt-3 justify-content-center align-items-center d-flex flex-column"
+				style={{ fontSize: 100, height: '50%', color: '#2a1e5c' }}
+			>
+				<Loading />
+				<h2 className="p-5" style={{ fontSize: 32 }}>
+					Please Wait...
+				</h2>
+			</main>
+		);
+	}
 };
 
 const Menu = () => (
@@ -143,32 +178,22 @@ const ButtonsPane = () => (
 	</div>
 );
 
-const Fields = ({ state, formatString }) => {
-	const types = [
-		{ name: 'First Name', img: 'fas fa-signature pr-1' },
-		{ name: 'Last Name', img: 'fas fa-signature pr-1' },
-		{ name: 'Gender', img: 'fas fa-venus-mars pr-1' },
-		{ name: 'Email Address', img: 'fas fa-at pr-1' },
-		{ name: 'Phone Number', img: 'fas fa-phone pr-1' },
-		{ name: 'Country', img: 'fas fa-globe-americas pr-1' },
-		{ name: 'Province', img: 'fas fa-city pr-1' },
-		{ name: 'Address', img: 'far fa-address-card pr-1' }
-	];
+const Fields = ({ state, formatString, onUpdate }) => {
 	if (state !== null) {
-		types[0]['value'] = state.fname;
-		types[1]['value'] = state.lname;
-		types[2]['value'] = state.gender;
-		types[3]['value'] = state.email;
-		types[4]['value'] = state.phone;
-		types[5]['value'] = state.country;
-		types[6]['value'] = state.province;
-		types[7]['value'] = state.address;
+		const types = fieldTypes(state);
 		return (
-			<div className="col-md-6 mb-4">
+			<div className="col-md-6">
 				<h4>Information</h4>
 				<div className="client-lists">
 					{types.map((item, index) => (
-						<Field types={types} index={index} item={item} formatString={formatString} />
+						<Field
+							key={index}
+							types={types}
+							index={index}
+							item={item}
+							formatString={formatString}
+							onUpdate={onUpdate}
+						/>
 					))}
 				</div>
 			</div>
@@ -210,5 +235,18 @@ const Orders = ({ state, names }) => {
 
 	return <Empty />;
 };
+
+const EmptyBox = () => (
+	<div className="col-md-6">
+		<h4>Recent Orders</h4>
+		<div className="text-center justify-content-center align-items-center d-flex flex-column">
+			<i
+				className="fab fa-creative-commons-zero p-5"
+				style={{ fontSize: 100, color: '#ee4266', backgroundColor: '#2a1e5c', borderRadius: 20 }}
+			/>
+			<p className="pt-5">This client hasn't made any orders yet.</p>
+		</div>
+	</div>
+);
 
 export default Client;
