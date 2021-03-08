@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Accordion, Card, ListGroup, Button } from 'react-bootstrap';
 import { fieldTypes } from '../../data/InputTypes';
@@ -7,6 +7,7 @@ import SlideCard from '../../components/SlideCard/Card';
 import Field from '../../components/SlideCard/Field';
 import Empty from '../../components/Placeholders/Empty';
 import Loading from '../../components/Placeholders/Loading';
+import Receipt from '../../components/Receipt/Receipt';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/storage';
@@ -111,6 +112,26 @@ const Body = () => {
 						</a>
 					}
 				/>
+				<SlideCard
+					children={
+						ORDER !== null ? (
+							<Receipt
+								form={{
+									clientName: formatString(`${FNAME} ${LNAME}`),
+									address: ORDER.address,
+									country: ORDER.country,
+									province: ORDER.province,
+									orderId: ORDER_ID,
+									date: ORDER.date
+								}}
+								files={[]}
+							/>
+						) : (
+							<React.Fragment />
+						)
+					}
+					title="Receipt"
+				/>
 			</div>
 		</main>
 	);
@@ -185,10 +206,7 @@ const Details = ({ state, formatString, onUpdate }) => {
 
 const ButtonsPane = ({ client }) => (
 	<div id="buttons-pane" className="p-3">
-		<a
-			href={`/clients/${client !== null ? client.clientId : ''}`}
-			className="float-sm-right btn btn-link btn-sm text-primary mx-2 px-3"
-		>
+		<a href={document.referrer} className="float-sm-right btn btn-link btn-sm text-primary mx-2 px-3">
 			<i className="fas fa-arrow-left pr-3" />Go Back
 		</a>
 	</div>
