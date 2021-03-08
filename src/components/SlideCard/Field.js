@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
 import parse from 'html-react-parser';
-import { TextField, ToggleField, DateField, RichTextField, UserEmailField, PasswordField } from './UpdateField';
+import {
+	TextField,
+	ToggleField,
+	DateField,
+	RichTextField,
+	UserEmailField,
+	PasswordField,
+	RadioField,
+	ClientEmailField,
+	PhoneField
+} from './UpdateField';
 
 const Field = ({ types, index, item, formatString, onUpdate }) => {
 	//Trigger a change in the DOM to rerender this component with the update field component
@@ -54,6 +64,28 @@ const Field = ({ types, index, item, formatString, onUpdate }) => {
 						onCancel={() => setSlide(false)}
 					/>
 				);
+			case 'client-email':
+				return (
+					<ClientEmailField
+						storeKey={item.key}
+						heading={item.name}
+						id={`${item.value}-update`}
+						onClick={onUpdate}
+						onCancel={() => setSlide(false)}
+					/>
+				);
+
+			case 'tel':
+				return (
+					<PhoneField
+						storeKey={item.key}
+						heading={item.name}
+						value={item.value}
+						id={item.value}
+						onClick={onUpdate}
+						onCancel={() => setSlide(false)}
+					/>
+				);
 			case 'password':
 				return (
 					<PasswordField
@@ -61,6 +93,16 @@ const Field = ({ types, index, item, formatString, onUpdate }) => {
 						heading={item.name}
 						onClick={onUpdate}
 						id={item.value}
+						onCancel={() => setSlide(false)}
+					/>
+				);
+			case 'radio':
+				return (
+					<RadioField
+						storeKey={item.key}
+						heading={item.name}
+						options={item.options}
+						onClick={onUpdate}
 						onCancel={() => setSlide(false)}
 					/>
 				);

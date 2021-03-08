@@ -24,10 +24,10 @@ export const TextField = ({ storeKey, heading, value, onClick, id, onCancel }) =
 	);
 };
 
-export const RadioField = ({ storeKey, heading, onClick, id, options, onCancel }) => {
-	const [ SELECTED, setSelected ] = useState(null);
+export const RadioField = ({ storeKey, heading, onClick, options, onCancel }) => {
+	const [ SELECTED, setSelected ] = useState('');
 	return (
-		<div id={id}>
+		<div className="update-item col-md-11 py-2">
 			<label className="pr-5">{heading}</label>
 			{options.map((item, index) => (
 				<div className="form-check form-check-inline" key={index}>
@@ -47,7 +47,7 @@ export const RadioField = ({ storeKey, heading, onClick, id, options, onCancel }
 			<button className="btn btn-link text-danger" onClick={onCancel}>
 				Cancel
 			</button>
-			<button className="btn btn-link" onClick={(e) => onClick(SELECTED)}>
+			<button className="btn btn-link" onClick={(e) => onClick(e, { [storeKey]: SELECTED })}>
 				Update
 			</button>
 		</div>
@@ -110,17 +110,31 @@ export const DateField = ({ storeKey, onClick, onCancel, value }) => {
 	);
 };
 
-export const NumberField = ({ onClick, id, value, heading, onCancel }) => (
-	<div className="form-group row">
-		<Input label={heading} type="tel" id={id} placeholder={value} name={id} />
-		<button className="btn btn-link text-danger" onClick={onCancel}>
-			Cancel
-		</button>
-		<button className="btn btn-link" onClick={(e) => onClick(document.getElementById(id).value)}>
-			Update
-		</button>
-	</div>
-);
+export const PhoneField = ({ storeKey, onClick, id, value, heading, onCancel }) => {
+	let phoneRef = useRef(null);
+
+	return (
+		<div className="col-md-11 py-1 update-item">
+			<div className="row">
+				<div className="col-md">
+					<label htmlFor={id}>{heading}</label>
+					<input ref={phoneRef} type="tel" className="form-control" id={id} placeholder={value} name={id} />
+				</div>
+				<div className="col-md align-items-end justify-content-start d-flex">
+					<button className="btn btn-link text-danger" onClick={onCancel}>
+						Cancel
+					</button>
+					<button
+						className="btn btn-link"
+						onClick={(e) => onClick(e, { [storeKey]: phoneRef.current.value })}
+					>
+						Update
+					</button>
+				</div>
+			</div>
+		</div>
+	);
+};
 
 export const UserEmailField = ({ storeKey, heading, onClick, id, onCancel }) => {
 	let oldEmailRef = useRef(null);
@@ -173,6 +187,39 @@ export const UserEmailField = ({ storeKey, heading, onClick, id, onCancel }) => 
 								'old-email': oldEmailRef.current.value,
 								password: passwordRef.current.value
 							})}
+					>
+						Update
+					</button>
+				</div>
+			</div>
+		</div>
+	);
+};
+
+export const ClientEmailField = ({ storeKey, heading, onClick, id, onCancel }) => {
+	let emailRef = useRef(null);
+
+	return (
+		<div className="col-md-11 py-1 update-item">
+			<div className="row">
+				<div className="col-md">
+					<label htmlFor={id}>{heading}</label>
+					<input
+						ref={emailRef}
+						type="email"
+						className="form-control my-1"
+						id="email"
+						placeholder="Enter new email address"
+						name={id}
+					/>
+				</div>
+				<div className="col-md align-items-end justify-content-start d-flex">
+					<button className="btn btn-link text-danger" onClick={onCancel}>
+						Cancel
+					</button>
+					<button
+						className="btn btn-link"
+						onClick={(e) => onClick(e, { [storeKey]: emailRef.current.value })}
 					>
 						Update
 					</button>
