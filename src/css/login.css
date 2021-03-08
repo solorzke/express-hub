@@ -49,6 +49,6 @@
     border-bottom-style: groove;
 }
 
-.login a, .login a:hover {
+.login .confirm-login-btn, .login .confirm-login-btn:hover {
     color: #ee4266;
 }
