@@ -190,10 +190,6 @@ const Menu = ({ onDelete }) => (
 			<i className="fas fa-cog" />
 		</Dropdown.Toggle>
 		<Dropdown.Menu>
-			<Dropdown.Item href="#/action-1">
-				<i className="far fa-user pr-2" />
-				Update Client Info
-			</Dropdown.Item>
 			<Dropdown.Item href="#/action-2">
 				<i className="fas fa-download pr-2" />
 				Download Order History
@@ -274,16 +270,7 @@ const Orders = ({ state, names }) => {
 					{Object.keys(sortedOrders).map((item, index) => {
 						const order = state[item];
 						const items = order.items.map((item) => item.name).join(', ');
-						return (
-							<Fragment>
-								<File key={index} id={order.orderId} date={order.date} items={items} names={names} />
-								<File key={index} id={order.orderId} date={order.date} items={items} names={names} />
-								<File key={index} id={order.orderId} date={order.date} items={items} names={names} />
-								<File key={index} id={order.orderId} date={order.date} items={items} names={names} />
-								<File key={index} id={order.orderId} date={order.date} items={items} names={names} />
-								<File key={index} id={order.orderId} date={order.date} items={items} names={names} />
-							</Fragment>
-						);
+						return <File key={index} id={order.orderId} date={order.date} items={items} names={names} />;
 					})}
 				</ol>
 			</div>
