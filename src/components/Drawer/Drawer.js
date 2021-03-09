@@ -45,6 +45,11 @@ const Drawer = ({ active = '' }) => {
 						<i className="fas fa-users pr-2" />Clients
 					</span>
 				</a>
+				<a href="/orders" className="list-group-item list-group-item-action">
+					<span className={active === 'orders' ? 'activated' : ''}>
+						<i className="fas fa-file-invoice pr-2" />Orders
+					</span>
+				</a>
 				<a href="/search" className="list-group-item list-group-item-action">
 					<span className={active === 'search' ? 'activated' : ''}>
 						<i className="fas fa-search pr-2" />Search
