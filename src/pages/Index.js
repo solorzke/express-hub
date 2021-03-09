@@ -16,7 +16,8 @@ const Index = () => {
 		firebase.apps.length === 0 ? firebase.initializeApp(Config) : firebase.app();
 	});
 
-	const authenticate = async () => {
+	const authenticate = async (e) => {
+		e.preventDefault();
 		setProgress(true);
 		let email = document.getElementById('email').value;
 		let password = document.getElementById('password').value;
@@ -33,7 +34,7 @@ const Index = () => {
 		}
 	};
 
-	const onPasswordReset = (e, setFinish) => {
+	const onPasswordReset = (setFinish) => {
 		const email = document.getElementById('email-for-request').value;
 		//Send password reset request here
 		firebase
@@ -85,15 +86,13 @@ const Index = () => {
 const LoginBox = ({ authenticate, progress, onClick }) => (
 	<React.Fragment>
 		<h1 className="text-center">Mtech Express</h1>
-		<form>
+		<form onSubmit={authenticate}>
 			<input type="email" id="email" name="email" placeholder="Enter your email address" required />
 			<br />
 			<input type="password" id="password" name="password" placeholder="Enter your password" required />
 			<br />
 			{progress && <i className="fas fa-spinner fa-pulse py-3" />}
-			<Button onClick={() => authenticate()} className="login-login-btn">
-				Sign In
-			</Button>
+			<input type="submit" value="Sign In" className="login-login-btn btn btn-light" />
 		</form>
 		<p className="p-3 text-center">
 			Forgot Password?
@@ -109,14 +108,18 @@ const ForgotPasswordBox = ({ onPasswordReset, onClick }) => {
 
 	const handleFormSubmit = (e) => {
 		e.preventDefault();
-		onPasswordReset(e, setFinish);
+		onPasswordReset(setFinish);
 	};
 
 	return (
 		<div className="animate__animated animate__fadeInRight text-center">
 			<h1 className="text-center">Reset Password</h1>
 			{!FINISHED && <PasswordForm onSubmit={handleFormSubmit.bind(this)} onClick={onClick} />}
-			{FINISHED && <h1 className="text-center">Password reset request was sent to your email address.</h1>}
+			{FINISHED && (
+				<h2 className="animate__animated animate__fadeIn text-center">
+					Password reset request was sent to your email address.
+				</h2>
+			)}
 			{FINISHED && (
 				<button onClick={() => onClick('login')} className="btn btn-link p-0 mx-2 my-0 confirm-login-btn">
 					Go Back to Login
@@ -128,7 +131,7 @@ const ForgotPasswordBox = ({ onPasswordReset, onClick }) => {
 
 const PasswordForm = (props) => (
 	<React.Fragment>
-		<form>
+		<form onSubmit={props.onSubmit}>
 			<input
 				name="email-for-request"
 				id="email-for-request"
@@ -136,9 +139,7 @@ const PasswordForm = (props) => (
 				type="email"
 				required
 			/>
-			<Button onClick={(e) => props.onSubmit(e)} className="login-login-btn my-3">
-				Recover Password
-			</Button>
+			<input type="submit" value="Recover Password" className="login-login-btn btn btn-light" />
 		</form>
 		<p className="p-3 text-center">
 			Remember Password?
