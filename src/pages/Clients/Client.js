@@ -6,7 +6,7 @@ import Wrapper from '../../components/Wrapper/Wrapper';
 import File from '../../components/Files/File';
 import Field from '../../components/SlideCard/Field';
 import Empty from '../../components/Placeholders/Empty';
-import Loading from '../../components/Placeholders/Loading';
+import LoadingPage from '../../components/Placeholders/LoadingPage';
 import Toast from '../../components/Toast/Toast';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -170,17 +170,7 @@ const Body = () => {
 			</main>
 		);
 	} else {
-		return (
-			<main
-				className="container-fluid pt-3 justify-content-center align-items-center d-flex flex-column"
-				style={{ fontSize: 100, height: '50%', color: '#2a1e5c' }}
-			>
-				<Loading />
-				<h2 className="p-5" style={{ fontSize: 32 }}>
-					Please Wait...
-				</h2>
-			</main>
-		);
+		return <LoadingPage />;
 	}
 };
 

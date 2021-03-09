@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import Field from '../../components/SlideCard/Field';
 import Empty from '../../components/Placeholders/Empty';
-import Loading from '../../components/Placeholders/Loading';
+import LoadingPage from '../../components/Placeholders/LoadingPage';
 import Toast from '../../components/Toast/Toast';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -113,21 +113,25 @@ const Body = () => {
 		return newString.join(' ');
 	};
 
-	return (
-		<main className="container-fluid pt-3">
-			<div className="row">
-				<Toast
-					onClose={() => setToast(false)}
-					show={TOAST}
-					message={MESSAGE}
-					heading={HEADING}
-					img={<i className={`${IMG} p-3`} />}
-				/>
-				<Description />
-				<Details state={USER} formatString={formatString.bind(this)} onUpdate={onUpdate.bind(this)} />
-			</div>
-		</main>
-	);
+	if (USER !== null) {
+		return (
+			<main className="container-fluid pt-3">
+				<div className="row">
+					<Toast
+						onClose={() => setToast(false)}
+						show={TOAST}
+						message={MESSAGE}
+						heading={HEADING}
+						img={<i className={`${IMG} p-3`} />}
+					/>
+					<Description />
+					<Details state={USER} formatString={formatString.bind(this)} onUpdate={onUpdate.bind(this)} />
+				</div>
+			</main>
+		);
+	} else {
+		return <LoadingPage />;
+	}
 };
 
 const Details = ({ state, formatString, onUpdate }) => {
