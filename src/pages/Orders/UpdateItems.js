@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Config } from '../../data/Config';
 import { useLocation } from 'react-router-dom';
 import { Accordion, Button, ListGroup, Card } from 'react-bootstrap';
-import Undo from '../../components/Undo/Undo';
+import SlideCard from '../../components/SlideCard/Card';
 import Loading from '../../components/Placeholders/Loading';
+import LoadingPage from '../../components/Placeholders/LoadingPage';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import BackButton from '../../components/BackButton/Back';
 import Input from '../../components/Inputs/Input';
@@ -15,7 +16,7 @@ import 'firebase/storage';
 const useQuery = () => new URLSearchParams(useLocation().search);
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
-const UpdateItems = () => <Wrapper children={<Body />} active="clients" current="Update Items List" />;
+const UpdateItems = () => <Wrapper children={<Body />} active="orders" current="Update Items List" />;
 
 const Body = () => {
 	const ORDER_ID = useQuery().get('id');
@@ -27,8 +28,10 @@ const Body = () => {
 	useEffect(
 		() => {
 			if (ORDER === null) getOrder();
-			document.getElementById('item').value = '';
-			document.getElementById('quantity').value = '1';
+			if (ORDER !== null) {
+				document.getElementById('item').value = '';
+				document.getElementById('quantity').value = '1';
+			}
 		},
 		[ ORDER, ITEMS, PROMPT, PROMPTKEY ]
 	);
@@ -209,9 +212,20 @@ const Body = () => {
 		return newString.join(' ');
 	};
 	//Set a default image from a url to the avi as a placeholder until it is changed
-	const setDefaultImage = (item) => {
+	const setDefaultImage = (item, key) => {
 		const placeholder = 'https://www.nbmchealth.com/wp-content/uploads/rem/2018/04/default-placeholder.png';
-		return item.hasOwnProperty('avi') ? item.avi.path : placeholder;
+		if (item.hasOwnProperty('avi')) {
+			return item.avi.path;
+		} else {
+			setItems((prevState) => ({
+				...prevState,
+				[key]: {
+					...prevState[key],
+					avi: { path: placeholder }
+				}
+			}));
+			return placeholder;
+		}
 	};
 
 	//Create a key for the state item
@@ -289,26 +303,45 @@ const Body = () => {
 		}
 		setPrompt(false);
 	};
-
+	if (ORDER === null) return <LoadingPage />;
 	return (
 		<main className="container-fluid pt-3">
-			<Description />
-			<ItemsForm onSubmit={onItemSubmit.bind(this)} onFinish={onFinish.bind(this)} />
-			{ORDER !== null ? (
-				<CloudItems
-					order={ITEMS}
-					addFile={addFile.bind(this)}
-					setDefaultImage={setDefaultImage.bind(this)}
-					formatString={formatString.bind(this)}
-					onAviChange={onAviChange.bind(this)}
-					onTriggerInput={onTriggerInput.bind(this)}
-					onUpdate={onUpdate.bind(this)}
-					onDelete={onDelete.bind(this)}
-					onRemoveFile={onRemoveFile.bind(this)}
+			<BackButton
+				value="Go Back To Order"
+				message="Are you sure you want to go back to the previous page? All current data will be lost."
+				path={document.referrer}
+			/>
+			<div className="row">
+				<SlideCard
+					children={
+						<div className="row">
+							<Description />
+							<ItemsForm onSubmit={onItemSubmit.bind(this)} onFinish={onFinish.bind(this)} />
+						</div>
+					}
+					title="Submission"
+					icon="fas fa-keyboard pr-3"
 				/>
-			) : (
-				''
-			)}
+			</div>
+			<div className="row">
+				<SlideCard
+					children={
+						<CloudItems
+							order={ITEMS}
+							addFile={addFile.bind(this)}
+							setDefaultImage={setDefaultImage.bind(this)}
+							formatString={formatString.bind(this)}
+							onAviChange={onAviChange.bind(this)}
+							onTriggerInput={onTriggerInput.bind(this)}
+							onUpdate={onUpdate.bind(this)}
+							onDelete={onDelete.bind(this)}
+							onRemoveFile={onRemoveFile.bind(this)}
+						/>
+					}
+					title="Items"
+					icon="fas fa-clipboard-list pr-3"
+				/>
+			</div>
 			{/* <Undo onClick={() => alert('hello')} onClose={() => alert('goodbye')} /> */}
 			<Prompt
 				modalShow={PROMPT}
@@ -323,55 +356,54 @@ const Body = () => {
 };
 
 const Description = () => (
-	<div id="description">
-		<BackButton
-			value="Go Back To Order"
-			message="Are you sure you want to go back to the previous page? All current data will be lost."
-			path={document.referrer}
-		/>
-		<h1>Add/Update Items to Order</h1>
-		<p>
-			Enter all of the items you'd like to add to this order before finalizing. Take this opportunity to upload
-			any files or documents that are pertinent to each of your items.
-		</p>
-		<p className="mb-5">Click 'Update' when you are done adding items/files to update the order.</p>
+	<div className="col">
+		<div id="description">
+			<h1>Add/Update Items to Order</h1>
+			<p>
+				Enter all of the items you'd like to add to this order before finalizing. Take this opportunity to
+				upload any files or documents that are pertinent to each of your items.
+			</p>
+			<p className="mb-5">Click 'Update' when you are done adding items/files to update the order.</p>
+		</div>
 	</div>
 );
 
 const ItemsForm = ({ onSubmit, onFinish }) => (
-	<form onSubmit={onSubmit}>
-		<div className="form-group row">
-			<Input
-				required={false}
-				column="col-md-10"
-				id="item"
-				label="Item"
-				type="text"
-				placeholder="Item Name"
-				name="item"
-			/>
-			<Input
-				required={false}
-				column="col-md-2"
-				id="quantity"
-				label="Quantity"
-				type="number"
-				placeholder="Quantity"
-				name="quantity"
-			/>
-		</div>
-		<input type="submit" className="btn btn-primary float-right d-inline" value="Add Item" />
-		<button className="btn-success btn float-right d-inline mr-3" onClick={onFinish}>
-			Update & Save Order
-		</button>
-	</form>
+	<div className="col justify-content-center align-items-center d-flex">
+		<form onSubmit={onSubmit}>
+			<div className="form-group row">
+				<Input
+					required={false}
+					column="col-md-10"
+					id="item"
+					label="Item"
+					type="text"
+					placeholder="Item Name"
+					name="item"
+				/>
+				<Input
+					required={false}
+					column="col-md-2"
+					id="quantity"
+					label="Quantity"
+					type="number"
+					placeholder="Quantity"
+					name="quantity"
+				/>
+			</div>
+			<input type="submit" className="btn btn-primary float-right d-inline" value="Add Item" />
+			<button className="btn-success btn float-right d-inline mr-3" onClick={onFinish}>
+				Update & Save Order
+			</button>
+		</form>
+	</div>
 );
 
 const CloudItems = (props) => (
-	<div className="cloud-items pt-5">
+	<div className="cloud-items">
 		{Object.keys(props.order).map((item, index) => {
 			const cloudItem = props.order[item];
-			const aviPath = props.setDefaultImage(props.order[item]);
+			const aviPath = props.setDefaultImage(props.order[item], item);
 			const name = props.formatString(cloudItem.name);
 			return (
 				<FileBox

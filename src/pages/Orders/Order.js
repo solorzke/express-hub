@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Accordion, Card, ListGroup, Button } from 'react-bootstrap';
 import { fieldTypes } from '../../data/InputTypes';
+import LoadingPage from '../../components/Placeholders/LoadingPage';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import SlideCard from '../../components/SlideCard/Card';
 import Field from '../../components/SlideCard/Field';
@@ -19,7 +20,7 @@ const useQuery = () => new URLSearchParams(useLocation().search);
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
-const Order = () => <Wrapper children={<Body />} current="Clients" active="clients" />;
+const Order = () => <Wrapper children={<Body />} current="Orders" active="orders" />;
 
 const Body = () => {
 	let QUERY = useQuery();
@@ -76,6 +77,7 @@ const Body = () => {
 		return newString.join(' ');
 	};
 
+	if (ORDER === null) return <LoadingPage />;
 	return (
 		<main className="container-fluid pt-3">
 			<div className="row">
@@ -102,6 +104,7 @@ const Body = () => {
 						/>
 					}
 					title="Order Details"
+					icon="fas fa-list-alt pr-2"
 				/>
 				<SlideCard
 					children={<Documents state={ORDER} formatString={formatString.bind(this)} />}
@@ -111,6 +114,7 @@ const Body = () => {
 							Add/Update Docs List
 						</a>
 					}
+					icon="fas fa-clipboard-list pr-2"
 				/>
 				<SlideCard
 					children={
@@ -131,6 +135,7 @@ const Body = () => {
 						)
 					}
 					title="Receipt"
+					icon="fas fa-receipt pr-2"
 				/>
 			</div>
 		</main>

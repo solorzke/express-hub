@@ -103,7 +103,7 @@ const Body = () => {
 				const url = await uploadFile({ name: file.name, file: file.file }, orderId);
 				urls.push(url);
 				console.log('> Firebase: File uploaded!');
-				setMessage('File uploaded to the cloud.');
+				setMessage('Uploading files to the cloud.');
 			}
 		} while (items.length !== 0);
 		callback(urls);

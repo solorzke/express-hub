@@ -5,6 +5,8 @@ import Input from '../../components/Inputs/Input';
 import FileInput from '../../components/Inputs/Files';
 import Prompt from '../../components/Inputs/Prompt';
 import BackButton from '../../components/BackButton/Back';
+import SlideCard from '../../components/SlideCard/Card';
+import { Fragment } from 'react';
 
 //Wrapper for the Body component
 const Items = () => <Wrapper children={<Body />} current="New Order" active="new" />;
@@ -143,15 +145,38 @@ const Body = () => {
 	return (
 		<main className="container p-3">
 			{location.state !== undefined ? '' : <Redirect to="error" />}
-			<Description />
-			<ItemsForm onSubmit={onSubmit.bind(this)} onFinish={onFinish.bind(this)} />
-			<OrderItems
-				items={items}
-				onUpdate={onUpdate.bind(this)}
-				onDelete={onDelete.bind(this)}
-				onFilesChange={onFilesChange.bind(this)}
-				formatString={formatString.bind(this)}
+			<BackButton
+				value="Go Back To Form"
+				message="Are you sure you want to go back to the previous page? All current data will be lost."
+				path="/new-order/add-order"
 			/>
+			<div className="row">
+				<SlideCard
+					children={
+						<div className="row">
+							<Description />
+							<ItemsForm onSubmit={onSubmit.bind(this)} onFinish={onFinish.bind(this)} />
+						</div>
+					}
+					title="Submission"
+					icon="fas fa-keyboard pr-3"
+				/>
+			</div>
+			<div className="row">
+				<SlideCard
+					children={
+						<OrderItems
+							items={items}
+							onUpdate={onUpdate.bind(this)}
+							onDelete={onDelete.bind(this)}
+							onFilesChange={onFilesChange.bind(this)}
+							formatString={formatString.bind(this)}
+						/>
+					}
+					title="Items"
+					icon="fas fa-clipboard-list pr-3"
+				/>
+			</div>
 			<Prompt
 				modalShow={prompt}
 				onHide={() => setPrompt(false)}
@@ -165,9 +190,9 @@ const Body = () => {
 };
 
 const OrderItems = ({ items, onUpdate, onDelete, onFilesChange, formatString }) => (
-	<div id="order-items">
+	<Fragment>
 		<br />
-		<div className="pt-5">
+		<div id="order-items" className="p-3">
 			{Object.keys(items).map((key) => {
 				const name = formatString(items[key].name);
 				const quantity = items[key].quantity;
@@ -183,52 +208,51 @@ const OrderItems = ({ items, onUpdate, onDelete, onFilesChange, formatString }) 
 				);
 			})}
 		</div>
-	</div>
+	</Fragment>
 );
 
 const ItemsForm = ({ onSubmit, onFinish }) => (
-	<form onSubmit={onSubmit}>
-		<div className="form-group row">
-			<Input
-				required={false}
-				column="col-md-10"
-				id="item"
-				label="Item"
-				type="text"
-				placeholder="Item Name"
-				name="item"
-			/>
-			<Input
-				required={false}
-				column="col-md-2"
-				id="quantity"
-				label="Quantity"
-				type="number"
-				placeholder="Quantity"
-				name="quantity"
-			/>
-		</div>
-		<input type="submit" className="btn btn-primary float-right d-inline" value="Add Item" />
-		<button className="btn-success btn float-right d-inline mr-3" onClick={onFinish}>
-			Continue
-		</button>
-	</form>
+	<div className="col justify-content-center align-items-center d-flex">
+		<form onSubmit={onSubmit}>
+			<div className="form-group row">
+				<Input
+					required={false}
+					column="col-md-10"
+					id="item"
+					label="Item"
+					type="text"
+					placeholder="Item Name"
+					name="item"
+				/>
+				<Input
+					required={false}
+					column="col-md-2"
+					id="quantity"
+					label="Quantity"
+					type="number"
+					placeholder="Quantity"
+					name="quantity"
+				/>
+			</div>
+			<input type="submit" className="btn btn-primary float-right d-inline" value="Add Item" />
+			<button className="btn-success btn float-right d-inline mr-3" onClick={onFinish}>
+				Continue
+			</button>
+		</form>
+	</div>
 );
 
 const Description = () => (
-	<div id="description">
-		<BackButton
-			value="Go Back To Form"
-			message="Are you sure you want to go back to the previous page? All current data will be lost."
-			path="/new-order/add-order"
-		/>
-		<h1>Add Items to Order</h1>
-		<p>
-			Enter all of the items you'd like to add to this order before finalizing. Take this opportunity to upload
-			any files or documents that are pertinent to each of your items before proceeding.
-		</p>
-		<p>You can update this information later if you wish.</p>
-		<p className="mb-5">Press 'Continue' when you are done adding items/files to proceed to the final step.</p>
+	<div className="col">
+		<div id="description">
+			<h1>Add Items to Order</h1>
+			<p>
+				Enter all of the items you'd like to add to this order before finalizing. Take this opportunity to
+				upload any files or documents that are pertinent to each of your items before proceeding.
+			</p>
+			<p>You can update this information later if you wish.</p>
+			<p className="mb-0">Press 'Continue' when you are done adding items/files to proceed to the final step.</p>
+		</div>
 	</div>
 );
 
