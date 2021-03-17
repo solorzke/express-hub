@@ -1,5 +1,6 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { useLocation } from 'react-router-dom';
+import Logo from '../teloentrego.png';
 import Firebase from 'firebase/app';
 import Loading from '../components/Placeholders/Loading';
 import 'firebase/auth';
@@ -15,7 +16,7 @@ const ResetPassword = () => {
 	let QUERY = useQuery();
 	const [ oobCode, setOobCode ] = useState(null);
 	const [ mode, setMode ] = useState(null);
-	const [ process, setProcess ] = useState('finished');
+	const [ process, setProcess ] = useState('start');
 	const [ heading, setHeading ] = useState('Reset Password');
 
 	useEffect(() => {
@@ -32,8 +33,11 @@ const ResetPassword = () => {
 			setProcess('loading');
 			setHeading('Please Wait...');
 			const user_email = await Firebase.auth().verifyPasswordResetCode(oobCode);
-			if (user_email !== input_email)
-				return alert("Email Address doesn't match with the code it was sent from. Try again");
+			if (user_email !== input_email) {
+				alert("Email Address doesn't match with the code it was sent from. Try again");
+				setProcess('start');
+				return;
+			}
 			await Firebase.auth().confirmPasswordReset(oobCode, new_pw);
 			console.log('> Firebase: Password Reset Successful');
 			setProcess('finished');
@@ -50,17 +54,21 @@ const ResetPassword = () => {
 
 	return (
 		<div className="login login-body">
-			<main className="login-login-container">
+			<main className="login-login-container container">
 				<div className="row">
 					<div className="col">
-						<i className="fas fa-dolly login-logo" />
-						<h2 className="pt-5">Come to Mtech Express Shipping, &amp; Let's Get It Done!</h2>
-						<p className="pt-5">A Different Kind Of Company. A Different Kind Of Express Shipping.</p>
+						<img src={Logo} height="400" width="550" />
+						<h2 className="pt-5 text-center jo-font">
+							Shipping &amp; Packaging At Its Finest! Across the USA &amp; South America
+						</h2>
+						<p className="pt-5 text-center jo-font">
+							A Different Kind Of Company. A Different Kind Of Express Shipping.
+						</p>
 					</div>
 					<div className="col d-flex justify-content-center align-content-center flex-column">
 						<h1 className="text-center">{heading}</h1>
-						{process === 'stddart' && <ResetPasswordBox onSubmit={onSubmit.bind(this)} />}
-						{process === 'loaddding' && <LoadingBox />}
+						{process === 'start' && <ResetPasswordBox onSubmit={onSubmit.bind(this)} />}
+						{process === 'loading' && <LoadingBox />}
 						{process === 'finished' && <ConfirmationBox />}
 					</div>
 				</div>

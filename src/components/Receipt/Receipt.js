@@ -66,7 +66,7 @@ const Overview = (props) => {
 		<div className="receipt-overview pb-3">
 			<OverviewHeader logo={'http://www.alliedbuildings.com/wp-content/uploads/2016/11/Allied-Black-Logo.png'} />
 			<OverviewBody {...props} />
-			{Object.keys(props.files).map((item) => <Item data={props.files[item]} />)}
+			{Object.keys(props.files).map((item, index) => <Item key={index} data={props.files[item]} />)}
 			<OverviewFooter {...props} />
 		</div>
 	);

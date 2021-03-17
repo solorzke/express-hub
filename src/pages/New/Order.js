@@ -1,9 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { Countries } from '../../data/Location';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import Editor from '../../components/TextEditor/Editor';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
-import Async from 'react-async';
+import LoadingPage from '../../components/Placeholders/LoadingPage';
 import { useHistory } from 'react-router-dom';
 
 const Order = () => <Wrapper children={<Body />} current="New Order" active="new" />;
@@ -14,14 +15,22 @@ const Body = () => {
 	let countryRef = useRef(null);
 	let provinceRef = useRef(null);
 	const [ SHIPPING, setShipping ] = useState(false);
+	const [ CLIENTS, setClients ] = useState(null);
 	const history = useHistory();
 	let value = '';
+
+	useEffect(() => {
+		if (CLIENTS === null) {
+			getClients();
+		}
+	}, []);
 
 	//Request a list of clients from the firestore
 	const getClients = async () => {
 		const snapshot = await Firebase.firestore().collection('clients').get();
 		let clients = [];
 		snapshot.forEach((doc) => clients.push(doc.data()));
+		setClients(clients);
 		return clients;
 	};
 
@@ -72,14 +81,14 @@ const Body = () => {
 			console.log(`> App: Unable to save form data.\n ${error.message}`);
 		}
 	};
-
+	if (CLIENTS === null) return <LoadingPage />;
 	return (
 		<main className="container p-3 toast-div">
 			<Description />
 			<OrderForm
 				formatName={formatName.bind(this)}
 				onSubmit={onSubmit.bind(this)}
-				getClients={getClients.bind(this)}
+				clients={CLIENTS}
 				setShipping={setShipping.bind(this)}
 				refs={{ client: clientRef, country: countryRef, province: provinceRef }}
 				setText={setText.bind(this)}
@@ -88,45 +97,37 @@ const Body = () => {
 	);
 };
 
-const OrderForm = ({ formatName, onSubmit, getClients, refs, setText, setShipping }) => (
+const OrderForm = ({ formatName, onSubmit, clients, refs, setText, setShipping }) => (
 	<form onSubmit={onSubmit}>
 		<div className="form-group row">
-			<Clients refs={refs} formatName={formatName} getClients={getClients} />
+			{/* <Clients refs={refs} formatName={formatName} getClients={getClients} /> */}
+			<ClientsPicker formatName={formatName} data={clients} refs={refs} />
 			<DatePicker />
 		</div>
-		<Destination refs={refs} />
+		<Destination refs={refs} countries={Countries} />
 		<ShippingStatus onClick={setShipping} />
 		<TextEditor setText={setText} />
 		<ConfirmButtons />
 	</form>
 );
 
-const Clients = ({ refs, getClients, formatName }) => (
+const ClientsPicker = ({ data, formatName, refs }) => (
 	<div className="form-group col-md-6">
 		<label>Client</label>
 		<select required ref={refs.client} className="custom-select" id="client">
 			<option value="" disabled selected>
 				Select a client
 			</option>
-			<Async promiseFn={getClients} onReject={(e) => console.log(e.message)}>
-				{({ data, err, isLoading }) => {
-					if (isLoading) return 'Loading...';
-					if (err) return `Something went wrong: ${err.message}`;
-					if (data) {
-						return data.map((item, index) => {
-							let fname = formatName(item.fname);
-							let lname = formatName(item.lname);
-							let full_name = `${fname} ${lname}`;
-							return (
-								<option value={item.id} key={index}>
-									{full_name}
-								</option>
-							);
-						});
-					}
-					return null;
-				}}
-			</Async>
+			{data.map((item, index) => {
+				let fname = formatName(item.fname);
+				let lname = formatName(item.lname);
+				let full_name = `${fname} ${lname}`;
+				return (
+					<option value={item.id} key={index}>
+						{full_name}
+					</option>
+				);
+			})}
 		</select>
 	</div>
 );
@@ -145,41 +146,71 @@ const DatePicker = () => (
 	</div>
 );
 
-const Destination = ({ refs }) => (
-	<div id="destination">
-		<h3 className="py-3">Destination</h3>
-		<div className="form-group row">
-			<label htmlFor="country" className="col-sm-2 col-form-label">
-				Country
-			</label>
-			<div className="col-sm-10">
-				<select
-					ref={refs.country}
-					required
-					className="custom-select crs-country"
-					id="country"
-					data-region-id="province"
-				/>
+const Destination = ({ refs, countries }) => {
+	const [ country, setCountry ] = useState(null);
+
+	const onChange = (e) => {
+		const value = e.target.selectedOptions[0].value;
+		switch (value) {
+			case 'united states':
+				return setCountry('usa');
+			case 'ecuador':
+				return setCountry('ecu');
+			default:
+				return setCountry(null);
+		}
+	};
+
+	return (
+		<div id="destination">
+			<h3 className="py-3">Destination</h3>
+			<div className="form-group row">
+				<label htmlFor="country" className="col-sm-2 col-form-label">
+					Country
+				</label>
+				<div className="col-sm-10">
+					<select
+						ref={refs.country}
+						required
+						className="custom-select"
+						id="country"
+						onChange={onChange.bind(this)}
+					>
+						<option value="" selected>
+							Select a Country
+						</option>
+						<option value="ecuador">Ecuador</option>
+						<option value="united states">United States</option>
+					</select>
+				</div>
+			</div>
+			<div className="form-group row">
+				<label htmlFor="province" className="col-sm-2 col-form-label">
+					Province
+				</label>
+				<div className="col-sm-10">
+					<select ref={refs.province} required className="custom-select" id="province">
+						<option value="">-</option>
+						{country !== null &&
+							countries[country].map((item, index) => (
+								<option key={index} value={item.value}>
+									{item.name}
+								</option>
+							))}
+					</select>
+				</div>
+			</div>
+			<div className="form-group row">
+				<label htmlFor="address" className="col-sm-2 col-form-label">
+					Address
+				</label>
+				<div className="col-sm-10">
+					<input type="text" className="form-control" id="address" placeholder="Address" name="address" />
+				</div>
 			</div>
 		</div>
-		<div className="form-group row">
-			<label htmlFor="province" className="col-sm-2 col-form-label">
-				Province
-			</label>
-			<div className="col-sm-10">
-				<select ref={refs.province} required className="custom-select" id="province" />
-			</div>
-		</div>
-		<div className="form-group row">
-			<label htmlFor="address" className="col-sm-2 col-form-label">
-				Address
-			</label>
-			<div className="col-sm-10">
-				<input type="text" className="form-control" id="address" placeholder="Address" name="address" />
-			</div>
-		</div>
-	</div>
-);
+	);
+};
 
 const ShippingStatus = ({ onClick }) => {
 	const [ SHOW, setShow ] = useState(false);

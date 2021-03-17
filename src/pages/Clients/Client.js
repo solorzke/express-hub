@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { fieldTypes } from '../../data/ClientInputTypes';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import File from '../../components/Files/File';
@@ -29,7 +29,6 @@ const Body = () => {
 	const [ client, setClient ] = useState(null);
 	const [ orders, setOrders ] = useState([]);
 	const [ empty, setEmpty ] = useState(false);
-	const history = useHistory();
 
 	useEffect(() => {
 		console.log(id);

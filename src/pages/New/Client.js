@@ -87,6 +87,13 @@ const Body = () => {
 
 	return (
 		<main className="container-fluid p-3">
+			<Toast
+				onClose={() => setToast(false)}
+				show={toast}
+				message={message}
+				heading={heading}
+				img={<i className={`${img} p-3`} />}
+			/>
 			<h1>Add New Client</h1>
 			<p className="mb-5">
 				Enter the client's information before proceeding to adding their new shipment order to the database.
@@ -95,13 +102,6 @@ const Body = () => {
 				refs={{ country: countryRef, province: provinceRef }}
 				onSubmit={onSubmit.bind(this)}
 				onGenderClick={onGenderClick.bind(this)}
-			/>
-			<Toast
-				onClose={() => setToast(false)}
-				show={toast}
-				message={message}
-				heading={heading}
-				img={<i className={`${img} p-3`} />}
 			/>
 		</main>
 	);
@@ -138,7 +138,7 @@ const Gender = ({ onClick }) => {
 						value={item.value}
 						onClick={(e) => onClick(e, item.value)}
 					/>
-					<label className="form-check-label" for={item.value}>
+					<label className="form-check-label" htmlFor={item.value}>
 						{item.name}
 					</label>
 				</div>
