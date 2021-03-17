@@ -115,7 +115,7 @@ const OverviewHeader = ({ logo }) => {
 
 const PurchaseOverview = () => (
 	<div className="purchase-overview">
-		<h3>Mtech Express Order Summary</h3>
+		<h3>Teloentrego Order Summary</h3>
 	</div>
 );
 
@@ -126,13 +126,13 @@ const OverviewBody = (props) => {
 			<div className="user-info">
 				<p className="user-info-name"> Hello {props.name},</p>
 				<p className="user-info-text">
-					The following item(s) listed below will be ordered and shipped to you once they are ready. Mtech
-					Express will contact you soon regarding the status of the order and its shipment.
+					The following item(s) listed below will be ordered and shipped to you once they are ready.
+					Teloentrego Shipping will contact you soon regarding the status of the order and its shipment.
 				</p>
 				<p className="user-info-text">
 					Of course, if you have any questions, please feel free to contact Marco Solorzano.
 				</p>
-				<p>Thank you for choosing Mtech Express.</p>
+				<p>Thank you for choosing Teloentrego Shipping.</p>
 				<p className="salutation">
 					<img src="https://ec2-52-40-174-59.us-west-2.compute.amazonaws.com/banners/about_us_pic.png" />
 				</p>
@@ -149,11 +149,11 @@ const OverviewFooter = () => {
 	return (
 		<footer className="overview-footer">
 			<span className="site">
-				<a href="http://www.alliedbuildings.com/contact-us/" target="_blank">
-					www.allied.build/help
+				<a href="https://www.teloentrego.com" target="_blank">
+					https://www.teloentrego.com
 				</a>
 			</span>
-			<span className="invoice-id">+1.877.94 STEEL</span>
+			<span className="invoice-id">+1 (973)-474-7298</span>
 		</footer>
 	);
 };

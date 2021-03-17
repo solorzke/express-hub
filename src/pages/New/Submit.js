@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useLocation, Redirect } from 'react-router-dom';
+import { useLocation, Redirect, useHistory } from 'react-router-dom';
+import { Breadcrumb } from 'react-bootstrap';
 import { Config } from '../../data/Config';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import Receipt from '../../components/Receipt/Receipt';
@@ -20,6 +21,7 @@ const Body = () => {
 	const [ message, setMessage ] = useState('Adding Order...');
 	const [ heading, setHeading ] = useState('Processing');
 	const location = useLocation();
+	const history = useHistory();
 
 	//Set the state for the toast props
 	const setToastProps = (toastImg, toastHeading, toastMessage, log, action) => {
@@ -112,6 +114,10 @@ const Body = () => {
 	return (
 		<main className="container p-3">
 			{location.state !== undefined ? '' : <Redirect to="error" />}
+			<Paths
+				message="Are you sure you want to go back? All your items and files will be deleted and cannot be recovered."
+				historyHook={history}
+			/>
 			<Toast
 				onClose={() => setToast(false)}
 				show={toast}
@@ -120,13 +126,47 @@ const Body = () => {
 				img={<i className={`${img} p-3`} />}
 			/>
 			<h1>Confirm Order</h1>
-			<p className="mb-2 w-50">
-				Review all the items and form data added to this shipment order before adding it to the system. Keep in
-				mind, you can update or delete this information later.
-			</p>
-			<ConfirmDiv onConfirm={(e) => onConfirm(e)} />
+			<div className="row mb-3">
+				<div className="col">
+					<p>
+						Review all the items and form data added to this shipment order before adding it to the system.
+						Keep in mind, you can update or delete this information later.
+					</p>
+				</div>
+				<div className="col">
+					<ConfirmDiv onConfirm={(e) => onConfirm(e)} />
+				</div>
+			</div>
+
 			<Receipt form={location.state.form} files={location.state.items} />
 		</main>
+	);
+};
+
+const Paths = ({ historyHook, message }) => {
+	const onClick = (e, path) => {
+		e.preventDefault();
+		if (window.confirm(message)) window.location.href = path;
+	};
+	return (
+		<Breadcrumb>
+			<Breadcrumb.Item href="/new-orders" onClick={(e) => onClick(e, '/new-order/')}>
+				Home
+			</Breadcrumb.Item>
+			<Breadcrumb.Item href="/new-orders" onClick={(e) => onClick(e, '/new-order/add-order')}>
+				Order
+			</Breadcrumb.Item>
+			<Breadcrumb.Item
+				href="/new-orders/add-order/add-items"
+				onClick={(e) => {
+					e.preventDefault();
+					historyHook.goBack();
+				}}
+			>
+				Items
+			</Breadcrumb.Item>
+			<Breadcrumb.Item active>Submit</Breadcrumb.Item>
+		</Breadcrumb>
 	);
 };
 

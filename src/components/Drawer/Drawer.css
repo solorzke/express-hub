@@ -11,8 +11,9 @@
   -moz-transition: margin .25s ease-out;
   -o-transition: margin .25s ease-out;
   transition: margin .25s ease-out;
-  background-color: #2a1e5c;
-  color: #fff;
+  /* background-color: #2a1e5c; */
+  background-color: #34345B;
+  color: #FFDDA1;
 }
 
 #sidebar-wrapper .sidebar-heading {
@@ -26,8 +27,9 @@
 }
 
 .list-group-item {
-  background-color: #2a1e5c;
-  color: #fff;
+  /* background-color: #2a1e5c; */
+  background-color: #34345B;
+  color: #FFDDA1;
 }
 
 @media (min-width: 768px) {

@@ -10,7 +10,12 @@ const SearchBar = (props) => {
 	};
 
 	return (
-		<div>
+		<div className="input-group mb-3">
+			<div className="input-group-prepend">
+				<span className="input-group-text" id="basic-addon1">
+					<i className="fas fa-search" />
+				</span>
+			</div>
 			<input
 				type="text"
 				className="form-control"
@@ -34,9 +39,9 @@ const SearchBar = (props) => {
 const ResultsCounter = ({ data, inputLength }) => {
 	const dataLength = data.length;
 	if (data.length > 0) {
-		return <p className="py-2 pl-3 my-0 bg-secondary text-light">{dataLength} results found</p>;
+		return <p className="py-2 pl-3 my-0 bg-secondary text-light search-bar">{dataLength} results found</p>;
 	} else if (data.length === 0 && inputLength > 0) {
-		return <p className="py-2 pl-3 my-0 bg-secondary text-light">0 results found</p>;
+		return <p className="py-2 pl-3 my-0 bg-secondary text-light search-bar">0 results found</p>;
 	} else {
 		return '';
 	}

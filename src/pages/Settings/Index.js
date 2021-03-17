@@ -156,7 +156,7 @@ const Details = ({ state, formatString, onUpdate }) => {
 
 const Description = () => (
 	<div id="description" className="px-5">
-		<h2>User Profile</h2>
+		<h1>User Profile</h1>
 		<p>Update your user information below and save your changes.</p>
 	</div>
 );

@@ -1,8 +1,10 @@
 .login-body {
     margin: 0;
     padding: 0;
-    background-color: #2a1e5c;
-    color: #fff;
+    /* background-color: #2a1e5c; */
+    /* color: #fff; */
+    background-color: #34345B;
+    color: #FFDDA1;
     height: 100vh;
     display: flex;
     justify-content: center;

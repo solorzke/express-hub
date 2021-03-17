@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import Wrapper from '../../components/Wrapper/Wrapper';
-import { Table } from 'react-bootstrap';
+import { Table, Pagination } from 'react-bootstrap';
 import { Headings } from '../../data/TableHeadings';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
 import { Config } from '../../data/Config';
 import LoadingPage from '../../components/Placeholders/LoadingPage';
+import { Months, Days, Years } from '../../data/Dates';
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
@@ -13,6 +14,7 @@ const Index = () => <Wrapper children={<Body />} active="orders" current="Orders
 
 const Body = () => {
 	const [ ORDERS, setOrders ] = useState(null);
+	const [ FILTERED_ORDERS, setFilteredOrders ] = useState(null);
 	const [ CLIENTS, setClients ] = useState(null);
 
 	useEffect(
@@ -21,7 +23,7 @@ const Body = () => {
 				getOrders();
 			}
 		},
-		[ ORDERS, CLIENTS ]
+		[ ORDERS, CLIENTS, FILTERED_ORDERS ]
 	);
 
 	const getClients = async (orders) => {
@@ -45,6 +47,7 @@ const Body = () => {
 			const snapshot = await Firebase.firestore().collection('orders').get();
 			snapshot.forEach((doc) => results.push(doc.data()));
 			setOrders(results);
+			setFilteredOrders(results);
 			console.log(`> Firebase: ${results.length} results found.`);
 			getClients(results);
 		} catch (error) {
@@ -54,7 +57,7 @@ const Body = () => {
 	};
 
 	const sortOrders = (type, field) => {
-		let copy = [ ...ORDERS ];
+		let copy = [ ...FILTERED_ORDERS ];
 		switch (type) {
 			case 'string':
 				const sortedStrings = copy.sort((a, b) => {
@@ -62,7 +65,7 @@ const Body = () => {
 					else if (a[field] > b[field]) return 1;
 					else return 0;
 				});
-				setOrders(sortedStrings);
+				setFilteredOrders(sortedStrings);
 				return sortedStrings;
 			case 'num':
 				const sortedNums = copy.sort((a, b) => {
@@ -70,7 +73,7 @@ const Body = () => {
 					b = parseInt(b[field]);
 					return b - a;
 				});
-				setOrders(sortedNums);
+				setFilteredOrders(sortedNums);
 				return sortedNums;
 			case 'date':
 				const sortedDates = copy.sort((a, b) => {
@@ -78,24 +81,42 @@ const Body = () => {
 					b = b.date.split('/');
 					return b[2] - a[2] || b[0] - a[0] || b[1] - a[1];
 				});
-				setOrders(sortedDates);
+				setFilteredOrders(sortedDates);
 				return sortedDates;
 			case 'boolean':
 				const sortedBooleans = copy.sort((a, b) => Number(a.shippingStatus) - Number(b.shippingStatus));
-				setOrders(sortedBooleans);
+				setFilteredOrders(sortedBooleans);
 				return sortedBooleans;
 		}
 	};
 
 	const sortDescendingOrders = (sorted) => setOrders(sorted.reverse());
 
+	const onDateChange = () => {
+		const selected_month = document.getElementById('month').selectedOptions[0].value;
+		const selected_day = document.getElementById('day').selectedOptions[0].value;
+		const selected_year = document.getElementById('year').selectedOptions[0].value;
+		const copy = [ ...ORDERS ];
+		const filtered = copy.filter((item) => {
+			const currentMonth = item.date.split('/')[0];
+			const currentDay = item.date.split('/')[1];
+			const currentYear = item.date.split('/')[2];
+			return currentMonth === selected_month && currentDay >= selected_day && currentYear === selected_year;
+		});
+		console.log(FILTERED_ORDERS);
+		setFilteredOrders(filtered);
+	};
+
 	if (ORDERS === null || CLIENTS === null) return <LoadingPage />;
 	return (
 		<main className="container-fluid">
-			<Description />
+			<div className="row">
+				<Description />
+				<DateForm onDateChange={onDateChange.bind(this)} />
+			</div>
 			<Spreadsheet
 				clients={CLIENTS}
-				data={ORDERS}
+				data={FILTERED_ORDERS}
 				onClick={sortOrders.bind(this)}
 				onSortDescending={sortDescendingOrders.bind(this)}
 			/>
@@ -105,7 +126,31 @@ const Body = () => {
 
 const Spreadsheet = ({ clients, data, onClick, onSortDescending }) => {
 	const [ filter, setFilter ] = useState({ key: 9999, status: 'none' });
+	const [ indices, setIndices ] = useState([ [ 0 ] ]);
+	const [ currentPage, setCurrentPage ] = useState(0);
 	const headers = Headings(onClick);
+
+	useEffect(
+		() => {
+			onIndexingPages(data);
+		},
+		[ filter, data ]
+	);
+
+	const onIndexingPages = (orders) => {
+		let pages = [];
+		let copy = [ ...orders ];
+		do {
+			let page = [];
+			for (let i = 0; i < 10; i++) {
+				if (copy.length === 0) break;
+				else page.push(copy.shift());
+			}
+			pages.push(page);
+		} while (copy.length > 0);
+		setIndices(pages);
+		console.log(orders);
+	};
 
 	const onFilterClick = (e, index) => {
 		e.preventDefault();
@@ -134,78 +179,129 @@ const Spreadsheet = ({ clients, data, onClick, onSortDescending }) => {
 
 	const onClientPageClick = (clientId) => (window.location.href = `/clients/${clientId}`);
 
+	const setChevron = (item, index) => {
+		if (filter.key !== index) return item.class.none;
+		else if (filter.status === 'asc') return item.class.asc;
+		else if (filter.status === 'des') return item.class.des;
+	};
+
+	const onChevronClick = (e, item, index) => {
+		const status = onFilterClick(e, index);
+		switch (status) {
+			case 'asc':
+				return item.onClick();
+			case 'des':
+				const orders = item.onClick();
+				return onSortDescending(orders);
+		}
+	};
+
 	return (
-		<Table striped bordered hover>
-			<thead>
-				<tr>
-					{headers.map((item, index) => {
-						const chevron = () => {
-							if (filter.key !== index) return item.class.none;
-							else if (filter.status === 'asc') return item.class.asc;
-							else if (filter.status === 'des') return item.class.des;
-						};
+		<Fragment>
+			<Table striped bordered hover className="mb-1">
+				<thead>
+					<tr>
+						{headers.map((item, index) => {
+							const chevron = setChevron(item, index);
+							return (
+								<th key={index}>
+									{item.name}
+									<i
+										style={item.style}
+										className={chevron}
+										onClick={(e) => onChevronClick(e, item, index)}
+									/>
+								</th>
+							);
+						})}
+					</tr>
+				</thead>
+				<tbody>
+					{indices[currentPage].map((item, index) => (
+						<tr key={index}>
+							<td
+								className="btn-link"
+								style={{ cursor: 'pointer' }}
+								onClick={() => onOrderPageClick(item.orderId, item.clientId)}
+							>
+								{item.orderId}
+							</td>
+							<td
+								className="btn-link"
+								style={{ cursor: 'pointer' }}
+								onClick={() => onClientPageClick(item.clientId)}
+							>
+								{item.clientId}
+							</td>
+							<td>{item.date}</td>
+							<td>{item.country}</td>
+							<td>{item.province}</td>
+							<td>{item.address}</td>
+							<td className={item.shippingStatus ? 'text-success' : 'text-danger'}>
+								{item.shippingStatus ? 'Shipped' : 'Not Shipped'}
+							</td>
+							<td>{item.trackingNum}</td>
+						</tr>
+					))}
+				</tbody>
+			</Table>
+			<p className="text-right p-0 m-0 text-secondary">* Showing {data.length} results</p>
+			<div className="d-flex justify-content-center align-items-center flex-row">
+				<Pagination>
+					{indices.map((item, index) => {
 						return (
-							<th key={index}>
-								{item.name}
-								<i
-									style={item.style}
-									className={chevron()}
-									onClick={(e) => {
-										const status = onFilterClick(e, index);
-										switch (status) {
-											case 'asc':
-												return item.onClick();
-											case 'des':
-												const orders = item.onClick();
-												return onSortDescending(orders);
-										}
-									}}
-								/>
-							</th>
+							<Pagination.Item
+								key={index}
+								active={index === currentPage}
+								onClick={() => setCurrentPage(index)}
+							>
+								{index + 1}
+							</Pagination.Item>
 						);
 					})}
-				</tr>
-			</thead>
-			<tbody>
-				{data.map((item, index) => (
-					<tr key={index}>
-						<td
-							className="btn-link"
-							style={{ cursor: 'pointer' }}
-							onClick={() => onOrderPageClick(item.orderId, item.clientId)}
-						>
-							{item.orderId}
-						</td>
-						<td
-							className="btn-link"
-							style={{ cursor: 'pointer' }}
-							onClick={() => onClientPageClick(item.clientId)}
-						>
-							{item.clientId}
-						</td>
-						<td>{item.date}</td>
-						<td>{item.country}</td>
-						<td>{item.province}</td>
-						<td>{item.address}</td>
-						<td className={item.shippingStatus ? 'text-success' : 'text-danger'}>
-							{item.shippingStatus ? 'Shipped' : 'Not Shipped'}
-						</td>
-						<td>{item.trackingNum}</td>
-					</tr>
-				))}
-			</tbody>
-		</Table>
+				</Pagination>
+			</div>
+		</Fragment>
 	);
 };
 
 const Description = () => (
 	<div id="description" className="col-md-7 pt-3">
-		<h1>Mtech Express Orders Manifest</h1>
+		<h1>Teloentrego Orders Manifest</h1>
 		<p>
-			Welcome to the Mtech Express Orders Manifest page. Here you'll be able to view all the orders that are
+			Welcome to the Teloentrego Orders Manifest page. Here you'll be able to view all the orders that are
 			currently saved on record, and view them.
 		</p>
 		<p>You can also filter these results based on the desired filter parameter you'd like.</p>
+	</div>
+);
+
+const DateForm = ({ onDateChange }) => (
+	<div className="col-md-5 pt-3">
+		<h4>Filter by Date</h4>
+		<div className="input-group">
+			<select onChange={onDateChange} className="custom-select" id="month">
+				{Months.map((month, index) => (
+					<option key={index} value={month.value}>
+						{month.name}
+					</option>
+				))}
+			</select>
+			<select onChange={onDateChange} className="custom-select" id="day">
+				{Days.map((day, index) => (
+					<option key={index} value={day}>
+						{day}
+					</option>
+				))}
+			</select>
+			<select onChange={onDateChange} className="custom-select" id="year">
+				{Years.map((year, index) => (
+					<option key={index} value={year}>
+						{year}
+					</option>
+				))}
+			</select>
+		</div>
 	</div>
 );
 

@@ -5,6 +5,7 @@ import AsyncSelect from '../../components/Inputs/Select';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
 import { Config } from '../../data/Config';
+import { Card } from 'react-bootstrap';
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
@@ -63,8 +64,8 @@ const Body = () => {
 
 	return (
 		<main className="container-fluid p-3">
-			<h1>Client Search</h1>
-			<p className="pb-5">
+			<h1>Clients Index Search</h1>
+			<p className="pb-1">
 				Find a client by search or selection to bring up their information and recent orders.
 			</p>
 			<SearchForm
@@ -83,35 +84,34 @@ export default Index;
 
 const SearchForm = ({ onChange, names, formatString, selectRef, getClients, onSelect }) => (
 	<form autoComplete="off">
-		<SearchClients onChange={onChange} names={names} formatString={formatString} />
-		<Divider />
-		<SelectClient selectRef={selectRef} getClients={getClients} formatString={formatString} onSelect={onSelect} />
+		<CardBox
+			header="Search"
+			title="Search By Name"
+			text="Add a new client and their shipment order, including information such as their name and
+						their shipping details to be logged into the database."
+			children={<SearchClients onChange={onChange} names={names} formatString={formatString} />}
+		/>
+		<CardBox
+			header="Select"
+			title="Select From A List of Clients"
+			text="Add a new client and their shipment order, including information such as their name and
+						their shipping details to be logged into the database."
+			children={
+				<SelectClient
+					selectRef={selectRef}
+					getClients={getClients}
+					formatString={formatString}
+					onSelect={onSelect}
+				/>
+			}
+		/>
 	</form>
-);
-
-const Divider = () => (
-	<div className="form-group row">
-		<div className="form-group col-md-5">
-			<hr />
-		</div>
-		<div className="form-group col-md-2 text-center">
-			<p>Or</p>
-		</div>
-		<div className="form-group col-md-5">
-			<hr />
-		</div>
-	</div>
 );
 
 const SearchClients = ({ onChange, names, formatString }) => (
 	<div className="form-group row">
-		<div className="form-group col-md-11">
+		<div className="form-group col-md-12">
 			<SearchBar onChange={onChange} data={names} formatString={formatString} />
-		</div>
-		<div className="form-group col-md-1">
-			<button className="btn btn-md btn-primary" id="submit">
-				<i className="fas fa-search" />
-			</button>
 		</div>
 	</div>
 );
@@ -128,4 +128,15 @@ const SelectClient = ({ selectRef, getClients, formatString, onSelect }) => (
 			/>
 		</div>
 	</div>
+);
+
+const CardBox = ({ header, title, text, children }) => (
+	<Card className="mt-4">
+		<Card.Header>{header}</Card.Header>
+		<Card.Body>
+			<Card.Title>{title}</Card.Title>
+			<Card.Text>{text}</Card.Text>
+			{children}
+		</Card.Body>
+	</Card>
 );

@@ -9,6 +9,7 @@ import Wrapper from '../../components/Wrapper/Wrapper';
 import BackButton from '../../components/BackButton/Back';
 import Input from '../../components/Inputs/Input';
 import Prompt from '../../components/Inputs/Prompt';
+import Toast from '../../components/Toast/Toast';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/storage';
@@ -24,6 +25,11 @@ const Body = () => {
 	const [ ITEMS, setItems ] = useState({});
 	const [ PROMPT, setPrompt ] = useState(false);
 	const [ PROMPTKEY, setPromptKey ] = useState(null);
+	//State data that control the toast message
+	const [ toast, setToast ] = useState(false);
+	const [ img, setImg ] = useState('fas fa-spinner fa-pulse');
+	const [ message, setMessage ] = useState('Updating Order...');
+	const [ heading, setHeading ] = useState('Collecting files and updating them to the cloud');
 
 	useEffect(
 		() => {
@@ -35,6 +41,22 @@ const Body = () => {
 		},
 		[ ORDER, ITEMS, PROMPT, PROMPTKEY ]
 	);
+
+	//Set the state for the toast props
+	const setToastProps = (toastImg, toastHeading, toastMessage, log, action) => {
+		setImg(toastImg);
+		setHeading(toastHeading);
+		setMessage(toastMessage);
+		console.log(log);
+		setTimeout(() => {
+			setToast(false);
+			setImg('fas fa-spinner fa-pulse');
+			setHeading('Deleting Client and their orders...');
+			setMessage('Deleting Client');
+			console.log('Toast Props set to normal.');
+			if (action) window.location.href = '/orders';
+		}, 3000);
+	};
 
 	//On submission of the form, create an obj of all the items and its files and proceed to the next page
 	const onItemSubmit = (e) => {
@@ -86,42 +108,56 @@ const Body = () => {
 
 	//Extract and remove the file item by matching the index of the item in the filter loop.
 	const onRemoveFile = async (index, itemKey, stateHandler) => {
-		try {
-			stateHandler(index);
-			let copy = ITEMS[itemKey]['files'][index];
-			const FieldValue = Firebase.firestore.FieldValue;
-			console.log(copy);
-			const filtered_files = ITEMS[itemKey]['files'].filter((item, i) => index !== i);
-			await Firebase.firestore().collection('orders').doc(ORDER_ID).update({
+		stateHandler(index);
+		let copy = ITEMS[itemKey]['files'][index];
+		const FieldValue = Firebase.firestore.FieldValue;
+		console.log(copy);
+		const filtered_files = ITEMS[itemKey]['files'].filter((item, i) => index !== i);
+		await Firebase.storage().ref(`images/${ORDER_ID}/${copy.name}`).delete().catch((e) => console.error(e));
+		await Firebase.firestore()
+			.collection('orders')
+			.doc(ORDER_ID)
+			.update({
 				['item-images.' + copy.name]: FieldValue.delete()
-			});
-			// await Firebase.storage().ref(`images/${ORDER_ID}`).child(copy.name).delete();
-			setItems((STATE) => ({
-				...STATE,
-				[itemKey]: {
-					...STATE[itemKey],
-					files: filtered_files
-				}
-			}));
-		} catch (error) {
-			console.error('> Firebase: Couldnt send the request.');
-			console.error(error);
-		} finally {
-			stateHandler(false);
-		}
+			})
+			.catch((e) => console.error(e));
+		// await Firebase.storage().ref(`images/${ORDER_ID}`).child(copy.name).delete();
+		setItems((STATE) => ({
+			...STATE,
+			[itemKey]: {
+				...STATE[itemKey],
+				files: filtered_files
+			}
+		}));
+		stateHandler(false);
 	};
 
 	//Once the Update/Save button is clicked, move on to the next page with the state item data passed in
 	const onFinish = async (e) => {
 		try {
 			e.preventDefault();
+			setToast(true);
 			if (Object.keys(ITEMS).length === 0) return alert('Please add at least one item for your order.');
 			const payload = await uploadFilesToStorage();
 			const response = await updateOrderToFirestore(payload);
+			setToastProps(
+				'fas fa-check-circle toast-success',
+				'Update Complete!',
+				`The order was updated to the cloud!`,
+				`> Firebase: Order: ${ORDER_ID} and its items are updated to the system.`,
+				true
+			);
 			if (response) window.location.reload();
 		} catch (error) {
 			console.error('> Firebase: request couldnt go through');
 			console.error(error);
+			setToastProps(
+				'fas fa-check-circle toast-success',
+				'Update Failed!',
+				`The order could not update to the cloud!`,
+				`> Firebase: Order: ${ORDER_ID} and its information weren't updated to the system.`,
+				false
+			);
 		}
 	};
 
@@ -306,6 +342,13 @@ const Body = () => {
 	if (ORDER === null) return <LoadingPage />;
 	return (
 		<main className="container-fluid pt-3">
+			<Toast
+				onClose={() => setToast(false)}
+				show={toast}
+				message={message}
+				heading={heading}
+				img={<i className={`${img} p-3`} />}
+			/>
 			<BackButton
 				value="Go Back To Order"
 				message="Are you sure you want to go back to the previous page? All current data will be lost."

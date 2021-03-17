@@ -27,7 +27,7 @@ const Drawer = ({ active = '' }) => {
 
 	return (
 		<div className="border-right" id="sidebar-wrapper">
-			<div className="sidebar-heading">Mtech Express</div>
+			<div className="sidebar-heading jo-font">Teloentrego</div>
 			<div className="list-group list-group-flush">
 				{/* <a href="/home" className="list-group-item list-group-item-action">
 					<span className={active === 'dashboard' ? 'activated' : ''}>

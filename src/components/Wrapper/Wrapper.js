@@ -15,7 +15,10 @@ const Wrapper = ({ children, current, active }) => {
 			<div className={`d-flex${toggle}`} id="wrapper">
 				<Drawer active={active} />
 				<div id="page-content-wrapper">
-					<nav className="navbar navbar-expand-lg navbar-light bg-light text-light border-bottom bg-nav">
+					<nav
+						className="navbar navbar-expand-lg navbar-light bg-light border-bottom bg-nav"
+						style={{ color: '#FFDDA1' }}
+					>
 						<button className="btn" id="menu-toggle" onClick={(event) => onClick(event)}>
 							<i className="fas fa-bars bars" />
 						</button>

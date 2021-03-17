@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Accordion, Card, ListGroup, Button } from 'react-bootstrap';
+import { Accordion, Card, ListGroup, Button, Breadcrumb, Dropdown } from 'react-bootstrap';
 import { fieldTypes } from '../../data/InputTypes';
 import LoadingPage from '../../components/Placeholders/LoadingPage';
 import Wrapper from '../../components/Wrapper/Wrapper';
@@ -8,6 +8,7 @@ import SlideCard from '../../components/SlideCard/Card';
 import Field from '../../components/SlideCard/Field';
 import Empty from '../../components/Placeholders/Empty';
 import Loading from '../../components/Placeholders/Loading';
+import Toast from '../../components/Toast/Toast';
 import Receipt from '../../components/Receipt/Receipt';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -25,10 +26,17 @@ const Order = () => <Wrapper children={<Body />} current="Orders" active="orders
 const Body = () => {
 	let QUERY = useQuery();
 	const ORDER_ID = QUERY.get('id');
+	const confirm_message =
+		'Are you sure you want to delete this order? All docs and information will be erased and cannot be recovered.';
 	const [ FNAME, setFname ] = useState('');
 	const [ LNAME, setLname ] = useState('');
 	const [ ORDER, setOrder ] = useState(null);
 	const [ UPDATING, setUpdating ] = useState(false);
+	//State data that control the toast message
+	const [ toast, setToast ] = useState(false);
+	const [ img, setImg ] = useState('fas fa-spinner fa-pulse');
+	const [ message, setMessage ] = useState('Deleting Order');
+	const [ heading, setHeading ] = useState('Data is being deleted...');
 
 	useEffect(
 		() => {
@@ -38,6 +46,22 @@ const Body = () => {
 		},
 		[ UPDATING ]
 	);
+
+	//Set the state for the toast props
+	const setToastProps = (toastImg, toastHeading, toastMessage, log, action) => {
+		setImg(toastImg);
+		setHeading(toastHeading);
+		setMessage(toastMessage);
+		console.log(log);
+		setTimeout(() => {
+			setToast(false);
+			setImg('fas fa-spinner fa-pulse');
+			setHeading('Deleting Client and their orders...');
+			setMessage('Deleting Client');
+			console.log('Toast Props set to normal.');
+			if (action) window.location.href = '/orders';
+		}, 3000);
+	};
 
 	//Get the order data from the firestore based on the orderId
 	const getOrder = async () => {
@@ -69,6 +93,46 @@ const Body = () => {
 		}
 	};
 
+	/* 
+		Delete the order from firestore and storage platforms
+		1. Get the order id first
+		2. Use the order id to delete the reference folder in storage that matches that id
+		3. Finally delete the order id from the firestore
+		4. Open a new page to /orders
+	*/
+	const deleteOrder = async () => {
+		try {
+			const answer = window.confirm(confirm_message);
+			if (answer) {
+				setToast(true);
+				const list = await Firebase.storage().ref(`images/${ORDER_ID}`).list();
+				const items = list.items;
+				for (let i = 0; i < items.length; i++) {
+					const item_path = items[i]['_delegate']['_location']['path_'];
+					await Firebase.storage().ref(item_path).delete();
+				}
+				await Firebase.firestore().collection('orders').doc(ORDER_ID).delete();
+				setToastProps(
+					'fas fa-check-circle toast-success',
+					'Order Deleted!',
+					`The order was deleted from the cloud!`,
+					`> Firebase: Order: ${ORDER_ID} and its information are deleted from the system.`,
+					true
+				);
+			}
+		} catch (error) {
+			console.error("> Firebase: Couldn't process request.");
+			console.error(error);
+			setToastProps(
+				'fas fa-window-close toast-fail',
+				'Failed',
+				`Order couldn't be deleted!`,
+				`> Firebase: Error couldnt send request.\n ${error.message}`,
+				false
+			);
+		}
+	};
+
 	//Change the casing of every word in the string
 	const formatString = (str) => {
 		//Check if its multi-word
@@ -80,6 +144,13 @@ const Body = () => {
 	if (ORDER === null) return <LoadingPage />;
 	return (
 		<main className="container-fluid pt-3">
+			<Toast
+				onClose={() => setToast(false)}
+				show={toast}
+				message={message}
+				heading={heading}
+				img={<i className={`${img} p-3`} />}
+			/>
 			<div className="row">
 				<Description
 					state={{ fname: FNAME, lname: LNAME }}
@@ -87,13 +158,13 @@ const Body = () => {
 					orderId={QUERY.get('id')}
 				/>
 				<ShipmentConfirmation
-					shipped={ORDER !== null ? ORDER.shippingStatus : false}
+					shipped={ORDER.shippingStatus}
 					onClick={updateOrder.bind(this)}
 					progress={UPDATING}
 				/>
 			</div>
-
-			<ButtonsPane client={ORDER} />
+			<Paths />
+			<Menu onDelete={deleteOrder.bind(this)} />
 			<div className="row">
 				<SlideCard
 					children={
@@ -118,21 +189,17 @@ const Body = () => {
 				/>
 				<SlideCard
 					children={
-						ORDER !== null ? (
-							<Receipt
-								form={{
-									clientName: formatString(`${FNAME} ${LNAME}`),
-									address: ORDER.address,
-									country: ORDER.country,
-									province: ORDER.province,
-									orderId: ORDER_ID,
-									date: ORDER.date
-								}}
-								files={[]}
-							/>
-						) : (
-							<React.Fragment />
-						)
+						<Receipt
+							form={{
+								clientName: formatString(`${FNAME} ${LNAME}`),
+								address: ORDER.address,
+								country: ORDER.country,
+								province: ORDER.province,
+								orderId: ORDER_ID,
+								date: ORDER.date
+							}}
+							files={[]}
+						/>
 					}
 					title="Receipt"
 					icon="fas fa-receipt pr-2"
@@ -144,7 +211,7 @@ const Body = () => {
 
 const Description = ({ state, formatString, orderId }) => (
 	<div id="description" className="col-md-7">
-		<h2>Order Number: {orderId}</h2>
+		<h1>Order Number: {orderId}</h1>
 		<p>
 			For Client: <strong>{state !== null ? formatString(`${state.fname} ${state.lname}`) : ''}</strong>
 		</p>
@@ -209,12 +276,22 @@ const Details = ({ state, formatString, onUpdate }) => {
 	return <Empty />;
 };
 
-const ButtonsPane = ({ client }) => (
-	<div id="buttons-pane" className="p-3">
-		<a href={document.referrer} className="float-sm-right btn btn-link btn-sm text-primary mx-2 px-3">
-			<i className="fas fa-arrow-left pr-3" />Go Back
-		</a>
-	</div>
+const Menu = ({ onDelete }) => (
+	<Dropdown className="text-right mt-1">
+		<Dropdown.Toggle id="dropdown-basic">
+			<i className="fas fa-cog" />
+		</Dropdown.Toggle>
+		<Dropdown.Menu>
+			<Dropdown.Item href="#/action-2">
+				<i className="fas fa-download pr-2" />
+				Download Order History
+			</Dropdown.Item>
+			<Dropdown.Item as={Button} onClick={onDelete}>
+				<i className="fas fa-trash-alt pr-2" />
+				Delete Order
+			</Dropdown.Item>
+		</Dropdown.Menu>
+	</Dropdown>
 );
 
 const Documents = ({ state, formatString }) => {
@@ -307,5 +384,12 @@ const Item = ({ data, formatString }) => {
 		</div>
 	);
 };
+
+const Paths = () => (
+	<Breadcrumb className="py-2">
+		<Breadcrumb.Item href={document.referrer}>Back to Origin</Breadcrumb.Item>
+		<Breadcrumb.Item active>Order</Breadcrumb.Item>
+	</Breadcrumb>
+);
 
 export default Order;

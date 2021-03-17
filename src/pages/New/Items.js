@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import { useLocation, useHistory, Redirect } from 'react-router-dom';
+import { Breadcrumb } from 'react-bootstrap';
 import Input from '../../components/Inputs/Input';
 import FileInput from '../../components/Inputs/Files';
 import Prompt from '../../components/Inputs/Prompt';
-import BackButton from '../../components/BackButton/Back';
 import SlideCard from '../../components/SlideCard/Card';
-import { Fragment } from 'react';
 
 //Wrapper for the Body component
 const Items = () => <Wrapper children={<Body />} current="New Order" active="new" />;
@@ -145,11 +144,7 @@ const Body = () => {
 	return (
 		<main className="container p-3">
 			{location.state !== undefined ? '' : <Redirect to="error" />}
-			<BackButton
-				value="Go Back To Form"
-				message="Are you sure you want to go back to the previous page? All current data will be lost."
-				path="/new-order/add-order"
-			/>
+			<Paths message="Are you sure you want to go back? All your items and files will be deleted and cannot be recovered." />
 			<div className="row">
 				<SlideCard
 					children={
@@ -255,5 +250,23 @@ const Description = () => (
 		</div>
 	</div>
 );
+
+const Paths = ({ message }) => {
+	const onClick = (e, path) => {
+		e.preventDefault();
+		if (window.confirm(message)) window.location.href = path;
+	};
+	return (
+		<Breadcrumb>
+			<Breadcrumb.Item href="/new-orders" onClick={(e) => onClick(e, '/new-order/')}>
+				Home
+			</Breadcrumb.Item>
+			<Breadcrumb.Item href="/new-orders/add-order" onClick={(e) => onClick(e, '/new-order/add-order')}>
+				Order
+			</Breadcrumb.Item>
+			<Breadcrumb.Item active>Items</Breadcrumb.Item>
+		</Breadcrumb>
+	);
+};
 
 export default Items;

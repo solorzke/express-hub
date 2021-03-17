@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { fieldTypes } from '../../data/ClientInputTypes';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import File from '../../components/Files/File';
@@ -12,8 +12,7 @@ import Firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/storage';
 import { Config } from '../../data/Config';
-import { Button } from 'react-bootstrap';
-import { Fragment } from 'react';
+import { Button, Breadcrumb } from 'react-bootstrap';
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
@@ -30,6 +29,7 @@ const Body = () => {
 	const [ client, setClient ] = useState(null);
 	const [ orders, setOrders ] = useState([]);
 	const [ empty, setEmpty ] = useState(false);
+	const history = useHistory();
 
 	useEffect(() => {
 		console.log(id);
@@ -112,7 +112,12 @@ const Body = () => {
 				setToast(true);
 				for (let i = 0; i < orders.length; i++) {
 					const orderId = orders[i].orderId;
-					await Firebase.storage().ref(`images/${orderId}`).delete();
+					const list = await Firebase.storage().ref(`images/${orderId}`).list();
+					const items = list.items;
+					for (let j = 0; j < list.items.length; j++) {
+						const item_path = items[j]['_delegate']['_location']['path_'];
+						await Firebase.storage().ref(item_path).delete();
+					}
 					await Firebase.firestore().collection('orders').doc(orderId).delete();
 				}
 				await Firebase.firestore().collection('clients').doc(id).delete();
@@ -130,7 +135,7 @@ const Body = () => {
 			setToastProps(
 				'fas fa-window-close toast-fail',
 				'Failed',
-				`Order couldn't be added!`,
+				`Client couldn't be deleted!`,
 				`> Firebase: Error couldnt send request.\n ${error.message}`,
 				false
 			);
@@ -148,10 +153,12 @@ const Body = () => {
 	if (client !== null) {
 		return (
 			<main className="container-fluid pt-3">
+				<Paths />
 				<Toast
 					onClose={() => setToast(false)}
 					show={toast}
 					message={message}
+					sssss
 					heading={heading}
 					img={<i className={`${img} p-3`} />}
 				/>
@@ -194,7 +201,7 @@ const Menu = ({ onDelete }) => (
 
 const Description = ({ state, formatString }) => (
 	<div id="description">
-		<h2>Client: {state !== null ? formatString(`${state.fname} ${state.lname}`) : ''}</h2>
+		<h1>Client: {state !== null ? formatString(`${state.fname} ${state.lname}`) : ''}</h1>
 		<p>Client since: {state !== null ? state.clientSince : 'Not Available'}</p>
 		<p style={{ width: '50%' }}>
 			See information about your client's account, download an archive of their order history, or make changes to
@@ -203,14 +210,7 @@ const Description = ({ state, formatString }) => (
 	</div>
 );
 
-const ButtonsPane = ({ onDelete }) => (
-	<div id="buttons-pane">
-		<Menu onDelete={onDelete} />
-		<a href="/clients" className="float-sm-right btn btn-link btn-sm text-primary mx-2 px-3">
-			<i className="fas fa-arrow-left pr-3" />Go Back
-		</a>
-	</div>
-);
+const ButtonsPane = ({ onDelete }) => <Menu onDelete={onDelete} />;
 
 const Fields = ({ state, formatString, onUpdate }) => {
 	if (state !== null) {
@@ -281,6 +281,13 @@ const EmptyBox = () => (
 			<p className="pt-5">This client hasn't made any orders yet.</p>
 		</div>
 	</div>
+);
+
+const Paths = () => (
+	<Breadcrumb>
+		<Breadcrumb.Item href="/clients">Back to Origin</Breadcrumb.Item>
+		<Breadcrumb.Item active>Client</Breadcrumb.Item>
+	</Breadcrumb>
 );
 
 export default Client;

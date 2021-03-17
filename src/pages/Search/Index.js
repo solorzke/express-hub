@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import SearchBar from '../../components/Inputs/Search';
+import Logo from '../../logo.jpeg';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
 import { Config } from '../../data/Config';
@@ -102,10 +103,10 @@ const Body = () => {
 };
 
 const PortraitHeader = () => (
-	<div className="w-100 d-flex justify-content-center align-items-center py-5 flex-column">
-		<i className="fas fa-shipping-fast login-logo" style={{ fontSize: 200 }} />
-		<h1 className="pt-5">Mtech Express</h1>
-		<p className="p-0 m-0">Search for an order</p>
+	<div className="w-100 d-flex justify-content-center align-items-center pb-5 flex-column">
+		{/* <i className="fas fa-shipping-fast login-logo" style={{ fontSize: 200 }} />
+		<h1 className="pt-5">Teloentrego</h1> */}
+		<img src={Logo} height="400" width="650" className="rounded" />
 	</div>
 );
 
@@ -116,13 +117,8 @@ const SearchBox = ({ onChange, data, formatString, setResults }) => (
 				<div className="form-group col-md-2 justify-content-center align-items-center0 d-flex">
 					<QueryBox setResults={setResults} />
 				</div>
-				<div className="form-group col-md-9">
+				<div className="form-group col-md-10">
 					<SearchBar onChange={onChange} data={data} formatString={formatString} />
-				</div>
-				<div className="form-group col-md-1">
-					<button className="btn btn-md btn-primary" id="submit">
-						<i className="fas fa-search" />
-					</button>
 				</div>
 			</div>
 		</form>

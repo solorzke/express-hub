@@ -1,6 +1,10 @@
 .index-new-user-logo {
-    color: #ee4266;
+    color: #34345B;
     font-size: 200px;
+}
+
+.index-add-client-view:hover .index-new-user-logo  {
+    color: #ee4266;
 }
 
 /* .index h1, .index h2, .index h3, .index h4, .index h5, .index h6 {
@@ -138,4 +142,20 @@ form > input {
 .update-item {
     background-color: #FFFCF2;
 
+}
+
+.jo-font {
+    font-family: 'Abril Fatface', cursive;
+
+    
+}
+
+.heading-bar {
+    background-color: #C6AC8F;
+    padding: 5px;
+   
+}
+
+h1 {
+    font-family: 'Abril Fatface', cursive;
 }

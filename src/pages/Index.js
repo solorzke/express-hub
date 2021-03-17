@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Logo from '../teloentrego.png';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -57,9 +58,13 @@ const Index = () => {
 				<div className="container">
 					<div className="row">
 						<div className="col">
-							<i className="fas fa-dolly login-logo" />
-							<h2 className="pt-5">Come to Mtech Express Shipping, &amp; Let's Get It Done!</h2>
-							<p className="pt-5">A Different Kind Of Company. A Different Kind Of Express Shipping.</p>
+							<img src={Logo} height="400" width="550" />
+							<h2 className="pt-5 text-center jo-font">
+								Shipping &amp; Packaging At Its Finest! Across the USA &amp; South America
+							</h2>
+							<p className="pt-5 text-center jo-font">
+								A Different Kind Of Company. A Different Kind Of Express Shipping.
+							</p>
 						</div>
 						<div className="col d-flex justify-content-center align-content-end flex-column">
 							{area === 'login' && (
@@ -85,7 +90,7 @@ const Index = () => {
 
 const LoginBox = ({ authenticate, progress, onClick }) => (
 	<React.Fragment>
-		<h1 className="text-center">Mtech Express</h1>
+		<h1 className="text-center jo-font">Teloentrego</h1>
 		<form onSubmit={authenticate}>
 			<input type="email" id="email" name="email" placeholder="Enter your email address" required />
 			<br />

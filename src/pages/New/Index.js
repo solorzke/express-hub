@@ -9,9 +9,10 @@ const Body = () => {
 	return (
 		<main className="landing-page d-flex justify-content-center align-items-center index">
 			<div className="container-fluid pt-2">
-				<h1>Select An Option</h1>
+				<h1 className="jo-font">Select An Option</h1>
+				<p>Add new client or order</p>
 				<CardBox
-					header="Option 1"
+					header="Client"
 					title="New Client"
 					text="Add a new client and their shipment order, including information such as their name and
 								their shipping details to be logged into the database."
@@ -19,7 +20,7 @@ const Body = () => {
 					image="fas fa-user-circle"
 				/>
 				<CardBox
-					header="Option 2"
+					header="Order"
 					title="New Order"
 					text="Create a new order for an existing client in the database and add their shipping
 					information."

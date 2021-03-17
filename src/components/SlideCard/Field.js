@@ -129,7 +129,7 @@ const Field = ({ types, index, item, formatString, onUpdate }) => {
 };
 
 const ImageBox = ({ item }) => (
-	<div className="col-sm-1 d-flex justify-content-center align-items-center" style={{ backgroundColor: '#2a1e5c' }}>
+	<div className="col-sm-1 d-flex justify-content-center align-items-center" style={{ backgroundColor: '#34345B' }}>
 		<i className={`${item.img}`} style={{ color: '#ee4266' }} />
 	</div>
 );
