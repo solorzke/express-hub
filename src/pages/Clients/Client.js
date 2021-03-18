@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown, Button, Breadcrumb } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { fieldTypes } from '../../data/ClientInputTypes';
+import { Config } from '../../data/Config';
+import Slidecard from '../../components/SlideCard/Card';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import File from '../../components/Files/File';
 import Field from '../../components/SlideCard/Field';
@@ -11,8 +13,6 @@ import Toast from '../../components/Toast/Toast';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/storage';
-import { Config } from '../../data/Config';
-import { Button, Breadcrumb } from 'react-bootstrap';
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
@@ -149,35 +149,45 @@ const Body = () => {
 		return newString.join(' ');
 	};
 
-	if (client !== null) {
-		return (
-			<main className="container-fluid pt-3">
-				<Paths />
-				<Toast
-					onClose={() => setToast(false)}
-					show={toast}
-					message={message}
-					sssss
-					heading={heading}
-					img={<i className={`${img} p-3`} />}
-				/>
-				<div className="row">
-					<div className="col-md-12 w-100 client-pane">
-						<Description state={client} formatString={formatString.bind(this)} />
-						<ButtonsPane onDelete={deleteClient.bind(this)} />
-					</div>
+	if (client === null) return <LoadingPage />;
+	return (
+		<main className="container-fluid pt-3">
+			<Paths />
+			<Toast
+				onClose={() => setToast(false)}
+				show={toast}
+				message={message}
+				sssss
+				heading={heading}
+				img={<i className={`${img} p-3`} />}
+			/>
+			<div className="row">
+				<div className="col-md-12 w-100 client-pane">
+					<Description state={client} formatString={formatString.bind(this)} />
+					<ButtonsPane onDelete={deleteClient.bind(this)} />
 				</div>
-				<hr />
-				<section className="row">
-					<Fields state={client} formatString={formatString.bind(this)} onUpdate={updateClient.bind(this)} />
-					{!empty && <Orders state={orders} names={client} />}
-					{empty && <EmptyBox />}
-				</section>
-			</main>
-		);
-	} else {
-		return <LoadingPage />;
-	}
+			</div>
+			<hr />
+			<section className="row">
+				<Slidecard
+					children={
+						<Fields
+							state={client}
+							formatString={formatString.bind(this)}
+							onUpdate={updateClient.bind(this)}
+						/>
+					}
+					title="Client Information"
+					icon="fas fa-user-circle pr-2"
+				/>
+				<Slidecard
+					children={!empty ? <Orders state={orders} names={client} /> : <EmptyBox />}
+					title="Recent Orders"
+					icon="fas fa-list-alt pr-2"
+				/>
+			</section>
+		</main>
+	);
 };
 
 const Menu = ({ onDelete }) => (
@@ -215,8 +225,7 @@ const Fields = ({ state, formatString, onUpdate }) => {
 	if (state !== null) {
 		const types = fieldTypes(state);
 		return (
-			<div className="col-md-6">
-				<h4>Information</h4>
+			<div className="col-md">
 				<div className="client-lists">
 					{types.map((item, index) => (
 						<Field
@@ -240,7 +249,7 @@ const Orders = ({ state, names }) => {
 		const filteredDates = orders.sort((a, b) => {
 			a = a.date.split('/');
 			b = b.date.split('/');
-			return b[2] - a[2] || b[1] - a[1] || b[0] - a[0];
+			return b[2] - a[2] || b[0] - a[0] || b[1] - a[1];
 		});
 		return filteredDates;
 	};
@@ -249,8 +258,7 @@ const Orders = ({ state, names }) => {
 		names.lname = names.lname.replace(' ', '%20');
 		const sortedOrders = sortOrdersByDate(state);
 		return (
-			<div className="col-md-6">
-				<h4>Recent Orders</h4>
+			<div className="col-md-12">
 				<ol
 					className="list-group list-group-flush order-lists"
 					id="clients"
@@ -270,8 +278,7 @@ const Orders = ({ state, names }) => {
 };
 
 const EmptyBox = () => (
-	<div className="col-md-6">
-		<h4>Recent Orders</h4>
+	<div className="col-md-12">
 		<div className="text-center justify-content-center align-items-center d-flex flex-column">
 			<i
 				className="fab fa-creative-commons-zero p-5"
