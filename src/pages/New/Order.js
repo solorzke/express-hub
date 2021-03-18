@@ -176,7 +176,7 @@ const Destination = ({ refs, countries }) => {
 						id="country"
 						onChange={onChange.bind(this)}
 					>
-						<option value="" selected>
+						<option value="" selected disabled>
 							Select a Country
 						</option>
 						<option value="ecuador">Ecuador</option>
@@ -190,7 +190,9 @@ const Destination = ({ refs, countries }) => {
 				</label>
 				<div className="col-sm-10">
 					<select ref={refs.province} required className="custom-select" id="province">
-						<option value="">-</option>
+						<option value="" disabled selected>
+							-
+						</option>
 						{country !== null &&
 							countries[country].map((item, index) => (
 								<option key={index} value={item.value}>

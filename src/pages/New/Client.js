@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { Countries } from '../../data/Location';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -113,7 +114,7 @@ const ClientForm = ({ refs, onSubmit, onGenderClick }) => (
 	<form onSubmit={onSubmit}>
 		<Names />
 		<ContactInfo />
-		<Location refs={refs} />
+		<Location refs={refs} countries={Countries} />
 		<Gender onClick={onGenderClick} />
 		<ButtonGroup />
 	</form>
@@ -176,32 +177,67 @@ const ButtonGroup = () => (
 	</div>
 );
 
-const Location = ({ refs }) => (
-	<div id="location">
-		<div className="form-group row">
-			<label htmlFor="country" className="col-sm-2 col-form-label">
-				Country
-			</label>
-			<div className="col-sm-10">
-				<select
-					ref={refs.country}
-					required
-					className="custom-select crs-country"
-					id="country"
-					data-region-id="province"
-				/>
+const Location = ({ refs, countries }) => {
+	const [ country, setCountry ] = useState(null);
+
+	const onChange = (e) => {
+		const value = e.target.selectedOptions[0].value;
+		switch (value) {
+			case 'united states':
+				return setCountry('usa');
+			case 'ecuador':
+				return setCountry('ecu');
+			default:
+				return setCountry(null);
+		}
+	};
+
+	return (
+		<div id="destination">
+			<div className="form-group row">
+				<label htmlFor="country" className="col-sm-2 col-form-label">
+					Country
+				</label>
+				<div className="col-sm-10">
+					<select
+						ref={refs.country}
+						required
+						className="custom-select"
+						id="country"
+						onChange={onChange.bind(this)}
+					>
+						<option value="" selected>
+							Select a Country
+						</option>
+						<option value="ecuador">Ecuador</option>
+						<option value="united states">United States</option>
+					</select>
+				</div>
+			</div>
+			<div className="form-group row">
+				<label htmlFor="province" className="col-sm-2 col-form-label">
+					Province
+				</label>
+				<div className="col-sm-10">
+					<select ref={refs.province} required className="custom-select" id="province">
+						<option value="">-</option>
+						{country !== null &&
+							countries[country].map((item, index) => (
+								<option key={index} value={item.value}>
+									{item.name}
+								</option>
+							))}
+					</select>
+				</div>
+			</div>
+			<div className="form-group row">
+				<label htmlFor="address" className="col-sm-2 col-form-label">
+					Address
+				</label>
+				<div className="col-sm-10">
+					<input type="text" className="form-control" id="address" placeholder="Address" name="address" />
+				</div>
 			</div>
 		</div>
-		<div className="form-group row">
-			<label htmlFor="province" className="col-sm-2 col-form-label">
-				Province
-			</label>
-			<div className="col-sm-10">
-				<select ref={refs.province} required className="custom-select" id="province" />
-			</div>
-		</div>
-		<div className="form-group row">
-			<Input label="Address" type="text" id="address" placeholder="Address" name="address" />
-		</div>
-	</div>
-);
+	);
+};
