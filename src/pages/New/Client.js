@@ -47,7 +47,7 @@ const Body = () => {
 			const country = countryRef.current.selectedOptions[0].text;
 			const province = provinceRef.current.selectedOptions[0].text;
 			let id = Number(new Date()).toString();
-			let clientSince = new Date().toLocaleString().split(',')[0];
+			let clientSince = new Date().toLocaleString('en-US').split(',')[0];
 			const data = {
 				fname: fname,
 				lname: lname,
