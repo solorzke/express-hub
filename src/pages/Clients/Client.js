@@ -144,7 +144,9 @@ const Body = () => {
 	//Change the casing of every word in the string
 	const formatString = (str) => {
 		//Check if its multi-word
-		const words = str.split(' ');
+		const parsedStr = str.replaceAll('%20', ' ');
+		console.log(`${str} => ${parsedStr}`);
+		const words = parsedStr.split(' ');
 		const newString = words.map((item) => item.charAt(0).toUpperCase() + item.slice(1));
 		return newString.join(' ');
 	};
