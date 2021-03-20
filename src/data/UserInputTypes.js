@@ -1,6 +1,6 @@
 export const fieldTypes = (state) => [
 	{
-		name: 'User Id',
+		name: 'Usuario Id',
 		img: 'fas fa-passport',
 		value: state.emp_id,
 		type: 'text',
@@ -9,7 +9,7 @@ export const fieldTypes = (state) => [
 	},
 
 	{
-		name: 'First Name',
+		name: 'Primero Name',
 		img: 'fas fa-id-card',
 		value: state.fname,
 		type: 'text',
@@ -18,7 +18,7 @@ export const fieldTypes = (state) => [
 	},
 
 	{
-		name: 'Last Name',
+		name: 'Apellido',
 		img: 'fas fa-id-card',
 		value: state.lname,
 		type: 'text',
@@ -27,7 +27,7 @@ export const fieldTypes = (state) => [
 	},
 
 	{
-		name: 'Email Address',
+		name: 'Dirección de Correo Electrónico',
 		img: 'fas fa-at',
 		value: state.email,
 		type: 'user-email',
@@ -36,7 +36,7 @@ export const fieldTypes = (state) => [
 	},
 
 	{
-		name: 'Password',
+		name: 'Contraseña',
 		img: 'fas fa-lock',
 		value: '**********',
 		type: 'password',

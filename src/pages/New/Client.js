@@ -10,13 +10,13 @@ import { Config } from '../../data/Config';
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
-const Order = () => <Wrapper children={<Body />} current="New Client" active="new" />;
+const Order = () => <Wrapper children={<Body />} current="Nuevo Cliente" active="new" />;
 
 const Body = () => {
 	const [ img, setImg ] = useState('fas fa-spinner fa-pulse');
 	const [ toast, setToast ] = useState(false);
-	const [ message, setMessage ] = useState('Adding Client...');
-	const [ heading, setHeading ] = useState('Processing');
+	const [ message, setMessage ] = useState('Añadiendo Cliente ...');
+	const [ heading, setHeading ] = useState('Procesando');
 	const [ gender, setGender ] = useState('other');
 	let countryRef = useRef(null);
 	let provinceRef = useRef(null);
@@ -64,16 +64,16 @@ const Body = () => {
 			await Firebase.firestore().collection('clients').doc(id).set(data);
 			setToastProps(
 				'fas fa-check-circle toast-success',
-				'Complete',
-				'Client added!',
+				'Completo',
+				'Cliente agregado!',
 				'> Firebase: client data added',
 				true
 			);
 		} catch (error) {
 			setToastProps(
 				'fas fa-window-close toast-fail',
-				'Failed',
-				`Client couldn't be added!`,
+				'Fallido',
+				`No se pudo agregar el cliente!`,
 				'> Firebase: Error couldnt send request.',
 				false
 			);
@@ -95,9 +95,10 @@ const Body = () => {
 				heading={heading}
 				img={<i className={`${img} p-3`} />}
 			/>
-			<h1>Add New Client</h1>
+			<h1>Agregar Nuevo Cliente</h1>
 			<p className="mb-5">
-				Enter the client's information before proceeding to adding their new shipment order to the database.
+				Ingrese la información del cliente antes de proceder a agregar su nueva orden de envío a la base de
+				datos.
 			</p>
 			<ClientForm
 				refs={{ country: countryRef, province: provinceRef }}
@@ -122,13 +123,13 @@ const ClientForm = ({ refs, onSubmit, onGenderClick }) => (
 
 const Gender = ({ onClick }) => {
 	const genders = [
-		{ name: 'Male', value: 'male' },
-		{ name: 'Female', value: 'female' },
-		{ name: 'Other', value: 'other' }
+		{ name: 'Masculino', value: 'male' },
+		{ name: 'Femenino', value: 'female' },
+		{ name: 'Otro', value: 'other' }
 	];
 	return (
 		<div id="genders">
-			<label className="pr-5">Gender</label>
+			<label className="pr-5">Género</label>
 			{genders.map((item, index) => (
 				<div className="form-check form-check-inline" key={index}>
 					<input
@@ -150,18 +151,25 @@ const Gender = ({ onClick }) => {
 
 const Names = () => (
 	<div className="form-group row">
-		<InputCol column="col-md-6" label="First Name" type="text" id="fname" placeholder="First Name" name="fname" />
-		<InputCol column="col-md-6" label="Last Name" type="text" id="lname" placeholder="Last Name" name="lname" />
+		<InputCol
+			column="col-md-6"
+			label="Primer Nombre"
+			type="text"
+			id="fname"
+			placeholder="Primer Nombre"
+			name="fname"
+		/>
+		<InputCol column="col-md-6" label="Apellidos" type="text" id="lname" placeholder="Apellidos" name="lname" />
 	</div>
 );
 
 const ContactInfo = () => (
 	<div id="contact">
 		<div className="form-group row">
-			<Input label="Email" type="email" id="email" placeholder="Email Address" name="email" />
+			<Input label="Correo Electrónico" type="email" id="email" placeholder="Correo Electrónico" name="email" />
 		</div>
 		<div className="form-group row">
-			<Input label="Phone Number" type="tel" id="phone" placeholder="Phone Number" name="phone" />
+			<Input label="Número de Teléfono" type="tel" id="phone" placeholder="Número de Teléfono" name="phone" />
 		</div>
 	</div>
 );
@@ -170,9 +178,9 @@ const ButtonGroup = () => (
 	<div className="form-group row">
 		<div className="col-md d-flex justify-content-end align-items-center">
 			<a href="/new-order" className="mr-2 btn btn-md btn-secondary">
-				Cancel
+				Cancelar
 			</a>
-			<input value="Add Client" type="submit" className="btn btn-primary" id="btn-modal" />
+			<input value="Agregar Cliente" type="submit" className="btn btn-primary" id="btn-modal" />
 		</div>
 	</div>
 );
@@ -196,7 +204,7 @@ const Location = ({ refs, countries }) => {
 		<div id="destination">
 			<div className="form-group row">
 				<label htmlFor="country" className="col-sm-2 col-form-label">
-					Country
+					País
 				</label>
 				<div className="col-sm-10">
 					<select
@@ -207,16 +215,16 @@ const Location = ({ refs, countries }) => {
 						onChange={onChange.bind(this)}
 					>
 						<option value="" selected>
-							Select a Country
+							Seleccione un país
 						</option>
 						<option value="ecuador">Ecuador</option>
-						<option value="united states">United States</option>
+						<option value="united states">Estados Unidos</option>
 					</select>
 				</div>
 			</div>
 			<div className="form-group row">
 				<label htmlFor="province" className="col-sm-2 col-form-label">
-					Province
+					Provincia
 				</label>
 				<div className="col-sm-10">
 					<select ref={refs.province} required className="custom-select" id="province">
@@ -232,10 +240,10 @@ const Location = ({ refs, countries }) => {
 			</div>
 			<div className="form-group row">
 				<label htmlFor="address" className="col-sm-2 col-form-label">
-					Address
+					Dirección
 				</label>
 				<div className="col-sm-10">
-					<input type="text" className="form-control" id="address" placeholder="Address" name="address" />
+					<input type="text" className="form-control" id="address" placeholder="Dirección" name="address" />
 				</div>
 			</div>
 		</div>

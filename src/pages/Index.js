@@ -59,10 +59,10 @@ const Index = () => {
 						<div className="col">
 							<img src={Logo} height="400" width="550" />
 							<h2 className="pt-5 text-center jo-font">
-								Shipping &amp; Packaging At Its Finest! Across the USA &amp; South America
+								Envío y embalaje en su máxima expresión! En Estados Unidos y Sudamérica
 							</h2>
 							<p className="pt-5 text-center jo-font">
-								A Different Kind Of Company. A Different Kind Of Express Shipping.
+								Un tipo diferente de empresa. Un tipo diferente de envío exprés.
 							</p>
 						</div>
 						<div className="col d-flex justify-content-center align-content-end flex-column">
@@ -91,17 +91,23 @@ const LoginBox = ({ authenticate, progress, onClick }) => (
 	<React.Fragment>
 		<h1 className="text-center jo-font">Teloentrego</h1>
 		<form onSubmit={authenticate}>
-			<input type="email" id="email" name="email" placeholder="Enter your email address" required />
+			<input
+				type="email"
+				id="email"
+				name="email"
+				placeholder="Ingrese su dirección de correo electrónico"
+				required
+			/>
 			<br />
-			<input type="password" id="password" name="password" placeholder="Enter your password" required />
+			<input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required />
 			<br />
 			{progress && <i className="fas fa-spinner fa-pulse py-3" />}
 			<input type="submit" value="Sign In" className="login-login-btn btn btn-light" />
 		</form>
 		<p className="p-3 text-center">
-			Forgot Password?
+			¿Has olvidado tu contraseña?
 			<button className="btn btn-link p-0 mx-2 my-0 confirm-login-btn" onClick={() => onClick('forgot-pw')}>
-				Recover it now!
+				¡Recupera ahora!
 			</button>
 		</p>
 	</React.Fragment>
@@ -117,16 +123,16 @@ const ForgotPasswordBox = ({ onPasswordReset, onClick }) => {
 
 	return (
 		<div className="animate__animated animate__fadeInRight text-center">
-			<h1 className="text-center">Reset Password</h1>
+			<h1 className="text-center">Restablecer La Contraseña</h1>
 			{!FINISHED && <PasswordForm onSubmit={handleFormSubmit.bind(this)} onClick={onClick} />}
 			{FINISHED && (
 				<h2 className="animate__animated animate__fadeIn text-center">
-					Password reset request was sent to your email address.
+					La solicitud de restablecimiento de contraseña se envió a su dirección de correo electrónico.
 				</h2>
 			)}
 			{FINISHED && (
 				<button onClick={() => onClick('login')} className="btn btn-link p-0 mx-2 my-0 confirm-login-btn">
-					Go Back to Login
+					Volver al inicio de sesión
 				</button>
 			)}
 		</div>
@@ -139,16 +145,16 @@ const PasswordForm = (props) => (
 			<input
 				name="email-for-request"
 				id="email-for-request"
-				placeholder="Enter your email address"
+				placeholder="Ingrese su dirección de correo electrónico"
 				type="email"
 				required
 			/>
-			<input type="submit" value="Recover Password" className="login-login-btn btn btn-light" />
+			<input type="submit" value="Recuperar Contraseña" className="login-login-btn btn btn-light" />
 		</form>
 		<p className="p-3 text-center">
-			Remember Password?
+			¿Recordar contraseña?
 			<button className="btn btn-link p-0 mx-2 my-0 confirm-login-btn" onClick={() => props.onClick('login')}>
-				Login In
+				Iniciar Sesión
 			</button>
 		</p>
 	</React.Fragment>

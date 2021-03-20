@@ -1,10 +1,10 @@
 export const fieldTypes = (state) => {
 	const item_names = state.items.map((item) => item.name).join(', ');
-	const status = state.shippingStatus ? 'Shipped' : 'Waiting to be shipped';
+	const status = state.shippingStatus ? 'Enviado' : 'Esperando ser enviado';
 
 	return [
 		{
-			name: 'Order Number',
+			name: 'Número de Orden',
 			img: 'fas fa-barcode',
 			value: state.orderId,
 			type: 'text',
@@ -12,7 +12,7 @@ export const fieldTypes = (state) => {
 			permitted: false
 		},
 		{
-			name: 'Client Number',
+			name: 'Numero de Cliente',
 			img: 'fas fa-id-badge',
 			value: state.clientId,
 			type: 'text',
@@ -20,7 +20,7 @@ export const fieldTypes = (state) => {
 			permitted: false
 		},
 		{
-			name: 'Tracking Number',
+			name: 'El Número de Rastreo',
 			img: 'fas fa-truck',
 			value: state.trackingNum,
 			type: 'text',
@@ -28,7 +28,7 @@ export const fieldTypes = (state) => {
 			permitted: true
 		},
 		{
-			name: 'Shipment Status',
+			name: 'Estado Del Envío',
 			img: 'fas fa-passport',
 			value: status,
 			type: 'toggle',
@@ -36,10 +36,10 @@ export const fieldTypes = (state) => {
 			permitted: true,
 			status: state.shippingStatus
 		},
-		{ name: 'Date', img: 'fas fa-calendar-day', value: state.date, type: 'date', key: 'date', permitted: true },
-		{ name: 'Items', img: 'fas fa-box-open', value: item_names, type: 'none', permitted: false },
+		{ name: 'Fecha', img: 'fas fa-calendar-day', value: state.date, type: 'date', key: 'date', permitted: true },
+		{ name: 'Artículos', img: 'fas fa-box-open', value: item_names, type: 'none', permitted: false },
 		{
-			name: 'Country',
+			name: 'País',
 			img: 'fas fa-globe-americas pr-1',
 			value: state.country,
 			type: 'text',
@@ -47,7 +47,7 @@ export const fieldTypes = (state) => {
 			permitted: true
 		},
 		{
-			name: 'Province',
+			name: 'Provincia',
 			img: 'fas fa-city pr-1',
 			value: state.province,
 			type: 'text',
@@ -55,7 +55,7 @@ export const fieldTypes = (state) => {
 			permitted: true
 		},
 		{
-			name: 'Address',
+			name: 'Dirección',
 			img: 'far fa-address-card pr-1',
 			value: state.address,
 			type: 'text',
@@ -63,7 +63,7 @@ export const fieldTypes = (state) => {
 			permitted: true
 		},
 		{
-			name: 'Notes',
+			name: 'Notas',
 			img: 'fas fa-sticky-note',
 			value: state.notes,
 			type: 'rich-text',

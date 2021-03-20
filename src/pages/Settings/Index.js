@@ -13,7 +13,7 @@ import { fieldTypes } from '../../data/UserInputTypes';
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
-const Index = () => <Wrapper children={<Body />} current="Settings" active="settings" />;
+const Index = () => <Wrapper children={<Body />} current="Ajustes" active="settings" />;
 
 const Body = () => {
 	//State
@@ -21,8 +21,8 @@ const Body = () => {
 	//State data that control the toast message
 	const [ TOAST, setToast ] = useState(false);
 	const [ IMG, setImg ] = useState('fas fa-spinner fa-pulse');
-	const [ MESSAGE, setMessage ] = useState('Updating User Info...');
-	const [ HEADING, setHeading ] = useState('Processing');
+	const [ MESSAGE, setMessage ] = useState('Actualizando la información del usuario...');
+	const [ HEADING, setHeading ] = useState('Procesando');
 
 	useEffect(() => {
 		getUserInformation();
@@ -57,7 +57,7 @@ const Body = () => {
 		try {
 			const value = Object.values(data)[0].toLowerCase();
 			const key = Object.keys(data)[0];
-			if (value === '') return alert('Please enter a value before updating');
+			if (value === '') return alert('Ingrese un valor antes de actualizar');
 			data[key] = data[key].toLowerCase();
 			switch (key) {
 				case 'email':
@@ -88,8 +88,8 @@ const Body = () => {
 			}
 			setToastProps(
 				'fas fa-check-circle toast-success',
-				'Update Complete',
-				'User information was updated successfully!',
+				'Actualizacion completa',
+				'La información del usuario se actualizó correctamente.',
 				'> Firebase: data updated',
 				true
 			);
@@ -97,8 +97,8 @@ const Body = () => {
 			console.error(error);
 			setToastProps(
 				'fas fa-window-close toast-fail',
-				'Failed',
-				`Update info couldn't be added!`,
+				'Fallido',
+				`¡No se pudo agregar la información de actualización!`,
 				`> Firebase: Error couldnt send request.\n ${error.message}`,
 				false
 			);
@@ -156,8 +156,8 @@ const Details = ({ state, formatString, onUpdate }) => {
 
 const Description = () => (
 	<div id="description" className="px-5">
-		<h1>User Profile</h1>
-		<p>Update your user information below and save your changes.</p>
+		<h1>Perfil Del Usuario</h1>
+		<p>Actualice su información de usuario a continuación y guarde sus cambios.</p>
 	</div>
 );
 

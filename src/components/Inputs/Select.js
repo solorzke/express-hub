@@ -4,10 +4,10 @@ import Async from 'react-async';
 const AsyncSelect = ({ required = false, refs, promiseFn, formatString, onChange }) => {
 	return (
 		<div>
-			<label>Client</label>
+			<label>Cliente</label>
 			<select required={required} ref={refs} className="custom-select" id="client" onChange={onChange}>
 				<option value="" disabled selected>
-					Select a client
+					Selecciona un cliente
 				</option>
 				<Async promiseFn={promiseFn} onReject={(e) => console.log(e.message)}>
 					{({ data, err, isLoading }) => {

@@ -9,9 +9,9 @@ const File = ({ id, date, items, names }) => {
 			style={{ backgroundColor: '#FFFCF2' }}
 		>
 			<li>
-				Order: {id}
+				Pedido: {id}
 				<p className="file-items text-secondary px-0">
-					<span className="file-date text-secondary pr-3">{date}</span>Items: {items}
+					<span className="file-date text-secondary pr-3">{date}</span>Articulos: {items}
 				</p>
 			</li>
 		</a>

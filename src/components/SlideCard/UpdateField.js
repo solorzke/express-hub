@@ -13,10 +13,10 @@ export const TextField = ({ storeKey, heading, value, onClick, id, onCancel }) =
 				</div>
 				<div className="col-md align-items-end justify-content-start d-flex">
 					<button className="btn btn-link text-danger" onClick={onCancel}>
-						Cancel
+						Cancelar
 					</button>
 					<button className="btn btn-link" onClick={(e) => onClick(e, { [storeKey]: textRef.current.value })}>
-						Update
+						Actualizar
 					</button>
 				</div>
 			</div>
@@ -45,10 +45,10 @@ export const RadioField = ({ storeKey, heading, onClick, options, onCancel }) =>
 				</div>
 			))}
 			<button className="btn btn-link text-danger" onClick={onCancel}>
-				Cancel
+				Cancelar
 			</button>
 			<button className="btn btn-link" onClick={(e) => onClick(e, { [storeKey]: SELECTED })}>
-				Update
+				Actualizar
 			</button>
 		</div>
 	);
@@ -56,12 +56,12 @@ export const RadioField = ({ storeKey, heading, onClick, options, onCancel }) =>
 
 export const ToggleField = ({ storeKey, onClick, value, onCancel }) => (
 	<div className="update-item col-md-11 animate__animated animate__slideInRight">
-		<h6 className="mb-0 mt-2">Change Shipping Status</h6>
+		<h6 className="mb-0 mt-2">Cambiar estado de envío</h6>
 		<button className="btn btn-link text-danger pl-0" onClick={onCancel}>
-			Cancel
+			Cancelar
 		</button>
 		<button className="btn btn-link pl-0" onClick={(e) => onClick(e, { [storeKey]: !value })}>
-			{`Change status to ${value ? '"Waiting To Be Shipped"' : '"Shipped"'}`}
+			{`Cambiar estado a ${value ? '"Esperando ser enviado"' : '"Enviado"'}`}
 		</button>
 	</div>
 );
@@ -83,7 +83,7 @@ export const DateField = ({ storeKey, onClick, onCancel, value }) => {
 		<div className="update-item col-md-11 animate__animated animate__slideInRight">
 			<div className="row">
 				<div className="col-md-4">
-					<label htmlFor="order-date">Order Date</label>
+					<label htmlFor="order-date">Fecha de Pedido</label>
 					<input
 						ref={datePicker}
 						type="date"
@@ -96,13 +96,13 @@ export const DateField = ({ storeKey, onClick, onCancel, value }) => {
 				</div>
 				<div className="col-md-8 align-items-end justify-content-start d-flex">
 					<button className="btn btn-link text-danger pl-0" onClick={onCancel}>
-						Cancel
+						Cancelar
 					</button>
 					<button
 						className="btn btn-link pl-0"
 						onClick={(e) => onClick(e, { [storeKey]: reformatDate('mm/dd/yyyy') })}
 					>
-						Update
+						Actualizar
 					</button>
 				</div>
 			</div>
@@ -122,13 +122,13 @@ export const PhoneField = ({ storeKey, onClick, id, value, heading, onCancel }) 
 				</div>
 				<div className="col-md align-items-end justify-content-start d-flex">
 					<button className="btn btn-link text-danger" onClick={onCancel}>
-						Cancel
+						Cancelar
 					</button>
 					<button
 						className="btn btn-link"
 						onClick={(e) => onClick(e, { [storeKey]: phoneRef.current.value })}
 					>
-						Update
+						Actualizar
 					</button>
 				</div>
 			</div>
@@ -151,7 +151,7 @@ export const UserEmailField = ({ storeKey, heading, onClick, id, onCancel }) => 
 						type="email"
 						className="form-control my-1"
 						id="old-email"
-						placeholder="Enter new email address"
+						placeholder="Ingrese una nueva dirección de correo electrónico"
 						name={id}
 						required
 					/>
@@ -160,7 +160,7 @@ export const UserEmailField = ({ storeKey, heading, onClick, id, onCancel }) => 
 						type="email"
 						className="form-control my-1"
 						id={id}
-						placeholder="Enter current email address"
+						placeholder="Ingrese la dirección de correo electrónico actual"
 						name="old-email"
 						required
 					/>
@@ -170,14 +170,14 @@ export const UserEmailField = ({ storeKey, heading, onClick, id, onCancel }) => 
 						type="password"
 						className="form-control my-1"
 						id="password"
-						placeholder="Enter current password"
+						placeholder="Introducir la contraseña actual"
 						name="password"
 						required
 					/>
 				</div>
 				<div className="col-md align-items-center justify-content-start d-flex">
 					<button className="btn btn-link text-danger" onClick={onCancel}>
-						Cancel
+						Cancelar
 					</button>
 					<button
 						className="btn btn-link"
@@ -188,7 +188,7 @@ export const UserEmailField = ({ storeKey, heading, onClick, id, onCancel }) => 
 								password: passwordRef.current.value
 							})}
 					>
-						Update
+						Actualizar
 					</button>
 				</div>
 			</div>
@@ -215,13 +215,13 @@ export const ClientEmailField = ({ storeKey, heading, onClick, id, onCancel }) =
 				</div>
 				<div className="col-md align-items-end justify-content-start d-flex">
 					<button className="btn btn-link text-danger" onClick={onCancel}>
-						Cancel
+						Cancelar
 					</button>
 					<button
 						className="btn btn-link"
 						onClick={(e) => onClick(e, { [storeKey]: emailRef.current.value })}
 					>
-						Update
+						Actualizar
 					</button>
 				</div>
 			</div>
@@ -240,10 +240,10 @@ export const RichTextField = ({ storeKey, onClick, onCancel }) => {
 				</div>
 				<div className="col-md-4 align-items-center justify-content-start d-flex">
 					<button className="btn btn-link text-danger" onClick={onCancel}>
-						Cancel
+						Cancelar
 					</button>
 					<button className="btn btn-link" onClick={(e) => onClick(e, { [storeKey]: TEXT })}>
-						Update
+						Actualizar
 					</button>
 				</div>
 			</div>
@@ -281,7 +281,7 @@ export const PasswordField = ({ storeKey, heading, onClick, id, onCancel }) => {
 				</div>
 				<div className="col-md align-items-center justify-content-start d-flex">
 					<button className="btn btn-link text-danger" onClick={onCancel}>
-						Cancel
+						Cancelar
 					</button>
 					<button
 						className="btn btn-link"
@@ -291,7 +291,7 @@ export const PasswordField = ({ storeKey, heading, onClick, id, onCancel }) => {
 								'old-password': oldPasswordRef.current.value
 							})}
 					>
-						Update
+						Actualizar
 					</button>
 				</div>
 			</div>

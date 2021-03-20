@@ -1,6 +1,6 @@
 export const fieldTypes = (state) => [
 	{
-		name: 'First Name',
+		name: 'Primero Nombre',
 		img: 'fas fa-signature pr-1',
 		value: state.fname,
 		type: 'text',
@@ -9,7 +9,7 @@ export const fieldTypes = (state) => [
 	},
 
 	{
-		name: 'Last Name',
+		name: 'Apellido',
 		img: 'fas fa-signature pr-1',
 		value: state.lname,
 		type: 'text',
@@ -18,7 +18,7 @@ export const fieldTypes = (state) => [
 	},
 
 	{
-		name: 'Gender',
+		name: 'Género',
 		img: 'fas fa-venus-mars pr-1',
 		value: state.gender,
 		type: 'radio',
@@ -32,7 +32,7 @@ export const fieldTypes = (state) => [
 	},
 
 	{
-		name: 'Email Address',
+		name: 'Dirección De Correo Electrónico',
 		img: 'fas fa-at pr-1',
 		value: state.email,
 		type: 'client-email',
@@ -41,7 +41,7 @@ export const fieldTypes = (state) => [
 	},
 
 	{
-		name: 'Phone Number',
+		name: 'Número De Teléfono',
 		img: 'fas fa-phone pr-1',
 		value: state.phone,
 		type: 'tel',
@@ -50,7 +50,7 @@ export const fieldTypes = (state) => [
 	},
 
 	{
-		name: 'Country',
+		name: 'País',
 		img: 'fas fa-globe-americas pr-1',
 		value: state.country,
 		type: 'text',
@@ -59,7 +59,7 @@ export const fieldTypes = (state) => [
 	},
 
 	{
-		name: 'Province',
+		name: 'Provincia',
 		img: 'fas fa-city pr-1',
 		value: state.province,
 		type: 'text',
@@ -68,7 +68,7 @@ export const fieldTypes = (state) => [
 	},
 
 	{
-		name: 'Address',
+		name: 'Dirección',
 		img: 'far fa-address-card pr-1',
 		value: state.address,
 		type: 'text',

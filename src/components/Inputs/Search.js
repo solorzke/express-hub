@@ -19,7 +19,7 @@ const SearchBar = (props) => {
 			<input
 				type="text"
 				className="form-control"
-				placeholder="Search client's name"
+				placeholder="Buscar el nombre del cliente"
 				name="search"
 				id="search"
 				onChange={handleOnChange.bind(this)}
@@ -39,9 +39,9 @@ const SearchBar = (props) => {
 const ResultsCounter = ({ data, inputLength }) => {
 	const dataLength = data.length;
 	if (data.length > 0) {
-		return <p className="py-2 pl-3 my-0 bg-secondary text-light search-bar">{dataLength} results found</p>;
+		return <p className="py-2 pl-3 my-0 bg-secondary text-light search-bar">{dataLength} resultados encontrados</p>;
 	} else if (data.length === 0 && inputLength > 0) {
-		return <p className="py-2 pl-3 my-0 bg-secondary text-light search-bar">0 results found</p>;
+		return <p className="py-2 pl-3 my-0 bg-secondary text-light search-bar">0 resultados encontrados</p>;
 	} else {
 		return '';
 	}

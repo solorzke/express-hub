@@ -16,15 +16,15 @@ import 'firebase/storage';
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
-const Client = () => <Wrapper children={<Body />} current="Clients" active="clients" />;
+const Client = () => <Wrapper children={<Body />} current="Clientes" active="clients" />;
 
 const Body = () => {
 	let { id } = useParams();
 	//State data that control the toast message
 	const [ toast, setToast ] = useState(false);
 	const [ img, setImg ] = useState('fas fa-spinner fa-pulse');
-	const [ message, setMessage ] = useState('Deleting Client and their orders...');
-	const [ heading, setHeading ] = useState('Deleting Client');
+	const [ message, setMessage ] = useState('Eliminando Cliente y sus pedidos ...');
+	const [ heading, setHeading ] = useState('Eliminar Cliente');
 	//State data that controls client and order info
 	const [ client, setClient ] = useState(null);
 	const [ orders, setOrders ] = useState([]);
@@ -45,8 +45,8 @@ const Body = () => {
 		setTimeout(() => {
 			setToast(false);
 			setImg('fas fa-spinner fa-pulse');
-			setHeading('Deleting Client and their orders...');
-			setMessage('Deleting Client');
+			setHeading('Eliminando Cliente y sus pedidos ...');
+			setMessage('Eliminar cliente');
 			console.log('Toast Props set to normal.');
 			if (action) window.location.href = document.referrer;
 		}, 3000);
@@ -57,7 +57,9 @@ const Body = () => {
 		try {
 			const snapshot = await Firebase.firestore().collection('clients').where('id', '==', id).get();
 			if (snapshot.empty)
-				return alert('There is no user that matches this client id. Please go back and try again.');
+				return alert(
+					'No hay ningún usuario que coincida con este ID de cliente. Por favor, regrese y vuelva a intentarlo.'
+				);
 			let client = [];
 			snapshot.forEach((doc) => client.push(doc.data()));
 			setClient(client[0]);
@@ -87,7 +89,7 @@ const Body = () => {
 		try {
 			// setUpdating(true);
 			const value = Object.values(data)[0].toLowerCase();
-			if (value === '' && typeof value !== 'boolean') return alert('Please enter a value before updating');
+			if (value === '' && typeof value !== 'boolean') return alert('Ingrese un valor antes de actualizar');
 			await Firebase.firestore().collection('clients').doc(id).update(data);
 			window.location.reload();
 		} catch (error) {
@@ -105,7 +107,7 @@ const Body = () => {
 		e.preventDefault();
 		try {
 			const answer = window.confirm(
-				`Are you sure you want to delete this client? All orders, information, and files associated with this account will be erased & cannot be recovered.`
+				`¿Está seguro de que desea eliminar este cliente? Todos los pedidos, la información y los archivos asociados con esta cuenta se borrarán y no se podrán recuperar.`
 			);
 			if (answer) {
 				setToast(true);
@@ -122,8 +124,8 @@ const Body = () => {
 				await Firebase.firestore().collection('clients').doc(id).delete();
 				setToastProps(
 					'fas fa-check-circle toast-success',
-					'Client Deleted!',
-					`The client was deleted from the cloud!`,
+					'Cliente Eliminado!',
+					`¡El cliente fue eliminado de la nube!`,
 					`> Firebase: Client: ${id} and all his/her orders are deleted from the system.`,
 					true
 				);
@@ -133,8 +135,8 @@ const Body = () => {
 			console.error(error);
 			setToastProps(
 				'fas fa-window-close toast-fail',
-				'Failed',
-				`Client couldn't be deleted!`,
+				'Fallido',
+				`¡No se pudo eliminar el cliente!`,
 				`> Firebase: Error couldnt send request.\n ${error.message}`,
 				false
 			);
@@ -179,12 +181,12 @@ const Body = () => {
 							onUpdate={updateClient.bind(this)}
 						/>
 					}
-					title="Client Information"
+					title="Información Del Cliente"
 					icon="fas fa-user-circle pr-2"
 				/>
 				<Slidecard
 					children={!empty ? <Orders state={orders} names={client} /> : <EmptyBox />}
-					title="Recent Orders"
+					title="Pedidos Recientes"
 					icon="fas fa-list-alt pr-2"
 				/>
 			</section>
@@ -200,11 +202,11 @@ const Menu = ({ onDelete }) => (
 		<Dropdown.Menu>
 			<Dropdown.Item href="#/action-2">
 				<i className="fas fa-download pr-2" />
-				Download Order History
+				Descargar historial de pedidos
 			</Dropdown.Item>
 			<Dropdown.Item as={Button} onClick={onDelete}>
 				<i className="fas fa-trash-alt pr-2" />
-				Delete Client
+				Eliminar cliente
 			</Dropdown.Item>
 		</Dropdown.Menu>
 	</Dropdown>
@@ -212,11 +214,11 @@ const Menu = ({ onDelete }) => (
 
 const Description = ({ state, formatString }) => (
 	<div id="description">
-		<h1>Client: {state !== null ? formatString(`${state.fname} ${state.lname}`) : ''}</h1>
-		<p>Client since: {state !== null ? state.clientSince : 'Not Available'}</p>
+		<h1>Cliente: {state !== null ? formatString(`${state.fname} ${state.lname}`) : ''}</h1>
+		<p>Cliente desde: {state !== null ? state.clientSince : 'Not Available'}</p>
 		<p style={{ width: '50%' }}>
-			See information about your client's account, download an archive of their order history, or make changes to
-			their information with the options provided.
+			Vea información sobre la cuenta de su cliente, descargue un archivo de su historial de pedidos o realice
+			cambios en su información con las opciones proporcionadas.
 		</p>
 	</div>
 );
@@ -286,15 +288,15 @@ const EmptyBox = () => (
 				className="fab fa-creative-commons-zero p-5"
 				style={{ fontSize: 100, color: '#ee4266', backgroundColor: '#2a1e5c', borderRadius: 20 }}
 			/>
-			<p className="pt-5">This client hasn't made any orders yet.</p>
+			<p className="pt-5">Este cliente no ha hecho ningún pedido todavía.</p>
 		</div>
 	</div>
 );
 
 const Paths = () => (
 	<Breadcrumb>
-		<Breadcrumb.Item href="/clients">Back to Origin</Breadcrumb.Item>
-		<Breadcrumb.Item active>Client</Breadcrumb.Item>
+		<Breadcrumb.Item href="/clients">Volver al origen</Breadcrumb.Item>
+		<Breadcrumb.Item active>Cliente</Breadcrumb.Item>
 	</Breadcrumb>
 );
 

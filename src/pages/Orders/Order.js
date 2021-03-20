@@ -21,13 +21,13 @@ const useQuery = () => new URLSearchParams(useLocation().search);
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
-const Order = () => <Wrapper children={<Body />} current="Orders" active="orders" />;
+const Order = () => <Wrapper children={<Body />} current="Pedidos" active="orders" />;
 
 const Body = () => {
 	let QUERY = useQuery();
 	const ORDER_ID = QUERY.get('id');
 	const confirm_message =
-		'Are you sure you want to delete this order? All docs and information will be erased and cannot be recovered.';
+		'¿Está seguro de que desea eliminar este pedido? Todos los documentos y la información se borrarán y no se podrán recuperar.';
 	const [ FNAME, setFname ] = useState('');
 	const [ LNAME, setLname ] = useState('');
 	const [ ORDER, setOrder ] = useState(null);
@@ -35,8 +35,8 @@ const Body = () => {
 	//State data that control the toast message
 	const [ toast, setToast ] = useState(false);
 	const [ img, setImg ] = useState('fas fa-spinner fa-pulse');
-	const [ message, setMessage ] = useState('Deleting Order');
-	const [ heading, setHeading ] = useState('Data is being deleted...');
+	const [ message, setMessage ] = useState('Eliminando Orden');
+	const [ heading, setHeading ] = useState('Se está eliminando el pedido ...');
 
 	useEffect(
 		() => {
@@ -56,8 +56,8 @@ const Body = () => {
 		setTimeout(() => {
 			setToast(false);
 			setImg('fas fa-spinner fa-pulse');
-			setHeading('Deleting Client and their orders...');
-			setMessage('Deleting Client');
+			setHeading('Se está eliminando el pedido ...');
+			setMessage('Eliminando Orden');
 			console.log('Toast Props set to normal.');
 			if (action) window.location.href = '/orders';
 		}, 3000);
@@ -83,7 +83,7 @@ const Body = () => {
 		try {
 			setUpdating(true);
 			const value = Object.values(data)[0];
-			if (value === '' && typeof value !== 'boolean') return alert('Please enter a value before updating');
+			if (value === '' && typeof value !== 'boolean') return alert('Ingrese un valor antes de actualizar');
 			await Firebase.firestore().collection('orders').doc(ORDER_ID).update(data);
 			window.location.reload();
 		} catch (error) {
@@ -114,8 +114,8 @@ const Body = () => {
 				await Firebase.firestore().collection('orders').doc(ORDER_ID).delete();
 				setToastProps(
 					'fas fa-check-circle toast-success',
-					'Order Deleted!',
-					`The order was deleted from the cloud!`,
+					'Orden Eliminado!',
+					`¡El pedido fue eliminado de la nube!`,
 					`> Firebase: Order: ${ORDER_ID} and its information are deleted from the system.`,
 					true
 				);
@@ -125,8 +125,8 @@ const Body = () => {
 			console.error(error);
 			setToastProps(
 				'fas fa-window-close toast-fail',
-				'Failed',
-				`Order couldn't be deleted!`,
+				'Fallido',
+				`¡No se pudo borrar el pedido!`,
 				`> Firebase: Error couldnt send request.\n ${error.message}`,
 				false
 			);
@@ -174,15 +174,15 @@ const Body = () => {
 							onUpdate={updateOrder.bind(this)}
 						/>
 					}
-					title="Order Details"
+					title="Detalles Del Pedido"
 					icon="fas fa-list-alt pr-2"
 				/>
 				<SlideCard
 					children={<Documents state={ORDER} formatString={formatString.bind(this)} />}
-					title="Documents"
+					title="Documentos"
 					options={
 						<a href={`/order/update-items?id=${ORDER_ID}`} className="btn btn-link">
-							Add/Update Docs List
+							Agregar / actualizar lista de documentos
 						</a>
 					}
 					icon="fas fa-clipboard-list pr-2"
@@ -201,7 +201,7 @@ const Body = () => {
 							files={[]}
 						/>
 					}
-					title="Receipt"
+					title="Recibo"
 					icon="fas fa-receipt pr-2"
 				/>
 			</div>
@@ -211,36 +211,37 @@ const Body = () => {
 
 const Description = ({ state, formatString, orderId }) => (
 	<div id="description" className="col-md-7">
-		<h1>Order Number: {orderId}</h1>
+		<h1>Número de orden: {orderId}</h1>
 		<p>
-			For Client: <strong>{state !== null ? formatString(`${state.fname} ${state.lname}`) : ''}</strong>
+			Para El Cliente: <strong>{state !== null ? formatString(`${state.fname} ${state.lname}`) : ''}</strong>
 		</p>
 		<p>
-			Below is an in depth look at the shipment order that was created including details about its destination,
-			cargo items, and pertinent files/documents.
+			A continuación se muestra un análisis en profundidad del pedido de envío que se creó, incluidos los detalles
+			sobre su destino, artículos de carga y archivos / documentos pertinentes.
 		</p>
 		<p>
-			You can update the shipment status below when this order and its items are ready to be sent to the client.
+			Puede actualizar el estado del envío a continuación cuando este pedido y sus artículos estén listos para ser
+			enviados al cliente.
 		</p>
-		<p>Update the contents of this order and add/remove any files or documents too.</p>
+		<p>Actualice el contenido de este pedido y agregue / elimine cualquier archivo o documento también.</p>
 	</div>
 );
 
 const ShipmentConfirmation = ({ shipped, onClick, progress }) => {
-	const itHasShipped = `Currently, this order has already been shipped`;
-	const hasNotShipped = `Currently, this order isn't marked for shipping yet.`;
+	const itHasShipped = `Actualmente, este pedido ya ha sido enviado.`;
+	const hasNotShipped = `Actualmente, este pedido aún no está marcado para envío.`;
 	const subtitle = shipped ? itHasShipped : hasNotShipped;
-	const btnText = shipped ? "Change to 'Not ready to ship'" : "Confirm 'Ready to Ship'";
+	const btnText = shipped ? "Cambiar a 'No listo para enviar'" : "Confirmar 'Listo para enviar'";
 	const btnColor = shipped ? 'text-danger' : 'text-success';
 	return (
 		<div id="shipment-confirmation" className="col-md-5 d-flex justify-content-center align-items-end">
 			<Card>
 				<Card.Body>
 					<Card.Title>
-						<i className="fas fa-dolly pr-3" />Shipment Status
+						<i className="fas fa-dolly pr-3" />Estado del Envío
 					</Card.Title>
 					<Card.Subtitle className="mb-2 text-muted">{subtitle}</Card.Subtitle>
-					<Card.Text>Confirm this order is ready for shipping or revert its status.</Card.Text>
+					<Card.Text>Confirma que este pedido está listo para enviarse o revierte su estado.</Card.Text>
 					<Card.Link
 						variant="link"
 						className={btnColor}
@@ -284,11 +285,11 @@ const Menu = ({ onDelete }) => (
 		<Dropdown.Menu>
 			<Dropdown.Item href="#/action-2">
 				<i className="fas fa-download pr-2" />
-				Download Order History
+				Descargar historial de pedidos
 			</Dropdown.Item>
 			<Dropdown.Item as={Button} onClick={onDelete}>
 				<i className="fas fa-trash-alt pr-2" />
-				Delete Order
+				Eliminar Pedido
 			</Dropdown.Item>
 		</Dropdown.Menu>
 	</Dropdown>
@@ -342,7 +343,7 @@ const Item = ({ data, formatString }) => {
 					</Accordion.Toggle>
 					<span className="d-inline">
 						<h5 className="d-inline">{formatString(data.name)}</h5>
-						<p>Quantity: {data.quantity}</p>
+						<p>Cantidad: {data.quantity}</p>
 					</span>
 				</div>
 			</div>
@@ -387,8 +388,8 @@ const Item = ({ data, formatString }) => {
 
 const Paths = () => (
 	<Breadcrumb className="py-2">
-		<Breadcrumb.Item href={document.referrer}>Back to Origin</Breadcrumb.Item>
-		<Breadcrumb.Item active>Order</Breadcrumb.Item>
+		<Breadcrumb.Item href="/orders">Volver Al Origen</Breadcrumb.Item>
+		<Breadcrumb.Item active>Pedido</Breadcrumb.Item>
 	</Breadcrumb>
 );
 

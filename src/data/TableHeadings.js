@@ -1,6 +1,6 @@
 export const Headings = (onClick) => [
 	{
-		name: 'Order Id',
+		name: 'Pedido Id',
 		style: { cursor: 'pointer' },
 		class: {
 			asc: 'fas fa-sort-up float-right',
@@ -11,7 +11,7 @@ export const Headings = (onClick) => [
 	},
 
 	{
-		name: 'Client Id',
+		name: 'Cliente Id',
 		style: { cursor: 'pointer' },
 		class: {
 			asc: 'fas fa-sort-up float-right',
@@ -22,7 +22,7 @@ export const Headings = (onClick) => [
 	},
 
 	{
-		name: 'Date',
+		name: 'Fecha',
 		style: { cursor: 'pointer' },
 		class: {
 			asc: 'fas fa-sort-up float-right',
@@ -33,7 +33,7 @@ export const Headings = (onClick) => [
 	},
 
 	{
-		name: 'Country',
+		name: 'País',
 		style: { cursor: 'pointer' },
 		class: {
 			asc: 'fas fa-sort-up float-right',
@@ -44,7 +44,7 @@ export const Headings = (onClick) => [
 	},
 
 	{
-		name: 'Province',
+		name: 'Provincia',
 		style: { cursor: 'pointer' },
 		class: {
 			asc: 'fas fa-sort-up float-right',
@@ -55,7 +55,7 @@ export const Headings = (onClick) => [
 	},
 
 	{
-		name: 'Address',
+		name: 'Dirección',
 		style: { cursor: 'pointer' },
 		class: {
 			asc: 'fas fa-sort-up float-right',
@@ -66,7 +66,7 @@ export const Headings = (onClick) => [
 	},
 
 	{
-		name: 'Shipping Status',
+		name: 'Estado Del Envío',
 		style: { cursor: 'pointer' },
 		class: {
 			asc: 'fas fa-sort-up float-right',
@@ -77,7 +77,7 @@ export const Headings = (onClick) => [
 	},
 
 	{
-		name: 'Tracking Number',
+		name: 'El Número De Rastreo',
 		style: { cursor: 'pointer' },
 		class: {
 			asc: 'fas fa-sort-up float-right',

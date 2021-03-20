@@ -17,7 +17,7 @@ import 'firebase/storage';
 const useQuery = () => new URLSearchParams(useLocation().search);
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
-const UpdateItems = () => <Wrapper children={<Body />} active="orders" current="Update Items List" />;
+const UpdateItems = () => <Wrapper children={<Body />} active="orders" current="Actualizar Lista de Articulos" />;
 
 const Body = () => {
 	const ORDER_ID = useQuery().get('id');
@@ -28,8 +28,8 @@ const Body = () => {
 	//State data that control the toast message
 	const [ toast, setToast ] = useState(false);
 	const [ img, setImg ] = useState('fas fa-spinner fa-pulse');
-	const [ message, setMessage ] = useState('Updating Order...');
-	const [ heading, setHeading ] = useState('Collecting files and updating them to the cloud');
+	const [ message, setMessage ] = useState('Actualizando Orden...');
+	const [ heading, setHeading ] = useState('Recopilar archivos y actualizarlos a la nube');
 
 	useEffect(
 		() => {
@@ -49,12 +49,12 @@ const Body = () => {
 		setMessage(toastMessage);
 		console.log(log);
 		setTimeout(() => {
+			if (action) window.location.href = '/orders';
 			setToast(false);
 			setImg('fas fa-spinner fa-pulse');
-			setHeading('Deleting Client and their orders...');
-			setMessage('Deleting Client');
+			setHeading('Recopilar archivos y actualizarlos a la nube');
+			setMessage('Actualizando Orden...');
 			console.log('Toast Props set to normal.');
-			if (action) window.location.href = '/orders';
 		}, 3000);
 	};
 
@@ -67,9 +67,9 @@ const Body = () => {
 	//Add the item and its quanity from the form to the state
 	const addItem = () => {
 		//Check if the input is empty
-		if (document.getElementById('item').value === '') return alert('Enter an item.');
+		if (document.getElementById('item').value === '') return alert('Ingrese un Artículo.');
 		if (itemAlreadyExists(document.getElementById('item').value.toLowerCase()))
-			return alert('Item is already added. Add a new one');
+			return alert('El artículo ya está agregado. Agregar uno nuevo');
 		const item = document.getElementById('item').value.toLowerCase();
 		const key = createObjectKey(item);
 		const quantity = document.getElementById('quantity').value;
@@ -137,13 +137,13 @@ const Body = () => {
 		try {
 			e.preventDefault();
 			setToast(true);
-			if (Object.keys(ITEMS).length === 0) return alert('Please add at least one item for your order.');
+			if (Object.keys(ITEMS).length === 0) return alert('Agregue al menos un artículo para su pedido.');
 			const payload = await uploadFilesToStorage();
 			const response = await updateOrderToFirestore(payload);
 			setToastProps(
 				'fas fa-check-circle toast-success',
-				'Update Complete!',
-				`The order was updated to the cloud!`,
+				'¡Actualizacion completa!',
+				`¡El pedido se actualizó a la nube!`,
 				`> Firebase: Order: ${ORDER_ID} and its items are updated to the system.`,
 				true
 			);
@@ -153,8 +153,8 @@ const Body = () => {
 			console.error(error);
 			setToastProps(
 				'fas fa-check-circle toast-success',
-				'Update Failed!',
-				`The order could not update to the cloud!`,
+				'¡Actualización fallida!',
+				`¡El pedido no se pudo actualizar a la nube!`,
 				`> Firebase: Order: ${ORDER_ID} and its information weren't updated to the system.`,
 				false
 			);
@@ -318,7 +318,7 @@ const Body = () => {
 
 	const onPromptSubmission = (quantity, itemName, key) => {
 		if (itemName !== '') {
-			if (itemAlreadyExists(itemName)) return alert('That item already exists.');
+			if (itemAlreadyExists(itemName)) return alert('Ese artículo ya existe.');
 			//Change the key name by creating a new object with the same properties and deleting the old one
 			const newKey = createObjectKey(itemName.toLowerCase());
 			let itemsCopy = ITEMS;
@@ -350,8 +350,8 @@ const Body = () => {
 				img={<i className={`${img} p-3`} />}
 			/>
 			<BackButton
-				value="Go Back To Order"
-				message="Are you sure you want to go back to the previous page? All current data will be lost."
+				value="Volver al pedido"
+				message="¿Está seguro de que desea volver a la página anterior? Se perderán todos los datos actuales."
 				path={document.referrer}
 			/>
 			<div className="row">
@@ -362,7 +362,7 @@ const Body = () => {
 							<ItemsForm onSubmit={onItemSubmit.bind(this)} onFinish={onFinish.bind(this)} />
 						</div>
 					}
-					title="Submission"
+					title="Sumisión"
 					icon="fas fa-keyboard pr-3"
 				/>
 			</div>
@@ -381,7 +381,7 @@ const Body = () => {
 							onRemoveFile={onRemoveFile.bind(this)}
 						/>
 					}
-					title="Items"
+					title="Artículos"
 					icon="fas fa-clipboard-list pr-3"
 				/>
 			</div>
@@ -401,12 +401,15 @@ const Body = () => {
 const Description = () => (
 	<div className="col">
 		<div id="description">
-			<h1>Add/Update Items to Order</h1>
+			<h1>Agregar / Actualizar Artículos Para Ordenar</h1>
 			<p>
-				Enter all of the items you'd like to add to this order before finalizing. Take this opportunity to
-				upload any files or documents that are pertinent to each of your items.
+				Ingrese todos los artículos que le gustaría agregar a este pedido antes de finalizar. Toma esta
+				oportunidad para cargue cualquier archivo o documento que sea pertinente a cada uno de sus artículos.
 			</p>
-			<p className="mb-5">Click 'Update' when you are done adding items/files to update the order.</p>
+			<p className="mb-5">
+				Haga clic en 'Actualizar' cuando haya terminado de agregar elementos / archivos para actualizar el
+				pedido.
+			</p>
 		</div>
 	</div>
 );
@@ -419,24 +422,24 @@ const ItemsForm = ({ onSubmit, onFinish }) => (
 					required={false}
 					column="col-md-10"
 					id="item"
-					label="Item"
+					label="Nombre del árticulo"
 					type="text"
-					placeholder="Item Name"
+					placeholder="Nombre del árticulo"
 					name="item"
 				/>
 				<Input
 					required={false}
 					column="col-md-2"
 					id="quantity"
-					label="Quantity"
+					label="Cantidad"
 					type="number"
-					placeholder="Quantity"
+					placeholder="Cantidad"
 					name="quantity"
 				/>
 			</div>
-			<input type="submit" className="btn btn-primary float-right d-inline" value="Add Item" />
+			<input type="submit" className="btn btn-primary float-right d-inline" value="Añadir Artículo" />
 			<button className="btn-success btn float-right d-inline mr-3" onClick={onFinish}>
-				Update & Save Order
+				Actualizar y Guardar Pedido
 			</button>
 		</form>
 	</div>
@@ -506,7 +509,7 @@ const FileBox = (props) => {
 		<span className="d-inline">
 			<h5 className="d-inline">{props.itemName}</h5>
 			<p>
-				Quantity: {props.quantity}
+				Cantidad: {props.quantity}
 				<span className="pl-1">
 					<button
 						className="btn btn-link"
@@ -521,13 +524,13 @@ const FileBox = (props) => {
 							onChange={handleAddFile}
 							style={{ display: 'none' }}
 						/>
-						Add File(s)
+						Agregar Archivos
 					</button>
 					<button className="btn btn-link" type="button" onClick={(e) => props.onUpdate(e, props.itemKey)}>
-						Update Item
+						Actualizar Artículo
 					</button>
 					<button className="btn btn-link" type="button" onClick={(e) => props.onDelete(e, props.itemKey)}>
-						Remove Item
+						Remover El Artículo
 					</button>
 				</span>
 			</p>
@@ -557,7 +560,7 @@ const FileBox = (props) => {
 						props.onRemoveFile(index, props.itemKey, setLoad);
 					}}
 				>
-					{LOAD === index ? <Loading /> : 'Remove'}
+					{LOAD === index ? <Loading /> : 'Eliminar'}
 				</button>
 			</ListGroup.Item>
 		));

@@ -10,7 +10,7 @@ import { Months, Days, Years } from '../../data/Dates';
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
-const Index = () => <Wrapper children={<Body />} active="orders" current="Orders" />;
+const Index = () => <Wrapper children={<Body />} active="orders" current="Pedidos" />;
 
 const Body = () => {
 	const [ ORDERS, setOrders ] = useState(null);
@@ -238,14 +238,14 @@ const Spreadsheet = ({ clients, data, onClick, onSortDescending }) => {
 							<td>{item.province}</td>
 							<td>{item.address}</td>
 							<td className={item.shippingStatus ? 'text-success' : 'text-danger'}>
-								{item.shippingStatus ? 'Shipped' : 'Not Shipped'}
+								{item.shippingStatus ? 'Enviado' : 'No Enviado'}
 							</td>
 							<td>{item.trackingNum}</td>
 						</tr>
 					))}
 				</tbody>
 			</Table>
-			<p className="text-right p-0 m-0 text-secondary">* Showing {data.length} results</p>
+			<p className="text-right p-0 m-0 text-secondary">* Se muestran {data.length} resultados</p>
 			<div className="d-flex justify-content-center align-items-center flex-row">
 				<Pagination>
 					{indices.map((item, index) => {
@@ -267,18 +267,18 @@ const Spreadsheet = ({ clients, data, onClick, onSortDescending }) => {
 
 const Description = () => (
 	<div id="description" className="col-md-7 pt-3">
-		<h1>Teloentrego Orders Manifest</h1>
+		<h1>Manifiesto de Órdenes de Teloentrego</h1>
 		<p>
-			Welcome to the Teloentrego Orders Manifest page. Here you'll be able to view all the orders that are
-			currently saved on record, and view them.
+			Bienvenido a la página del manifiesto de pedidos de Teloentrego. Aquí podrá ver todos los pedidos que están
+			guardados actualmente en el registro y verlos.
 		</p>
-		<p>You can also filter these results based on the desired filter parameter you'd like.</p>
+		<p>También puede filtrar estos resultados según el parámetro de filtro que desee.</p>
 	</div>
 );
 
 const DateForm = ({ onDateChange }) => (
 	<div className="col-md-5 pt-3">
-		<h4>Filter by Date</h4>
+		<h4>Filtrar Por Fecha</h4>
 		<div className="input-group">
 			<select onChange={onDateChange} className="custom-select" id="month">
 				{Months.map((month, index) => (

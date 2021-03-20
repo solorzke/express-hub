@@ -8,7 +8,7 @@ import Prompt from '../../components/Inputs/Prompt';
 import SlideCard from '../../components/SlideCard/Card';
 
 //Wrapper for the Body component
-const Items = () => <Wrapper children={<Body />} current="New Order" active="new" />;
+const Items = () => <Wrapper children={<Body />} current="Nuevo Orden" active="new" />;
 
 const Body = () => {
 	//Location declared to determine if the page has form data passed into it or else redirect it to another page
@@ -41,9 +41,9 @@ const Body = () => {
 	//Add the item and its quanity from the form to the state
 	const addItem = () => {
 		//Check if the input is empty
-		if (document.getElementById('item').value === '') return alert('Enter an item.');
+		if (document.getElementById('item').value === '') return alert('Ingrese un artículo.');
 		if (itemAlreadyExists(document.getElementById('item').value.toLowerCase()))
-			return alert('Item is already added. Add a new one');
+			return alert('El artículo ya está agregado. Agregar uno nuevo.');
 		const item = document.getElementById('item').value.toLowerCase();
 		const key = createObjectKey(item);
 		const quantity = document.getElementById('quantity').value;
@@ -66,7 +66,7 @@ const Body = () => {
 	//Once the Continue button is clicked, move on to the next page with the state item data passed in
 	const onFinish = (e) => {
 		e.preventDefault();
-		if (Object.keys(items).length === 0) return alert('Please add at least one item for your order.');
+		if (Object.keys(items).length === 0) return alert('Agregue al menos un artículo para su pedido.');
 		location.state['items'] = [];
 		Object.keys(items).forEach((item) => {
 			let currentItem = items[item];
@@ -108,7 +108,7 @@ const Body = () => {
 
 	const onPromptSubmission = (quantity, itemName, key) => {
 		if (itemName !== '') {
-			if (itemAlreadyExists(itemName)) return alert('That item already exists.');
+			if (itemAlreadyExists(itemName)) return alert('Ese artículo ya existe.');
 			//Change the key name by creating a new object with the same properties and deleting the old one
 			const newKey = createObjectKey(itemName.toLowerCase());
 			let itemsCopy = items;
@@ -144,7 +144,7 @@ const Body = () => {
 	return (
 		<main className="container p-3">
 			{location.state !== undefined ? '' : <Redirect to="error" />}
-			<Paths message="Are you sure you want to go back? All your items and files will be deleted and cannot be recovered." />
+			<Paths message="¿Estás seguro de que quieres volver? Todos sus elementos y archivos se eliminarán y no se podrán recuperar." />
 			<div className="row">
 				<SlideCard
 					children={
@@ -153,7 +153,7 @@ const Body = () => {
 							<ItemsForm onSubmit={onSubmit.bind(this)} onFinish={onFinish.bind(this)} />
 						</div>
 					}
-					title="Submission"
+					title="Sumisión"
 					icon="fas fa-keyboard pr-3"
 				/>
 			</div>
@@ -168,7 +168,7 @@ const Body = () => {
 							formatString={formatString.bind(this)}
 						/>
 					}
-					title="Items"
+					title="Artículos"
 					icon="fas fa-clipboard-list pr-3"
 				/>
 			</div>
@@ -214,24 +214,24 @@ const ItemsForm = ({ onSubmit, onFinish }) => (
 					required={false}
 					column="col-md-10"
 					id="item"
-					label="Item"
+					label="Artículo"
 					type="text"
-					placeholder="Item Name"
+					placeholder="Nombre del árticulo"
 					name="item"
 				/>
 				<Input
 					required={false}
 					column="col-md-2"
 					id="quantity"
-					label="Quantity"
+					label="Cantidad"
 					type="number"
-					placeholder="Quantity"
+					placeholder="Cantidad"
 					name="quantity"
 				/>
 			</div>
-			<input type="submit" className="btn btn-primary float-right d-inline" value="Add Item" />
+			<input type="submit" className="btn btn-primary float-right d-inline" value="Añadir Artículo" />
 			<button className="btn-success btn float-right d-inline mr-3" onClick={onFinish}>
-				Continue
+				Continuar
 			</button>
 		</form>
 	</div>
@@ -240,13 +240,17 @@ const ItemsForm = ({ onSubmit, onFinish }) => (
 const Description = () => (
 	<div className="col">
 		<div id="description">
-			<h1>Add Items to Order</h1>
+			<h1>Agregar Artículos al Pedido</h1>
 			<p>
-				Enter all of the items you'd like to add to this order before finalizing. Take this opportunity to
-				upload any files or documents that are pertinent to each of your items before proceeding.
+				Ingrese todos los artículos que le gustaría agregar a este pedido antes de finalizar. Aproveche esta
+				oportunidad para cargar cualquier archivo o documento que sea pertinente a cada uno de sus artículos
+				antes de continuar.
 			</p>
-			<p>You can update this information later if you wish.</p>
-			<p className="mb-0">Press 'Continue' when you are done adding items/files to proceed to the final step.</p>
+			<p>Puede actualizar esta información más tarde si lo desea.</p>
+			<p className="mb-0">
+				Presione 'Continuar' cuando haya terminado de agregar elementos / archivos para continuar con el paso
+				final.
+			</p>
 		</div>
 	</div>
 );
@@ -262,9 +266,9 @@ const Paths = ({ message }) => {
 				Home
 			</Breadcrumb.Item>
 			<Breadcrumb.Item href="/new-orders/add-order" onClick={(e) => onClick(e, '/new-order/add-order')}>
-				Order
+				Pedido
 			</Breadcrumb.Item>
-			<Breadcrumb.Item active>Items</Breadcrumb.Item>
+			<Breadcrumb.Item active>Artículos</Breadcrumb.Item>
 		</Breadcrumb>
 	);
 };

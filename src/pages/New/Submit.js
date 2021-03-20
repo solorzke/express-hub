@@ -18,8 +18,8 @@ const Body = () => {
 	//State data that control the toast message
 	const [ toast, setToast ] = useState(false);
 	const [ img, setImg ] = useState('fas fa-spinner fa-pulse');
-	const [ message, setMessage ] = useState('Adding Order...');
-	const [ heading, setHeading ] = useState('Processing');
+	const [ message, setMessage ] = useState('Añadiendo orden ...');
+	const [ heading, setHeading ] = useState('Procesando');
 	const location = useLocation();
 	const history = useHistory();
 
@@ -43,8 +43,8 @@ const Body = () => {
 		try {
 			const data = location.state;
 			uploadAllFiles(data.items, data.form, (urls) => {
-				setHeading('Files uploaded! Adding order to the cloud...');
-				setMessage('All files uploaded to the cloud.');
+				setHeading('¡Archivos cargados! Añadiendo orden a la nube ...');
+				setMessage('Todos los archivos cargados en la nube.');
 				urls.forEach(
 					(item) => (data.form['item-images'] = { ...data.form['item-images'], [item.name]: item.url })
 				);
@@ -54,8 +54,8 @@ const Body = () => {
 				Firebase.firestore().collection('orders').doc(data.form.orderId).set(data.form).then(() => {
 					setToastProps(
 						'fas fa-check-circle toast-success',
-						'Order Added!',
-						`${message}\n The order was added to the cloud!`,
+						'Pedido agregado!',
+						`¡El pedido se agregó a la nube!`,
 						'> Firebase: order data added',
 						true
 					);
@@ -64,8 +64,8 @@ const Body = () => {
 		} catch (error) {
 			setToastProps(
 				'fas fa-window-close toast-fail',
-				'Failed',
-				`Order couldn't be added!`,
+				'Fallido',
+				`¡No se pudo agregar el pedido!`,
 				`> Firebase: Error couldnt send request.\n ${error.message}`,
 				false
 			);
@@ -105,7 +105,7 @@ const Body = () => {
 				const url = await uploadFile({ name: file.name, file: file.file }, orderId);
 				urls.push(url);
 				console.log('> Firebase: File uploaded!');
-				setMessage('Uploading files to the cloud.');
+				setMessage('Subiendo archivos a la nube.');
 			}
 		} while (items.length !== 0);
 		callback(urls);
@@ -115,7 +115,7 @@ const Body = () => {
 		<main className="container p-3">
 			{location.state !== undefined ? '' : <Redirect to="error" />}
 			<Paths
-				message="Are you sure you want to go back? All your items and files will be deleted and cannot be recovered."
+				message="¿Estás seguro de que quieres volver? Todos sus elementos y archivos se eliminarán y no se podrán recuperar."
 				historyHook={history}
 			/>
 			<Toast
@@ -125,12 +125,13 @@ const Body = () => {
 				heading={heading}
 				img={<i className={`${img} p-3`} />}
 			/>
-			<h1>Confirm Order</h1>
+			<h1>Confirmar pedido</h1>
 			<div className="row mb-3">
 				<div className="col">
 					<p>
-						Review all the items and form data added to this shipment order before adding it to the system.
-						Keep in mind, you can update or delete this information later.
+						Revise todos los artículos y los datos del formulario agregados a este pedido de envío antes de
+						agregarlo al sistema. Tenga en cuenta que puede actualizar o eliminar esta información más
+						tarde.
 					</p>
 				</div>
 				<div className="col">
@@ -154,7 +155,7 @@ const Paths = ({ historyHook, message }) => {
 				Home
 			</Breadcrumb.Item>
 			<Breadcrumb.Item href="/new-orders" onClick={(e) => onClick(e, '/new-order/add-order')}>
-				Order
+				Orden
 			</Breadcrumb.Item>
 			<Breadcrumb.Item
 				href="/new-orders/add-order/add-items"
@@ -163,9 +164,9 @@ const Paths = ({ historyHook, message }) => {
 					historyHook.goBack();
 				}}
 			>
-				Items
+				Artículos
 			</Breadcrumb.Item>
-			<Breadcrumb.Item active>Submit</Breadcrumb.Item>
+			<Breadcrumb.Item active>Enviar</Breadcrumb.Item>
 		</Breadcrumb>
 	);
 };

@@ -64,9 +64,9 @@ const Body = () => {
 
 	return (
 		<main className="container-fluid p-3">
-			<h1>Clients Index Search</h1>
+			<h1>Búsqueda De Indice De Clientes</h1>
 			<p className="pb-1">
-				Find a client by search or selection to bring up their information and recent orders.
+				Encuentre un cliente mediante búsqueda o selección para mostrar su información y pedidos recientes.
 			</p>
 			<SearchForm
 				onChange={onChange.bind(this)}
@@ -85,17 +85,15 @@ export default Index;
 const SearchForm = ({ onChange, names, formatString, selectRef, getClients, onSelect }) => (
 	<form autoComplete="off">
 		<CardBox
-			header="Search"
-			title="Search By Name"
-			text="Add a new client and their shipment order, including information such as their name and
-						their shipping details to be logged into the database."
+			header="Buscar"
+			title="Buscar Por Nombre"
+			text="Agregue un nuevo cliente y su orden de envío, incluida información como su nombre y sus detalles de envío para que se registre en la base de datos."
 			children={<SearchClients onChange={onChange} names={names} formatString={formatString} />}
 		/>
 		<CardBox
-			header="Select"
-			title="Select From A List of Clients"
-			text="Add a new client and their shipment order, including information such as their name and
-						their shipping details to be logged into the database."
+			header="Seleccione"
+			title="Seleccionar De Una Lista De Clientes"
+			text="Agregue un nuevo cliente y su orden de envío, incluida información como su nombre y sus detalles de envío para que se registre en la base de datos."
 			children={
 				<SelectClient
 					selectRef={selectRef}

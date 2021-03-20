@@ -7,7 +7,7 @@ import 'firebase/firestore';
 import LoadingPage from '../../components/Placeholders/LoadingPage';
 import { useHistory } from 'react-router-dom';
 
-const Order = () => <Wrapper children={<Body />} current="New Order" active="new" />;
+const Order = () => <Wrapper children={<Body />} current="Nuevo Orden" active="new" />;
 
 const Body = () => {
 	//Select refs for clients, country, province
@@ -116,10 +116,10 @@ const OrderForm = ({ formatName, onSubmit, clients, refs, setText, setShipping }
 
 const ClientsPicker = ({ data, formatName, refs }) => (
 	<div className="form-group col-md-6">
-		<label>Client</label>
+		<label>Cliente</label>
 		<select required ref={refs.client} className="custom-select" id="client">
 			<option value="" disabled selected>
-				Select a client
+				Selecciona un cliente
 			</option>
 			{data.map((item, index) => {
 				let fname = formatName(item.fname);
@@ -137,7 +137,7 @@ const ClientsPicker = ({ data, formatName, refs }) => (
 
 const DatePicker = () => (
 	<div className="form-group col-md-6">
-		<label htmlFor="order-date">Order Date</label>
+		<label htmlFor="order-date">Fecha De Orden</label>
 		<input
 			type="date"
 			className="form-control"
@@ -151,7 +151,6 @@ const DatePicker = () => (
 
 const Destination = ({ refs, countries }) => {
 	const [ country, setCountry ] = useState(null);
-
 	const onChange = (e) => {
 		const value = e.target.selectedOptions[0].value;
 		switch (value) {
@@ -166,10 +165,10 @@ const Destination = ({ refs, countries }) => {
 
 	return (
 		<div id="destination">
-			<h3 className="py-3">Destination</h3>
+			<h3 className="py-3">Destino</h3>
 			<div className="form-group row">
 				<label htmlFor="country" className="col-sm-2 col-form-label">
-					Country
+					País
 				</label>
 				<div className="col-sm-10">
 					<select
@@ -180,16 +179,16 @@ const Destination = ({ refs, countries }) => {
 						onChange={onChange.bind(this)}
 					>
 						<option value="" selected disabled>
-							Select a Country
+							Seleccione un País
 						</option>
 						<option value="ecuador">Ecuador</option>
-						<option value="united states">United States</option>
+						<option value="united states">Estados Unidos</option>
 					</select>
 				</div>
 			</div>
 			<div className="form-group row">
 				<label htmlFor="province" className="col-sm-2 col-form-label">
-					Province
+					Provincia
 				</label>
 				<div className="col-sm-10">
 					<select ref={refs.province} required className="custom-select" id="province">
@@ -207,10 +206,10 @@ const Destination = ({ refs, countries }) => {
 			</div>
 			<div className="form-group row">
 				<label htmlFor="address" className="col-sm-2 col-form-label">
-					Address
+					Dirección
 				</label>
 				<div className="col-sm-10">
-					<input type="text" className="form-control" id="address" placeholder="Address" name="address" />
+					<input type="text" className="form-control" id="address" placeholder="Dirección" name="address" />
 				</div>
 			</div>
 		</div>
@@ -219,13 +218,13 @@ const Destination = ({ refs, countries }) => {
 
 const ShippingStatus = ({ onClick }) => {
 	const [ SHOW, setShow ] = useState(false);
-	const OPTIONS = [ { name: 'Shipped', value: true }, { name: 'Not Yet Shipped', value: false } ];
+	const OPTIONS = [ { name: 'Enviado', value: true }, { name: 'Aun no ha sido enviado', value: false } ];
 	return (
 		<div id="shipping-tracking">
-			<h3 className="py-3">Shipping Status</h3>
+			<h3 className="py-3">Estado Del Envío</h3>
 
 			<label htmlFor="status" className="pr-5">
-				Status
+				Estado
 			</label>
 			{OPTIONS.map((item, index) => (
 				<div className="form-check form-check-inline" key={index}>
@@ -248,13 +247,13 @@ const ShippingStatus = ({ onClick }) => {
 			))}
 			<div className={`form-group row${SHOW ? '' : ' d-none'}`}>
 				<label htmlFor="tracking" className="col-sm-2 col-form-label">
-					Tracking Number
+					El Número de Rastreo
 				</label>
 				<input
 					className="col-sm-10 form-control"
 					id="tracking"
 					type="text"
-					placeholder="Enter a tracking number, if available."
+					placeholder="Ingrese un número de seguimiento, si está disponible."
 					name="tracking"
 				/>
 			</div>
@@ -264,7 +263,7 @@ const ShippingStatus = ({ onClick }) => {
 
 const TextEditor = ({ setText }) => (
 	<div id="editor">
-		<h3 className="py-3">Additional Notes</h3>
+		<h3 className="py-3">Notas Adicionales</h3>
 		<div className="form-group row">
 			<div className="col-md-12">
 				<Editor onChange={setText} />
@@ -277,23 +276,23 @@ const ConfirmButtons = () => (
 	<div className="form-group row">
 		<div className="col-md d-flex justify-content-end align-items-center">
 			<a href="/new-order" className="mr-2 btn btn-md btn-secondary">
-				Cancel
+				Cancelar
 			</a>
-			<input type="submit" value="Continue" className="btn btn-primary" id="btn-modal" />
+			<input type="submit" value="Continuar" className="btn btn-primary" id="btn-modal" />
 		</div>
 	</div>
 );
 
 const Description = () => (
 	<div id="description">
-		<h1>Add New Order</h1>
+		<h1>Agregar Nuevo Pedido</h1>
 		<p>
-			Select the client that wishes to make a new order, and set the order date when they requested it. Type
-			details about the order's destination including their country, province, and address.
+			Seleccione el cliente que desea realizar un nuevo pedido, y establezca la fecha del pedido cuando lo
+			solicitó. Escriba detalles sobre el destino del pedido, incluido su país, provincia y dirección.
 		</p>
 		<p className="mb-5">
-			You may add additional notes that are pertinent to the order if you wish. Click 'Continue' to proceed to the
-			next page.
+			Puede agregar notas adicionales que sean pertinentes al pedido si lo desea. Haga clic en "Continuar" para
+			pasar a la página siguiente.
 		</p>
 	</div>
 );

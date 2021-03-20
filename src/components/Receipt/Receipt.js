@@ -17,26 +17,26 @@ const Receipt = ({ form, files }) => {
 		<div className="receipt">
 			<div className="receipt-breakdown">
 				<div className="receipt-breakdown--header">
-					<p>Receipt for</p>
+					<p>Recibo de</p>
 					<h2>{clientName}</h2>
 				</div>
 				<ul className="receipt-breakdown--list">
-					<BreakDownEntry icon="fa fa-calendar-day" title="Order Date:" value={form.date} />
+					<BreakDownEntry icon="fa fa-calendar-day" title="Fecha De Orden:" value={form.date} />
 					<BreakDownEntry
 						icon="fa fa-globe-americas"
-						title="Province, Country:"
+						title="Provincia, País:"
 						value={`${form.province}, ${form.country}`}
 					/>
 					<BreakDownEntry
 						icon="fa fa-address-card"
-						title="Shipping Address:"
+						title="Dirección de Envío:"
 						value={formatString(form.address)}
 					/>
-					<BreakDownEntry icon="fa fa-barcode" title="Confirmation No:" value={form.orderId} />
+					<BreakDownEntry icon="fa fa-barcode" title="Confirmación No:" value={form.orderId} />
 				</ul>
 			</div>
 			<Overview
-				product="Mtech Express Order Summary"
+				product="Teloentrego Order Summary"
 				merchant={'Allied Steel Buildings'}
 				merchantEmail={'info@alliedbuildings.com'}
 				name={form.clientName}
@@ -77,18 +77,18 @@ const OverviewHeader = ({ logo }) => {
 	const year = new Date().getFullYear();
 	const month = () => {
 		const months = [
-			'January',
-			'February',
-			'March',
-			'April',
-			'May',
-			'June',
-			'July',
-			'August',
-			'September',
-			'October',
-			'November',
-			'December'
+			'Enero',
+			'Febrero',
+			'Marzo',
+			'Abril',
+			'Mayo',
+			'Junio',
+			'Julio',
+			'Agosto',
+			'Septiembre',
+			'Octubre',
+			'Noviembre',
+			'Diciembre'
 		];
 		return months[new Date().getMonth()];
 	};
@@ -115,7 +115,7 @@ const OverviewHeader = ({ logo }) => {
 
 const PurchaseOverview = () => (
 	<div className="purchase-overview">
-		<h3>Teloentrego Order Summary</h3>
+		<h3>Resumen del pedido de Teloentrego</h3>
 	</div>
 );
 
@@ -124,22 +124,23 @@ const OverviewBody = (props) => {
 		<div className="overview-body">
 			<PurchaseOverview {...props} />
 			<div className="user-info">
-				<p className="user-info-name"> Hello {props.name},</p>
+				<p className="user-info-name">Hola {props.name},</p>
 				<p className="user-info-text">
-					The following item(s) listed below will be ordered and shipped to you once they are ready.
-					Teloentrego Shipping will contact you soon regarding the status of the order and its shipment.
+					Los siguientes artículos que se enumeran a continuación se ordenarán y se le enviarán una vez que
+					estén listos. Teloentrego Shipping se pondrá en contacto contigo a la brevedad sobre el estado del
+					pedido y su envío.
 				</p>
 				<p className="user-info-text">
-					Of course, if you have any questions, please feel free to contact Marco Solorzano.
+					Por supuesto, si tiene alguna pregunta, no dude en ponerse en contacto con Marco Solorzano.{' '}
 				</p>
-				<p>Thank you for choosing Teloentrego Shipping.</p>
+				<p>Gracias por elegir Teloentrego Shipping.</p>
 				<p className="salutation">
 					<img src="https://ec2-52-40-174-59.us-west-2.compute.amazonaws.com/banners/about_us_pic.png" />
 				</p>
 			</div>
 
 			<div className="descriptor">
-				<p>It may take a few days for this order to be ready to ship</p>
+				<p>Es posible que este pedido tarde unos días en estar listo para enviarse.</p>
 			</div>
 		</div>
 	);
@@ -150,7 +151,7 @@ const OverviewFooter = () => {
 		<footer className="overview-footer">
 			<span className="site">
 				<a href="https://www.teloentrego.com" target="_blank">
-					https://www.teloentrego.com
+					https://teloentregoec.com
 				</a>
 			</span>
 			<span className="invoice-id">+1 (973)-474-7298</span>

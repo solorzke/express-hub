@@ -8,7 +8,7 @@ const LoadingPage = () => (
 	>
 		<Loading />
 		<h2 className="p-5" style={{ fontSize: 32 }}>
-			Please Wait...
+			Espere Por Favor...
 		</h2>
 	</main>
 );

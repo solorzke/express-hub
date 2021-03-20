@@ -1,16 +1,16 @@
 export const Months = [
-	{ name: 'January', value: '01' },
-	{ name: 'February', value: '02' },
-	{ name: 'March', value: '03' },
-	{ name: 'April', value: '04' },
-	{ name: 'May', value: '05' },
-	{ name: 'June', value: '06' },
-	{ name: 'July', value: '07' },
-	{ name: 'August', value: '08' },
-	{ name: 'September', value: '09' },
-	{ name: 'October', value: '10' },
-	{ name: 'November', value: '11' },
-	{ name: 'December', value: '12' }
+	{ name: 'Enero', value: '01' },
+	{ name: 'Febrero', value: '02' },
+	{ name: 'Marzo', value: '03' },
+	{ name: 'Abril', value: '04' },
+	{ name: 'Mayo', value: '05' },
+	{ name: 'Junio', value: '06' },
+	{ name: 'Julio', value: '07' },
+	{ name: 'Agosto', value: '08' },
+	{ name: 'Septiembre', value: '09' },
+	{ name: 'Octubre', value: '10' },
+	{ name: 'Noviembre', value: '11' },
+	{ name: 'Diciembre', value: '12' }
 ];
 
 const getDays = () => {

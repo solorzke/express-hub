@@ -8,7 +8,7 @@ import { Config } from '../../data/Config';
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
-const SearchIndex = () => <Wrapper children={<Body />} active="search" current="Search" />;
+const SearchIndex = () => <Wrapper children={<Body />} active="search" current="Buscar" />;
 
 const Body = () => {
 	const [ RESULTS, setResults ] = useState([]);
@@ -127,14 +127,14 @@ const SearchBox = ({ onChange, data, formatString, setResults }) => (
 
 const QueryBox = ({ setResults }) => {
 	const options = [
-		{ name: 'Client', value: 'client' },
-		{ name: 'Address', value: 'address' },
-		{ name: 'Country', value: 'country' },
-		{ name: 'Province', value: 'province' },
-		{ name: 'Order-Id', value: 'orderId' },
-		{ name: 'Client-Id', value: 'clientId' },
-		{ name: 'Date', value: 'date' },
-		{ name: 'Tracking Num', value: 'trackingNum' }
+		{ name: 'Cliente', value: 'client' },
+		{ name: 'Dirección', value: 'address' },
+		{ name: 'País', value: 'country' },
+		{ name: 'Provincia', value: 'province' },
+		{ name: 'Orden-Id', value: 'orderId' },
+		{ name: 'Cliente-Id', value: 'clientId' },
+		{ name: 'Fecha', value: 'date' },
+		{ name: 'Número De Rastreo', value: 'trackingNum' }
 	];
 
 	const onChange = (e) => {
