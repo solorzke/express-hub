@@ -90,7 +90,7 @@ const Body = () => {
 		}
 	};
 
-	const sortDescendingOrders = (sorted) => setOrders(sorted.reverse());
+	const sortDescendingOrders = (sorted) => setFilteredOrders(sorted.reverse());
 
 	const onDateChange = () => {
 		const selected_month = document.getElementById('month').selectedOptions[0].value;
