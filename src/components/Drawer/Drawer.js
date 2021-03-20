@@ -40,6 +40,12 @@ const Drawer = ({ active = '' }) => {
 						New Order
 					</span>
 				</a>
+				{/* <a href="/quotes" className="list-group-item list-group-item-action">
+					<span className={active === 'quotes' ? 'activated' : ''}>
+						<i className="fas fa-quote-right pr-2" />
+						Quotes
+					</span>
+				</a> */}
 				<a href="/clients" className="list-group-item list-group-item-action">
 					<span className={active === 'clients' ? 'activated' : ''}>
 						<i className="fas fa-users pr-2" />Clients

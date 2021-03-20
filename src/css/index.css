@@ -3,7 +3,16 @@
     font-size: 200px;
 }
 
+.quote-logo {
+    color: #34345B;
+    font-size: 100px;
+}
+
 .index-add-client-view:hover .index-new-user-logo  {
+    color: #ee4266;
+}
+
+.index-add-client-view:hover .quote-logo  {
     color: #ee4266;
 }
 
@@ -158,4 +167,12 @@ form > input {
 
 h1 {
     font-family: 'Abril Fatface', cursive;
+}
+
+/* Web Responsive */
+.logo-container {
+    background-image: url('../teloentrego.png') no-repeat center;
+    background-size: contain;
+    width: 100%;
+    padding-top: 42%;
 }

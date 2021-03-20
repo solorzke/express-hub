@@ -35,7 +35,10 @@ const Body = () => {
 	};
 
 	//Format the selected names to first letter uppercase followed by lowercase
-	const formatName = (str = '') => str.charAt(0).toUpperCase() + str.slice(1);
+	const formatName = (str = '') => {
+		const formatted = str.split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1));
+		return formatted.join(' ');
+	};
 
 	const setText = (data) => (value = data);
 
