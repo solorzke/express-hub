@@ -102,7 +102,7 @@ const LoginBox = ({ authenticate, progress, onClick }) => (
 			<input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required />
 			<br />
 			{progress && <i className="fas fa-spinner fa-pulse py-3" />}
-			<input type="submit" value="Sign In" className="login-login-btn btn btn-light" />
+			<input type="submit" value="Iniciar Sesión" className="login-login-btn btn btn-light" />
 		</form>
 		<p className="p-3 text-center">
 			¿Has olvidado tu contraseña?
