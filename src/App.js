@@ -16,6 +16,7 @@ import UpdateItems from './pages/Orders/UpdateItems';
 import SearchIndex from './pages/Search/Index';
 import SettingsIndex from './pages/Settings/Index';
 import ResetPassword from './pages/ForgotPassword';
+import QuotesPage from './pages/Quotes/Quote';
 import QuotesForm from './pages/Quotes/Form';
 import QuotesIndex from './pages/Quotes/Index';
 import Error404 from './pages/404';
@@ -36,8 +37,9 @@ function App() {
 				<Route path="/order" component={Order} />
 				<Route path="/clients/:id" component={ClientSummary} />
 				<Route path="/clients" component={ClientIndex} />
-				{/* <Route path="/quotes/add" component={QuotesForm} />
-				<Route path="/quotes" component={QuotesIndex} /> */}
+				<Route path="/quotes/quote" component={QuotesPage} />
+				<Route path="/quotes/add" component={QuotesForm} />
+				<Route path="/quotes" component={QuotesIndex} />
 				<Route path="/new-order/add-order/add-items" component={AddItems} />
 				<Route exact path="/new-order/add-order/submit" component={SubmitOrder} />
 				<Route path="/new-order/add-client" component={AddClient} />

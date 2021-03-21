@@ -40,6 +40,7 @@ const Body = () => {
 
 	useEffect(
 		() => {
+			if (ORDER_ID === null) window.location.href = '/error';
 			setFname(QUERY.get('fname').replace('%20', ' '));
 			setLname(QUERY.get('lname').replace('%20', ' '));
 			getOrder();
@@ -67,7 +68,10 @@ const Body = () => {
 	const getOrder = async () => {
 		try {
 			const snapshot = await Firebase.firestore().collection('orders').where('orderId', '==', ORDER_ID).get();
-			if (snapshot.empty) return alert("> Firebase: Didn't return any orders");
+			if (snapshot.empty) {
+				alert('No encontramos el pedido con ese numero de Id.');
+				window.location.href = '/orders';
+			}
 			let order_doc = [];
 			snapshot.forEach((doc) => order_doc.push(doc.data()));
 			setOrder(order_doc[0]);

@@ -103,7 +103,6 @@ const Body = () => {
 			const currentYear = item.date.split('/')[2];
 			return currentMonth === selected_month && currentDay >= selected_day && currentYear === selected_year;
 		});
-		console.log(FILTERED_ORDERS);
 		setFilteredOrders(filtered);
 	};
 

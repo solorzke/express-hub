@@ -5,7 +5,7 @@ import Editor from '../TextEditor/Editor';
 export const TextField = ({ storeKey, heading, value, onClick, id, onCancel }) => {
 	let textRef = useRef(null);
 	return (
-		<div className="col-md-11 py-1 update-item animate__animated animate__slideInRight">
+		<div className="col-md-11 py-1 update-item">
 			<div className="row">
 				<div className="col-md">
 					<label htmlFor={id}>{heading}</label>
@@ -27,7 +27,7 @@ export const TextField = ({ storeKey, heading, value, onClick, id, onCancel }) =
 export const RadioField = ({ storeKey, heading, onClick, options, onCancel }) => {
 	const [ SELECTED, setSelected ] = useState('');
 	return (
-		<div className="update-item col-md-11 py-2 animate__animated animate__slideInRight">
+		<div className="update-item col-md-11 py-2">
 			<label className="pr-5">{heading}</label>
 			{options.map((item, index) => (
 				<div className="form-check form-check-inline" key={index}>
@@ -55,7 +55,7 @@ export const RadioField = ({ storeKey, heading, onClick, options, onCancel }) =>
 };
 
 export const ToggleField = ({ storeKey, onClick, value, onCancel }) => (
-	<div className="update-item col-md-11 animate__animated animate__slideInRight">
+	<div className="update-item col-md-11">
 		<h6 className="mb-0 mt-2">Cambiar estado de envío</h6>
 		<button className="btn btn-link text-danger pl-0" onClick={onCancel}>
 			Cancelar
@@ -80,7 +80,7 @@ export const DateField = ({ storeKey, onClick, onCancel, value }) => {
 	};
 
 	return (
-		<div className="update-item col-md-11 animate__animated animate__slideInRight">
+		<div className="update-item col-md-11">
 			<div className="row">
 				<div className="col-md-4">
 					<label htmlFor="order-date">Fecha de Pedido</label>
@@ -114,7 +114,7 @@ export const PhoneField = ({ storeKey, onClick, id, value, heading, onCancel }) 
 	let phoneRef = useRef(null);
 
 	return (
-		<div className="col-md-11 py-1 update-item animate__animated animate__slideInRight">
+		<div className="col-md-11 py-1 update-item">
 			<div className="row">
 				<div className="col-md">
 					<label htmlFor={id}>{heading}</label>
@@ -136,13 +136,45 @@ export const PhoneField = ({ storeKey, onClick, id, value, heading, onCancel }) 
 	);
 };
 
+export const PriceField = ({ storeKey, onClick, value, heading, onCancel }) => {
+	let priceRef = useRef(null);
+	return (
+		<div className="col-md-11 py-1 update-item">
+			<div className="row">
+				<div className="col-md">
+					<label>{heading}</label>
+					<input
+						type="number"
+						step="any"
+						min="1"
+						ref={priceRef}
+						className="form-control"
+						placeholder={value}
+					/>
+				</div>
+				<div className="col-md align-items-end justify-content-start d-flex">
+					<button className="btn btn-link text-danger" onClick={onCancel}>
+						Cancelar
+					</button>
+					<button
+						className="btn btn-link"
+						onClick={(e) => onClick(e, { [storeKey]: priceRef.current.value })}
+					>
+						Actualizar
+					</button>
+				</div>
+			</div>
+		</div>
+	);
+};
+
 export const UserEmailField = ({ storeKey, heading, onClick, id, onCancel }) => {
 	let oldEmailRef = useRef(null);
 	let newEmailRef = useRef(null);
 	let passwordRef = useRef(null);
 
 	return (
-		<div className="col-md-11 py-1 update-item animate__animated animate__slideInRight">
+		<div className="col-md-11 py-1 update-item">
 			<div className="row">
 				<div className="col-md">
 					<label htmlFor={id}>{heading}</label>
@@ -200,7 +232,7 @@ export const ClientEmailField = ({ storeKey, heading, onClick, id, onCancel }) =
 	let emailRef = useRef(null);
 
 	return (
-		<div className="col-md-11 py-1 update-item animate__animated animate__slideInRight">
+		<div className="col-md-11 py-1 update-item">
 			<div className="row">
 				<div className="col-md">
 					<label htmlFor={id}>{heading}</label>
@@ -233,7 +265,7 @@ export const RichTextField = ({ storeKey, onClick, onCancel }) => {
 	const [ TEXT, setText ] = useState('');
 
 	return (
-		<div className="col-md-11 animate__animated animate__slideInRight">
+		<div className="col-md-11">
 			<div className="row update-item">
 				<div className="col-md-8 py-1">
 					<Editor onChange={(text) => setText(text)} />
@@ -256,7 +288,7 @@ export const PasswordField = ({ storeKey, heading, onClick, id, onCancel }) => {
 	let newPasswordRef = useRef(null);
 
 	return (
-		<div className="col-md-11 py-1 update-item animate__animated animate__slideInRight">
+		<div className="col-md-11 py-1 update-item">
 			<div className="row">
 				<div className="col-md">
 					<label htmlFor={id}>{heading}</label>

@@ -9,7 +9,8 @@ import {
 	PasswordField,
 	RadioField,
 	ClientEmailField,
-	PhoneField
+	PhoneField,
+	PriceField
 } from './UpdateField';
 
 const Field = ({ types, index, item, formatString, onUpdate }) => {
@@ -106,6 +107,16 @@ const Field = ({ types, index, item, formatString, onUpdate }) => {
 						onCancel={() => setSlide(false)}
 					/>
 				);
+			case 'price':
+				return (
+					<PriceField
+						storeKey={item.key}
+						heading={item.name}
+						value={item.value}
+						onClick={onUpdate}
+						onCancel={() => setSlide(false)}
+					/>
+				);
 			case 'rich-text':
 				return <RichTextField storeKey={item.key} onClick={onUpdate} onCancel={() => setSlide(false)} />;
 			default:
@@ -138,9 +149,9 @@ const Body = ({ item, onSlide, formatString, permitted }) => (
 	<div className="col-sm-11" style={{ backgroundColor: '#FFFCF2' }}>
 		<h6 className="mb-0 mt-2">{item.name}</h6>
 		{permitted ? <Chevron onSlide={onSlide} /> : <br />}
-		{item.name === 'Notes' ? (
+		{item.name === 'Notas' ? (
 			parse(
-				`<span className="text-secondary mb-1">${item.value !== undefined
+				`<span class="text-secondary mb-1">${item.value !== undefined
 					? item.value
 					: 'No Information Available'}</span>`
 			)

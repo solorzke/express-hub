@@ -19,10 +19,12 @@ const Wrapper = ({ children, current, active }) => {
 						className="navbar navbar-expand-lg navbar-light bg-light border-bottom bg-nav"
 						style={{ color: '#FFDDA1' }}
 					>
-						<button className="btn" id="menu-toggle" onClick={(event) => onClick(event)}>
-							<i className="fas fa-bars bars" />
-						</button>
-						{current}
+						<span>
+							<button className="btn" id="menu-toggle" onClick={(event) => onClick(event)}>
+								<i className="fas fa-bars bars" />
+							</button>
+							{current}
+						</span>
 					</nav>
 					{children}
 				</div>

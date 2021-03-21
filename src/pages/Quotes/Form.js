@@ -10,7 +10,7 @@ import { Breadcrumb } from 'react-bootstrap';
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
-const Form = () => <Wrapper children={<Body />} active="quotes" current="Quotes" />;
+const Form = () => <Wrapper children={<Body />} active="quotes" current="Cotizaciones" />;
 
 const Body = () => {
 	let clientRef = useRef(null);
@@ -22,8 +22,8 @@ const Body = () => {
 	//State data that control the toast message
 	const [ toast, setToast ] = useState(false);
 	const [ img, setImg ] = useState('fas fa-spinner fa-pulse');
-	const [ message, setMessage ] = useState('Saving Quote...');
-	const [ heading, setHeading ] = useState('Processing');
+	const [ message, setMessage ] = useState('Guardando cotización...');
+	const [ heading, setHeading ] = useState('Procesando');
 
 	useEffect(() => {
 		if (clients === null) getClients();
@@ -53,13 +53,14 @@ const Body = () => {
 				item: itemRef.current.value,
 				'quoted-price': priceRef.current.value,
 				cost: costRef.current.value,
-				notes: value
+				notes: value,
+				date: getTodaysDate()
 			});
 			console.log('> Firebase: quote added successfully!');
 			setToastProps(
 				'fas fa-check-circle toast-success',
-				'Quote Saved!',
-				`Your quote was saved!`,
+				'Cotizacion guardada!',
+				`¡Tu cotización fue guardada!`,
 				'> Firebase: quote added successfully!',
 				true
 			);
@@ -67,8 +68,8 @@ const Body = () => {
 			console.error(error);
 			setToastProps(
 				'fas fa-window-close toast-fail',
-				'Failed',
-				`Quote couldn't be saved!`,
+				'Fallido',
+				`¡La cotización no se pudo guardar!`,
 				`> Firebase: Error couldnt send request.`,
 				false
 			);
@@ -85,8 +86,8 @@ const Body = () => {
 			if (action) window.location.href = '/quotes';
 			setToast(false);
 			setImg('fas fa-spinner fa-pulse');
-			setHeading('Processing');
-			setMessage('Saving Quote...');
+			setHeading('Procesando');
+			setMessage('Guardando Cotización...');
 			console.log('Toast Props set to normal.');
 		}, 3000);
 	};
@@ -140,11 +141,11 @@ const Body = () => {
 
 const Description = () => (
 	<div className="description text-center">
-		<h1>Add New Quote</h1>
+		<h1>Agregar Nueva Cotización</h1>
 		<div className="justify-content-center align-items-center d-flex">
 			<p className="w-50">
-				Add a new quote to an existing client in the system. Please provide information such as the name of the
-				quoted item, quoted price, its cost, and a link to that item if possible.
+				Agregue una nueva cotización a un cliente existente en el sistema. Proporcione información como el
+				nombre del artículo cotizado, precio cotizado, su costo y un enlace a ese artículo si es posible.
 			</p>
 		</div>
 	</div>
@@ -163,10 +164,10 @@ const QuoteForm = ({ onSubmit, refs, data, formatName, onTextEditorChange }) => 
 
 const ClientsPicker = ({ refs, data, formatName }) => (
 	<div className="form-group">
-		<label htmlFor="clients">Clients</label>
+		<label htmlFor="clients">Clientes</label>
 		<select id="clients" ref={refs.clients} className="custom-select" required>
 			<option value="" disabled selected>
-				Select a client
+				Selecciona un cliente
 			</option>
 			{data.map((item, index) => {
 				let fname = formatName(item.fname);
@@ -184,7 +185,7 @@ const ClientsPicker = ({ refs, data, formatName }) => (
 
 const Item = ({ refs }) => (
 	<div className="form-group">
-		<label htmlFor="item">Item</label>
+		<label htmlFor="item">Articulo</label>
 		<input required ref={refs.item} type="text" className="form-control" id="item" placeholder="Enter an item" />
 	</div>
 );
@@ -192,7 +193,7 @@ const Item = ({ refs }) => (
 const QuotedPrice = ({ refs }) => (
 	<div className="form-group row">
 		<label className="col-sm-2 pt-2" htmlFor="quoted-price">
-			Quoted Price: $
+			Precio cotizado: $
 		</label>
 		<input
 			required
@@ -211,7 +212,7 @@ const QuotedPrice = ({ refs }) => (
 const Cost = ({ refs }) => (
 	<div className="form-group row">
 		<label htmlFor="cost" className="col-sm-2 pt-2">
-			Cost: $
+			Costo: $
 		</label>
 		<input
 			required
@@ -229,7 +230,7 @@ const Cost = ({ refs }) => (
 
 const TextEditor = ({ setText }) => (
 	<div id="editor">
-		<h3 className="py-3">Notes</h3>
+		<h3 className="py-3">Notas</h3>
 		<div className="form-group row">
 			<div className="col-md-12">
 				<Editor onChange={setText} />
@@ -242,9 +243,9 @@ const ConfirmButtons = () => (
 	<div className="form-group row">
 		<div className="col-md d-flex justify-content-end align-items-center">
 			<a href="/quotes" className="mr-2 btn btn-md btn-secondary">
-				Cancel
+				Cancelar
 			</a>
-			<input type="submit" value="Save" className="btn btn-primary" id="btn-modal" />
+			<input type="submit" value="Guardar" className="btn btn-primary" id="btn-modal" />
 		</div>
 	</div>
 );
@@ -252,7 +253,7 @@ const ConfirmButtons = () => (
 const Paths = () => {
 	const onClick = (e, path) => {
 		e.preventDefault();
-		const message = 'Are you sure you want to head back? All unsubmitted information here will be lost.';
+		const message = '¿Estás seguro de que quieres regresar? Toda la información no enviada aquí se perderá.';
 		if (window.confirm(message)) window.location.href = path;
 	};
 	return (
@@ -260,7 +261,7 @@ const Paths = () => {
 			<Breadcrumb.Item href="/quotes" onClick={(e) => onClick(e, '/quotes')}>
 				Home
 			</Breadcrumb.Item>
-			<Breadcrumb.Item active>Add New Quote</Breadcrumb.Item>
+			<Breadcrumb.Item active>Agregar Nueva Cotización</Breadcrumb.Item>
 		</Breadcrumb>
 	);
 };
