@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Dropdown, Button, Breadcrumb } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import { fieldTypes } from '../../data/ClientInputTypes';
+import { ClientTypes } from '../../data/InputTypes';
 import { Config } from '../../data/Config';
 import Slidecard from '../../components/SlideCard/Card';
 import Wrapper from '../../components/Wrapper/Wrapper';
@@ -227,7 +227,7 @@ const ButtonsPane = ({ onDelete }) => <Menu onDelete={onDelete} />;
 
 const Fields = ({ state, formatString, onUpdate }) => {
 	if (state !== null) {
-		const types = fieldTypes(state);
+		const types = ClientTypes(state);
 		return (
 			<div className="col-md">
 				<div className="client-lists">

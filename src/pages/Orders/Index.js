@@ -1,12 +1,13 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import Wrapper from '../../components/Wrapper/Wrapper';
-import { Table, Pagination } from 'react-bootstrap';
+import LoadingPage from '../../components/Placeholders/LoadingPage';
+import Toast from '../../components/Toast/Toast';
+import { Months, Days, Years } from '../../data/Dates';
 import { Headings } from '../../data/TableHeadings';
+import { Config } from '../../data/Config';
+import { Spreadsheet } from '../../components/Spreadsheet/Spreadsheet';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
-import { Config } from '../../data/Config';
-import LoadingPage from '../../components/Placeholders/LoadingPage';
-import { Months, Days, Years } from '../../data/Dates';
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
@@ -16,6 +17,11 @@ const Body = () => {
 	const [ ORDERS, setOrders ] = useState(null);
 	const [ FILTERED_ORDERS, setFilteredOrders ] = useState(null);
 	const [ CLIENTS, setClients ] = useState(null);
+	//State data that control the toast message
+	const [ toast, setToast ] = useState(false);
+	const [ img, setImg ] = useState('fas fa-spinner fa-pulse');
+	const [ message, setMessage ] = useState('Eliminando Ordenes');
+	const [ heading, setHeading ] = useState('Se está eliminando los pedidos ...');
 
 	useEffect(
 		() => {
@@ -25,6 +31,22 @@ const Body = () => {
 		},
 		[ ORDERS, CLIENTS, FILTERED_ORDERS ]
 	);
+
+	//Set the state for the toast props
+	const setToastProps = (toastImg, toastHeading, toastMessage, log, action) => {
+		setImg(toastImg);
+		setHeading(toastHeading);
+		setMessage(toastMessage);
+		console.log(log);
+		setTimeout(() => {
+			if (action) window.location.reload();
+			setToast(false);
+			setImg('fas fa-spinner fa-pulse');
+			setHeading('Se está eliminando los pedidos ...');
+			setMessage('Eliminando Ordenes');
+			console.log('Toast Props set to normal.');
+		}, 3000);
+	};
 
 	const getClients = async (orders) => {
 		for (let i = 0; i < orders.length; i++) {
@@ -106,161 +128,64 @@ const Body = () => {
 		setFilteredOrders(filtered);
 	};
 
+	//Delete all orders with their id from the firestore and storage and rerender the DOM
+	const onDeleteOrders = async (orders) => {
+		try {
+			setToast(true);
+			for (let i = 0; i < orders.length; i++) {
+				const id = orders[i];
+				//Run a loop to delete every file in the storage belonging to the order id
+				const files = (await Firebase.storage().ref(`images/${id}`).list()).items;
+				for (let j = 0; j < files.length; j++) {
+					const file_path = files[j]['_delegate']['_location']['path_'];
+					await Firebase.storage().ref(file_path).delete();
+				}
+				//Then delete the order from the firestore
+				await Firebase.firestore().collection('orders').doc(id).delete();
+			}
+			setToastProps(
+				'fas fa-check-circle toast-success',
+				'Pedidos borrado!',
+				`¡Sus pedidos selecionados estan borrados!`,
+				'> Firebase: order data deleted',
+				true
+			);
+		} catch (error) {
+			console.error(error);
+			setToastProps(
+				'fas fa-window-close toast-fail',
+				'Fallido',
+				`¡No se pudo borrar el pedido!`,
+				error.message,
+				false
+			);
+		}
+	};
+
 	if (ORDERS === null || CLIENTS === null) return <LoadingPage />;
 	return (
 		<main className="container-fluid">
+			<Toast
+				onClose={() => setToast(false)}
+				show={toast}
+				message={message}
+				heading={heading}
+				img={<i className={`${img} p-3`} />}
+			/>
 			<div className="row">
 				<Description />
 				<DateForm onDateChange={onDateChange.bind(this)} />
 			</div>
 			<Spreadsheet
+				type="orders"
+				headings={Headings}
 				clients={CLIENTS}
 				data={FILTERED_ORDERS}
-				onClick={sortOrders.bind(this)}
-				onSortDescending={sortDescendingOrders.bind(this)}
+				onSortAsc={sortOrders.bind(this)}
+				onSortDes={sortDescendingOrders.bind(this)}
+				onDeleteRows={onDeleteOrders.bind(this)}
 			/>
 		</main>
-	);
-};
-
-const Spreadsheet = ({ clients, data, onClick, onSortDescending }) => {
-	const [ filter, setFilter ] = useState({ key: 9999, status: 'none' });
-	const [ indices, setIndices ] = useState([ [ 0 ] ]);
-	const [ currentPage, setCurrentPage ] = useState(0);
-	const headers = Headings(onClick);
-
-	useEffect(
-		() => {
-			onIndexingPages(data);
-		},
-		[ filter, data ]
-	);
-
-	const onIndexingPages = (orders) => {
-		let pages = [];
-		let copy = [ ...orders ];
-		do {
-			let page = [];
-			for (let i = 0; i < 10; i++) {
-				if (copy.length === 0) break;
-				else page.push(copy.shift());
-			}
-			pages.push(page);
-		} while (copy.length > 0);
-		setIndices(pages);
-		console.log(orders);
-	};
-
-	const onFilterClick = (e, index) => {
-		e.preventDefault();
-		return filter.key === index ? onSetStatus(filter.key, filter.status) : onSetStatus(index, filter.status);
-	};
-
-	const onSetStatus = (key, status) => {
-		switch (status) {
-			case 'none':
-				setFilter({ key: key, status: 'asc' });
-				return 'asc';
-			case 'asc':
-				setFilter({ key: key, status: 'des' });
-				return 'des';
-			case 'des':
-				setFilter({ key: key, status: 'asc' });
-				return 'asc';
-		}
-	};
-
-	const onOrderPageClick = (orderId, clientId) => {
-		const fname = clients[clientId].fname;
-		const lname = clients[clientId].lname;
-		window.location.href = `/order?id=${orderId}&fname=${fname}&lname=${lname}`;
-	};
-
-	const onClientPageClick = (clientId) => (window.location.href = `/clients/${clientId}`);
-
-	const setChevron = (item, index) => {
-		if (filter.key !== index) return item.class.none;
-		else if (filter.status === 'asc') return item.class.asc;
-		else if (filter.status === 'des') return item.class.des;
-	};
-
-	const onChevronClick = (e, item, index) => {
-		const status = onFilterClick(e, index);
-		switch (status) {
-			case 'asc':
-				return item.onClick();
-			case 'des':
-				const orders = item.onClick();
-				return onSortDescending(orders);
-		}
-	};
-
-	return (
-		<Fragment>
-			<Table striped bordered hover className="mb-1">
-				<thead>
-					<tr>
-						{headers.map((item, index) => {
-							const chevron = setChevron(item, index);
-							return (
-								<th key={index}>
-									{item.name}
-									<i
-										style={item.style}
-										className={chevron}
-										onClick={(e) => onChevronClick(e, item, index)}
-									/>
-								</th>
-							);
-						})}
-					</tr>
-				</thead>
-				<tbody>
-					{indices[currentPage].map((item, index) => (
-						<tr key={index}>
-							<td
-								className="btn-link"
-								style={{ cursor: 'pointer' }}
-								onClick={() => onOrderPageClick(item.orderId, item.clientId)}
-							>
-								{item.orderId}
-							</td>
-							<td
-								className="btn-link"
-								style={{ cursor: 'pointer' }}
-								onClick={() => onClientPageClick(item.clientId)}
-							>
-								{item.clientId}
-							</td>
-							<td>{item.date}</td>
-							<td>{item.country}</td>
-							<td>{item.province}</td>
-							<td>{item.address}</td>
-							<td className={item.shippingStatus ? 'text-success' : 'text-danger'}>
-								{item.shippingStatus ? 'Enviado' : 'No Enviado'}
-							</td>
-							<td>{item.trackingNum}</td>
-						</tr>
-					))}
-				</tbody>
-			</Table>
-			<p className="text-right p-0 m-0 text-secondary">* Se muestran {data.length} resultados</p>
-			<div className="d-flex justify-content-center align-items-center flex-row">
-				<Pagination>
-					{indices.map((item, index) => {
-						return (
-							<Pagination.Item
-								key={index}
-								active={index === currentPage}
-								onClick={() => setCurrentPage(index)}
-							>
-								{index + 1}
-							</Pagination.Item>
-						);
-					})}
-				</Pagination>
-			</div>
-		</Fragment>
 	);
 };
 

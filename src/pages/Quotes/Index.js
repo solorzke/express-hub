@@ -1,9 +1,10 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import LoadingPage from '../../components/Placeholders/LoadingPage';
-import { Card, Table, Pagination } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { Config } from '../../data/Config';
 import { QuoteHeadings } from '../../data/TableHeadings';
+import { Spreadsheet } from '../../components/Spreadsheet/Spreadsheet';
 import Toast from '../../components/Toast/Toast';
 import Firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -168,7 +169,6 @@ const Body = () => {
 						onClientChange={onClientChange.bind(this)}
 					/>
 				</div>
-
 				<CardBox
 					header="Agregar Cotización"
 					title="Crear Una Nueva Cotización"
@@ -179,10 +179,12 @@ const Body = () => {
 			</div>
 			<hr />
 			<Spreadsheet
-				onDeleteRows={onDeleteQuotes.bind(this)}
+				type="quotes"
+				headings={QuoteHeadings}
 				data={filtered_quotes}
-				onClick={sortOrders.bind(this)}
-				onSortDescending={sortDescendingOrders.bind(this)}
+				onDeleteRows={onDeleteQuotes.bind(this)}
+				onSortAsc={sortOrders.bind(this)}
+				onSortDes={sortDescendingOrders.bind(this)}
 			/>
 		</main>
 	);
@@ -222,171 +224,6 @@ const CardBox = ({ header, title, text, path, image }) => (
 		</a>
 	</div>
 );
-
-const Spreadsheet = ({ data, onClick, onSortDescending, onDeleteRows }) => {
-	const [ filter, setFilter ] = useState({ key: 9999, status: 'none' });
-	const [ indices, setIndices ] = useState([ [ 0 ] ]);
-	const [ currentPage, setCurrentPage ] = useState(0);
-	const [ selectedRows, setSelectedRows ] = useState([]);
-	const headers = QuoteHeadings(onClick);
-
-	useEffect(
-		() => {
-			onIndexingPages(data);
-		},
-		[ filter, data ]
-	);
-
-	const onIndexingPages = (quotes) => {
-		let pages = [];
-		let copy = [ ...quotes ];
-		do {
-			let page = [];
-			for (let i = 0; i < 10; i++) {
-				if (copy.length === 0) break;
-				else page.push(copy.shift());
-			}
-			pages.push(page);
-		} while (copy.length > 0);
-		setIndices(pages);
-		console.log(quotes);
-	};
-
-	const onFilterClick = (e, index) => {
-		e.preventDefault();
-		return filter.key === index ? onSetStatus(filter.key, filter.status) : onSetStatus(index, filter.status);
-	};
-
-	const onSetStatus = (key, status) => {
-		switch (status) {
-			case 'none':
-				setFilter({ key: key, status: 'asc' });
-				return 'asc';
-			case 'asc':
-				setFilter({ key: key, status: 'des' });
-				return 'des';
-			case 'des':
-				setFilter({ key: key, status: 'asc' });
-				return 'asc';
-		}
-	};
-
-	const onOrderPageClick = (uid) => (window.location.href = `/quotes/quote?id=${uid}`);
-
-	const onClientPageClick = (clientId) => (window.location.href = `/clients/${clientId}`);
-
-	const setChevron = (item, index) => {
-		if (filter.key !== index) return item.class.none;
-		else if (filter.status === 'asc') return item.class.asc;
-		else if (filter.status === 'des') return item.class.des;
-	};
-
-	const onChevronClick = (e, item, index) => {
-		const status = onFilterClick(e, index);
-		switch (status) {
-			case 'asc':
-				return item.onClick();
-			case 'des':
-				const orders = item.onClick();
-				return onSortDescending(orders);
-		}
-	};
-
-	//Set the row id of the quote obj to the state for removal afterwards
-	const onCheckBoxClick = (e) => {
-		const row_id = e.target.value;
-		let matching = selectedRows.filter((row) => row === row_id);
-		if (matching.length === 0) {
-			setSelectedRows((prevState) => [ ...prevState, row_id ]);
-		} else {
-			matching = selectedRows.filter((row) => row !== row_id);
-			setSelectedRows(matching);
-		}
-	};
-
-	//Handle trash button click
-	const onTrashClick = () => {
-		if (selectedRows.length === 0) return;
-		if (!window.confirm('¿Está seguro de que desea eliminar estas cotizaciones? No se pueden recuperar.')) return;
-		onDeleteRows(selectedRows);
-	};
-
-	return (
-		<Fragment>
-			<Table striped bordered hover className="mb-1">
-				<thead>
-					<tr>
-						<th className="text-center">
-							<button className="btn-default btn p-0 m-0" onClick={onTrashClick.bind(this)}>
-								<i
-									className={`fas fa-trash${selectedRows.length > 0
-										? ' text-danger'
-										: ' text-secondary'}`}
-								/>
-							</button>
-						</th>
-						{headers.map((item, index) => {
-							const chevron = setChevron(item, index);
-							return (
-								<th key={index}>
-									{item.name}
-									<i
-										style={item.style}
-										className={chevron}
-										onClick={(e) => onChevronClick(e, item, index)}
-									/>
-								</th>
-							);
-						})}
-					</tr>
-				</thead>
-				<tbody>
-					{indices[currentPage].map((item, index) => (
-						<tr key={index}>
-							<td className="text-center">
-								<input type="checkbox" value={item.uid} onChange={onCheckBoxClick} />
-							</td>
-							<td
-								className="btn-link"
-								style={{ cursor: 'pointer' }}
-								onClick={() => onOrderPageClick(item.uid)}
-							>
-								{item.uid}
-							</td>
-							<td
-								className="btn-link"
-								style={{ cursor: 'pointer' }}
-								onClick={() => onClientPageClick(item.client)}
-							>
-								{item.client}
-							</td>
-							<td>{item.date}</td>
-							<td>{item.item}</td>
-							<td>${item['quoted-price']}</td>
-							<td>${item.cost}</td>
-						</tr>
-					))}
-				</tbody>
-			</Table>
-			<p className="text-right p-0 m-0 text-secondary">* Se muestran {data.length} resultados</p>
-			<div className="d-flex justify-content-center align-items-center flex-row">
-				<Pagination>
-					{indices.map((item, index) => {
-						return (
-							<Pagination.Item
-								key={index}
-								active={index === currentPage}
-								onClick={() => setCurrentPage(index)}
-							>
-								{index + 1}
-							</Pagination.Item>
-						);
-					})}
-				</Pagination>
-			</div>
-		</Fragment>
-	);
-};
 
 const ClientForm = ({ onClientChange, clients, formatName }) => (
 	<div className="pt-3">

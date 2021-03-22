@@ -6,8 +6,8 @@ import Firebase from 'firebase/app';
 import 'firebase/firestore';
 import { Config } from '../../data/Config';
 import { useLocation } from 'react-router-dom';
+import { QuoteTypes } from '../../data/InputTypes';
 import { Breadcrumb, Dropdown, Button } from 'react-bootstrap';
-import { InputTypes } from '../../data/QuoteInputTypes';
 import Toast from '../../components/Toast/Toast';
 
 // A custom hook that builds on useLocation to parse
@@ -155,7 +155,7 @@ const Description = ({ id, client }) => (
 );
 
 const Details = ({ state, formatString, onUpdate }) => {
-	const types = InputTypes(state);
+	const types = QuoteTypes(state);
 	return (
 		<div className="client-lists">
 			{types.map((item, index) => (

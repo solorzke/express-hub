@@ -32,16 +32,16 @@ export const Headings = (onClick) => [
 		onClick: () => onClick('date', 'date')
 	},
 
-	{
-		name: 'País',
-		style: { cursor: 'pointer' },
-		class: {
-			asc: 'fas fa-sort-up float-right',
-			des: 'fas fa-sort-down float-right',
-			none: 'fas fa-sort float-right'
-		},
-		onClick: () => onClick('string', 'country')
-	},
+	// {
+	// 	name: 'País',
+	// 	style: { cursor: 'pointer' },
+	// 	class: {
+	// 		asc: 'fas fa-sort-up float-right',
+	// 		des: 'fas fa-sort-down float-right',
+	// 		none: 'fas fa-sort float-right'
+	// 	},
+	// 	onClick: () => onClick('string', 'country')
+	// },
 
 	{
 		name: 'Provincia',

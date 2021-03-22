@@ -9,7 +9,7 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import { Config } from '../../data/Config';
 import { Cookie } from '../../data/Cookie';
-import { fieldTypes } from '../../data/UserInputTypes';
+import { UserTypes } from '../../data/InputTypes';
 
 Firebase.apps.length === 0 ? Firebase.initializeApp(Config) : Firebase.app();
 
@@ -136,7 +136,7 @@ const Body = () => {
 
 const Details = ({ state, formatString, onUpdate }) => {
 	if (state !== null) {
-		const types = fieldTypes(state);
+		const types = UserTypes(state);
 		return (
 			<div className="client-lists">
 				{types.map((item, index) => (

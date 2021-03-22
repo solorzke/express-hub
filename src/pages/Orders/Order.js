@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Accordion, Card, ListGroup, Button, Breadcrumb, Dropdown } from 'react-bootstrap';
-import { fieldTypes } from '../../data/InputTypes';
+import { OrderTypes } from '../../data/InputTypes';
 import LoadingPage from '../../components/Placeholders/LoadingPage';
 import Wrapper from '../../components/Wrapper/Wrapper';
 import SlideCard from '../../components/SlideCard/Card';
@@ -55,12 +55,12 @@ const Body = () => {
 		setMessage(toastMessage);
 		console.log(log);
 		setTimeout(() => {
+			if (action) window.location.href = '/orders';
 			setToast(false);
 			setImg('fas fa-spinner fa-pulse');
 			setHeading('Se está eliminando el pedido ...');
 			setMessage('Eliminando Orden');
 			console.log('Toast Props set to normal.');
-			if (action) window.location.href = '/orders';
 		}, 3000);
 	};
 
@@ -262,7 +262,7 @@ const ShipmentConfirmation = ({ shipped, onClick, progress }) => {
 
 const Details = ({ state, formatString, onUpdate }) => {
 	if (state !== null) {
-		const types = fieldTypes(state);
+		const types = OrderTypes(state);
 		return (
 			<div className="client-lists">
 				{types.map((item, index) => (
