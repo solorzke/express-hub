@@ -12,6 +12,7 @@ import {
 	PhoneField,
 	PriceField
 } from './UpdateField';
+import './Field.css';
 
 const Field = ({ types, index, item, formatString, onUpdate }) => {
 	//Trigger a change in the DOM to rerender this component with the update field component
@@ -140,13 +141,16 @@ const Field = ({ types, index, item, formatString, onUpdate }) => {
 };
 
 const ImageBox = ({ item }) => (
-	<div className="col-sm-1 d-flex justify-content-center align-items-center" style={{ backgroundColor: '#34345B' }}>
+	<div
+		className="col-md-1 d-flex justify-content-center align-items-center field-img-box"
+		style={{ backgroundColor: '#34345B' }}
+	>
 		<i className={`${item.img}`} style={{ color: '#ee4266' }} />
 	</div>
 );
 
 const Body = ({ item, onSlide, formatString, permitted }) => (
-	<div className="col-sm-11" style={{ backgroundColor: '#FFFCF2' }}>
+	<div className="col-md-11" style={{ backgroundColor: '#FFFCF2' }}>
 		<h6 className="mb-0 mt-2">{item.name}</h6>
 		{permitted ? <Chevron onSlide={onSlide} /> : <br />}
 		{item.name === 'Notas' ? (

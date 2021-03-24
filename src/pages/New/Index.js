@@ -36,10 +36,10 @@ const CardBox = ({ header, title, text, path, image }) => (
 			<Card.Header>{header}</Card.Header>
 			<Card.Body>
 				<div className="row">
-					<div className="col-md-3 text-center ">
+					<div className="col-lg-3 text-center ">
 						<i className={`${image} index-new-user-logo pb-1`} />
 					</div>
-					<div className="col-md-9">
+					<div className="col-lg-9">
 						<Card.Title>{title}</Card.Title>
 						<Card.Text>{text}</Card.Text>
 					</div>

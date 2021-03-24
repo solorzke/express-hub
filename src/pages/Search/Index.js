@@ -104,14 +104,12 @@ const Body = () => {
 
 const PortraitHeader = () => (
 	<div className="w-100 d-flex justify-content-center align-items-center pb-5 flex-column">
-		{/* <i className="fas fa-shipping-fast login-logo" style={{ fontSize: 200 }} />
-		<h1 className="pt-5">Teloentrego</h1> */}
-		<img src={Logo} height="400" width="650" className="rounded" />
+		<img src={Logo} className="rounded search-logo" />
 	</div>
 );
 
 const SearchBox = ({ onChange, data, formatString, setResults }) => (
-	<div className="">
+	<div>
 		<form>
 			<div className="form-group row">
 				<div className="form-group col-md-2 justify-content-center align-items-center0 d-flex">

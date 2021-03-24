@@ -399,7 +399,7 @@ const Body = () => {
 };
 
 const Description = () => (
-	<div className="col">
+	<div className="col-lg">
 		<div id="description">
 			<h1>Agregar / Actualizar Artículos Para Ordenar</h1>
 			<p>
@@ -415,7 +415,7 @@ const Description = () => (
 );
 
 const ItemsForm = ({ onSubmit, onFinish }) => (
-	<div className="col justify-content-center align-items-center d-flex">
+	<div className="col-lg justify-content-center align-items-center d-flex">
 		<form onSubmit={onSubmit}>
 			<div className="form-group row">
 				<Input
@@ -500,7 +500,7 @@ const FileBox = (props) => {
 					style={{ display: 'none' }}
 					accept="image/*"
 				/>
-				<img src={props.aviPath} ref={aviRef} className="text-center" height="50" width="50" id="avi" />
+				<img src={props.aviPath} ref={aviRef} className="text-center avi-img" />
 			</button>
 		</div>
 	);
@@ -524,13 +524,13 @@ const FileBox = (props) => {
 							onChange={handleAddFile}
 							style={{ display: 'none' }}
 						/>
-						Agregar Archivos
+						Agregar
 					</button>
 					<button className="btn btn-link" type="button" onClick={(e) => props.onUpdate(e, props.itemKey)}>
-						Actualizar Artículo
+						Actualizar
 					</button>
 					<button className="btn btn-link" type="button" onClick={(e) => props.onDelete(e, props.itemKey)}>
-						Remover El Artículo
+						Borrar
 					</button>
 				</span>
 			</p>

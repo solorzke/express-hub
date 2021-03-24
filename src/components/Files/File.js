@@ -9,7 +9,7 @@ const File = ({ id, date, items, names }) => {
 			style={{ backgroundColor: '#FFFCF2' }}
 		>
 			<li>
-				Pedido: {id}
+				Id: {id}
 				<p className="file-items text-secondary px-0">
 					<span className="file-date text-secondary pr-3">{date}</span>Articulos: {items}
 				</p>

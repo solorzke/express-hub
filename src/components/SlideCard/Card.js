@@ -2,7 +2,7 @@ import React from 'react';
 import { Accordion, Button } from 'react-bootstrap';
 
 const SlideCard = ({ children, title, options = null, icon }) => (
-	<Accordion defaultActiveKey="0" className="col-md-12 mb-4 w-50">
+	<Accordion defaultActiveKey="0" className="col-lg-12 mb-4">
 		<h4>
 			<i className={icon} style={{ color: '#2a1e5c' }} />
 			{title}

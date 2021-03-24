@@ -161,7 +161,7 @@ const Body = () => {
 				img={<i className={`${img} p-3`} />}
 			/>
 			<div className="row pb-3">
-				<div className="col">
+				<div className="col-xl">
 					<Description />
 					<ClientForm
 						clients={clients}
@@ -205,7 +205,7 @@ const Description = () => (
 );
 
 const CardBox = ({ header, title, text, path, image }) => (
-	<div className="col">
+	<div className="col-xl">
 		<a href={path}>
 			<Card className="index-add-client-view mt-4">
 				<Card.Header>{header}</Card.Header>

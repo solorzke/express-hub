@@ -207,7 +207,7 @@ const OrderItems = ({ items, onUpdate, onDelete, onFilesChange, formatString }) 
 );
 
 const ItemsForm = ({ onSubmit, onFinish }) => (
-	<div className="col justify-content-center align-items-center d-flex">
+	<div className="col-lg justify-content-center align-items-center d-flex pt-3">
 		<form onSubmit={onSubmit}>
 			<div className="form-group row">
 				<Input
@@ -238,7 +238,7 @@ const ItemsForm = ({ onSubmit, onFinish }) => (
 );
 
 const Description = () => (
-	<div className="col">
+	<div className="col-lg">
 		<div id="description">
 			<h1>Agregar Artículos al Pedido</h1>
 			<p>

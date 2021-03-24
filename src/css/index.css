@@ -1,6 +1,6 @@
 .index-new-user-logo {
     color: #34345B;
-    font-size: 200px;
+    font-size: 125px;
 }
 
 .quote-logo {
@@ -169,10 +169,99 @@ h1 {
     font-family: 'Abril Fatface', cursive;
 }
 
+.search-logo {
+    width: 100%;
+}
+
+.price-input {
+    width: 200px;
+}
+
+.desc-p-info {
+    width: 50% ;
+}
+
+@media (max-width: 768px) {
+    .desc-p-info {
+        width: 100%;
+    }
+}
+
+.piece > p > i {
+    padding-right: 10px;
+    color: #EE4266
+}
+
+.piece {
+    background: #2A1E5C;
+    color: #fff;
+    padding: 10px;
+}
+
+.piece-light {
+    background: #fff;
+    color: #000;
+    padding: 10px;
+}
+
+.piece-light > p > i {
+    padding-right: 10px;
+    color: #EE4266
+}
+
+.section-contact-us {
+    background: #2A1E5C;
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding: 5%;
+}
+
+.summary {
+    background: #fff;
+    padding: 50px;
+    line-height: 2.5;
+}
+
+.contact {
+    background: #C4CBCA;
+    padding: 50px
+
+}
+
+.contact-link > a {
+    font-size: 20px;
+    color: #2A1E5C;
+    font-family: 'Syne', sans-serif;
+    padding-left: 5px;
+}
+
+.contact-link > a:hover {
+    color: #EE4266
+}
+
+.contact-link + a {
+    font-size: 20px;
+    color: #2A1E5C;
+    font-family: 'Syne', sans-serif;
+}
+
+.contact-link + a:hover {
+    color: #EE4266
+}
+
+.tabs-destinations {
+    background: #fff;
+    padding: 50px;
+    line-height: 2.5;
+}
 /* Web Responsive */
-.logo-container {
+/* .logo-container {
     background-image: url('../teloentrego.png') no-repeat center;
     background-size: contain;
     width: 100%;
     padding-top: 42%;
-}
+} */
+

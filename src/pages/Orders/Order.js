@@ -155,6 +155,7 @@ const Body = () => {
 				heading={heading}
 				img={<i className={`${img} p-3`} />}
 			/>
+			<Paths />
 			<div className="row">
 				<Description
 					state={{ fname: FNAME, lname: LNAME }}
@@ -167,7 +168,6 @@ const Body = () => {
 					progress={UPDATING}
 				/>
 			</div>
-			<Paths />
 			<Menu onDelete={deleteOrder.bind(this)} />
 			<div className="row">
 				<SlideCard
@@ -338,7 +338,7 @@ const Item = ({ data, formatString }) => {
 			<div className="row">
 				<div className="col-md-2 d-flex justify-content-center align-items-center">
 					<a className="btn btn-default btn-file" href={data.avi} target="_blank">
-						<img src={data.avi} className="text-center" height="50" width="50" id="avi" />
+						<img src={data.avi} className="text-center avi-img" id="avi" />
 					</a>
 				</div>
 				<div className="col-md-10 pl-3 text-left pt-2">

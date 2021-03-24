@@ -27,7 +27,7 @@ const Editor = (props) => {
 
 	return (
 		<RichTextEditor
-			placeholder="Ingrese notas o detalles adicionales sobre el pedido a continuación"
+			placeholder="Ingrese detalles adicionales sobre el pedido"
 			value={value}
 			onChange={onChange}
 			toolbarConfig={toolbarConfig}

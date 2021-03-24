@@ -1,0 +1,38 @@
+.navigation-footer {
+	background: #fff;
+	padding: 40px;
+}
+
+.footer-icon {
+	padding: 0 10px;
+}
+
+.footer-brand {
+	font-size: 30px;
+}
+
+.copyright-container {
+	display: flex;
+	width: 100%;
+	left: 0;
+	bottom: 0;
+	justify-content: center;
+	align-items: center;
+	background-color: #878E88;
+	padding-top: 20px;
+	color: #fff;
+}
+
+.copyright-container > p > span > a {
+	color: #fff
+}
+
+.copyright-container > p > span > a:hover {
+	color: #EE4266
+}
+
+@media screen and (max-width: 415px) {
+	.copyright-container > p{
+		font-size: 9px;
+	}
+}

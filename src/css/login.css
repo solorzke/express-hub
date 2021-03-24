@@ -51,6 +51,29 @@
     border-bottom-style: groove;
 }
 
-.login .confirm-login-btn, .login .confirm-login-btn:hover {
-    color: #ee4266;
+.logo-container {
+    width: 100%;
+}
+
+@media (max-width: 990px) {
+    .logo-container {
+        width: 60%;
+    }
+
+    .message-box > p, h2 {
+        display: none;
+    }
+    .message-box img {
+        padding-bottom: 50px;
+    }
+
+    .login-container input {
+        font-size: .2rem;
+    }
+
+    /* .message-box {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+    } */
 }

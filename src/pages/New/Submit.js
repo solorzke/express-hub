@@ -127,14 +127,14 @@ const Body = () => {
 			/>
 			<h1>Confirmar pedido</h1>
 			<div className="row mb-3">
-				<div className="col">
+				<div className="col-lg">
 					<p>
 						Revise todos los artículos y los datos del formulario agregados a este pedido de envío antes de
 						agregarlo al sistema. Tenga en cuenta que puede actualizar o eliminar esta información más
 						tarde.
 					</p>
 				</div>
-				<div className="col">
+				<div className="col-lg">
 					<ConfirmDiv onConfirm={(e) => onConfirm(e)} />
 				</div>
 			</div>

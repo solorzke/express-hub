@@ -1,6 +1,9 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Cookie } from './data/Cookie';
+import Home from './pages/Home/Index';
+import About from './pages/Home/About';
+import ContactUs from './pages/Home/Contact';
 import Index from './pages/Index';
 // import Home from './pages/Home';
 import NewIndex from './pages/New/Index';
@@ -28,6 +31,9 @@ function App() {
 	if (loggedIn) {
 		return (
 			<Switch>
+				<Route path="/home" component={Home} />
+				<Route path="/about" component={About} />
+				<Route path="/contact" component={ContactUs} />
 				<Route path="/auth" component={ResetPassword} />
 				{/* <Route path="/home" component={Home} /> */}
 				<Route path="/settings" component={SettingsIndex} />
@@ -52,6 +58,9 @@ function App() {
 	} else {
 		return (
 			<Switch>
+				<Route path="/home" component={Home} />
+				<Route path="/about" component={About} />
+				<Route path="/contact" component={ContactUs} />
 				<Route path="/auth" component={ResetPassword} />
 				<Route exact path="/" component={Index} />
 				<Route component={Error404} />

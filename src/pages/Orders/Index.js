@@ -201,7 +201,7 @@ const Description = () => (
 );
 
 const DateForm = ({ onDateChange }) => (
-	<div className="col-md-5 pt-3">
+	<div className="col-md-5 py-3">
 		<h4>Filtrar Por Fecha</h4>
 		<div className="input-group">
 			<select onChange={onDateChange} className="custom-select" id="month">

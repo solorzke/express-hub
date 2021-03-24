@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Table, Pagination } from 'react-bootstrap';
+import './Spreadsheet.css';
 
 export const Spreadsheet = ({ headings, clients, data, onSortAsc, onSortDes, onDeleteRows, type }) => {
 	const [ filter, setFilter ] = useState({ key: 9999, status: 'none' });
@@ -139,7 +140,7 @@ const Head = ({ onTrashClick, selectedRows, headers, setChevron, onChevronClick 
 			{headers.map((item, index) => {
 				const chevron = setChevron(item, index);
 				return (
-					<th key={index}>
+					<th key={index} className="spreadsheet-header">
 						{item.name}
 						<i style={item.style} className={chevron} onClick={(e) => onChevronClick(e, item, index)} />
 					</th>
@@ -181,7 +182,7 @@ const Orders = ({ currentPage, onCheckBoxClick, onOrderPageClick, onClientPageCl
 const Quotes = ({ currentPage, onCheckBoxClick, onQuotePageClick, onClientPageClick }) => (
 	<tbody>
 		{currentPage.map((item, index) => (
-			<tr key={index}>
+			<tr key={index} className="spreadsheet-data">
 				<td className="text-center">
 					<input type="checkbox" value={item.uid} onChange={onCheckBoxClick} />
 				</td>
@@ -202,7 +203,7 @@ const Quotes = ({ currentPage, onCheckBoxClick, onQuotePageClick, onClientPageCl
 
 const PaginateBox = ({ data, indices, setCurrentPage, currentPage }) => (
 	<Fragment>
-		<p className="text-right p-0 m-0 text-secondary">* Se muestran {data.length} resultados</p>
+		<p className="text-right pb-3 m-0 text-secondary">* Se muestran {data.length} resultados</p>
 		<div className="d-flex justify-content-center align-items-center flex-row">
 			<Pagination>
 				{indices.map((item, index) => {

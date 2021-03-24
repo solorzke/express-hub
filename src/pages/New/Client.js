@@ -123,8 +123,8 @@ const ClientForm = ({ refs, onSubmit, onGenderClick }) => (
 
 const Gender = ({ onClick }) => {
 	const genders = [
-		{ name: 'Masculino', value: 'male' },
-		{ name: 'Femenino', value: 'female' },
+		{ name: 'Hombre', value: 'male' },
+		{ name: 'Mujer', value: 'female' },
 		{ name: 'Otro', value: 'other' }
 	];
 	return (
@@ -175,7 +175,7 @@ const ContactInfo = () => (
 );
 
 const ButtonGroup = () => (
-	<div className="form-group row">
+	<div className="form-group row py-3">
 		<div className="col-md d-flex justify-content-end align-items-center">
 			<a href="/new-order" className="mr-2 btn btn-md btn-secondary">
 				Cancelar

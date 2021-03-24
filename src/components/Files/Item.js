@@ -26,7 +26,7 @@ const Item = ({ data }) => {
 						<div className="row">
 							<div className="col-md-2 d-flex justify-content-center align-items-center">
 								<button className="btn btn-default btn-file">
-									<img ref={aviRef} className="text-center" height="50" width="50" id="avi" />
+									<img ref={aviRef} className="text-center avi-img" />
 								</button>
 							</div>
 							<div className="col-md-10 pl-3 text-left pt-2">

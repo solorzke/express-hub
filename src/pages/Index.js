@@ -56,8 +56,8 @@ const Index = () => {
 			<main className="login-login-container">
 				<div className="container">
 					<div className="row">
-						<div className="col">
-							<img src={Logo} height="400" width="550" />
+						<div className="col-lg text-center message-box">
+							<img src={Logo} className="logo-container" />
 							<h2 className="pt-5 text-center jo-font">
 								Envío y embalaje en su máxima expresión! En Estados Unidos y Sudamérica
 							</h2>
@@ -65,7 +65,7 @@ const Index = () => {
 								Un tipo diferente de empresa. Un tipo diferente de envío exprés.
 							</p>
 						</div>
-						<div className="col d-flex justify-content-center align-content-end flex-column">
+						<div className="col-lg d-flex justify-content-center align-content-end flex-column">
 							{area === 'login' && (
 								<LoginBox
 									authenticate={authenticate.bind(this)}
@@ -91,15 +91,9 @@ const LoginBox = ({ authenticate, progress, onClick }) => (
 	<React.Fragment>
 		<h1 className="text-center jo-font">Teloentrego</h1>
 		<form onSubmit={authenticate}>
-			<input
-				type="email"
-				id="email"
-				name="email"
-				placeholder="Ingrese su dirección de correo electrónico"
-				required
-			/>
+			<input type="email" id="email" name="email" placeholder="Correo Electrónico" required />
 			<br />
-			<input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required />
+			<input type="password" id="password" name="password" placeholder="Contraseña" required />
 			<br />
 			{progress && <i className="fas fa-spinner fa-pulse py-3" />}
 			<input type="submit" value="Iniciar Sesión" className="login-login-btn btn btn-light" />
@@ -145,7 +139,7 @@ const PasswordForm = (props) => (
 			<input
 				name="email-for-request"
 				id="email-for-request"
-				placeholder="Ingrese su dirección de correo electrónico"
+				placeholder="Correo electrónico"
 				type="email"
 				required
 			/>

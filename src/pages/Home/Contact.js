@@ -1,0 +1,175 @@
+import React from 'react';
+import Navbar from '../../components/Nav/Navbar';
+import Banner from '../../components/Banner/Banner';
+import Footer from '../../components/Footer/Footer';
+import Globe from '../../media/globe.gif';
+import A1 from '../../media/5.png';
+import A2 from '../../media/6.png';
+import A3 from '../../media/7.png';
+import { Tab, Nav } from 'react-bootstrap';
+import Button from '../../components/Button/Button';
+import { Fragment } from 'react';
+
+const ContactUs = () => (
+	<Fragment>
+		<Navbar />
+		<main style={{ backgroundColor: '#2a1e5c' }}>
+			<Banner height="60vh" />
+			<Info />
+			<Summary />
+		</main>
+		<Destination />
+		<Message />
+		<Footer />
+	</Fragment>
+);
+
+const Info = () => (
+	<div className="contact">
+		<div className="container">
+			<div className="row">
+				<div className="col">
+					<h1 style={{ paddingTop: 20, paddingBottom: 20 }}>Here's Our Contact Info</h1>
+					<div className="row">
+						<div className="col-md">
+							<i className="far fa-envelope footer-icon contact-link">
+								<a href="#">mtech@email.com</a>
+							</i>
+						</div>
+						<div className="col-md">
+							<i className="fas fa-phone footer-icon contact-link" />
+							<a href="#">(201)-125-4158</a>
+						</div>
+						<div className="col-md">
+							<i className="fab fa-facebook-f footer-icon contact-link" />
+							<a href="#">Mtech Masters</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+);
+
+const Message = () => (
+	<div className="container-fluid m-0 p-0">
+		<div className="row">
+			<div className="col-md">
+				<div className="section-contact-us">
+					<h1 className="banner-title">Need Shipping?</h1>
+					<a href="#">
+						<Button label="Contact Us" />
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+);
+
+const Summary = () => (
+	<div className="summary">
+		<div className="container">
+			<div className="row">
+				<div className="col-md-5 align-content-center d-flex flex-column">
+					<h6>Excepteur sint occaecat cupidatat</h6>
+					<h1>Lorem ipsum dolor sit amet, consectetur</h1>
+				</div>
+				<div className="col-md-7 justify-content-center d-flex flex-column">
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+						labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+						laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+						voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+						non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+);
+
+const Destination = () => (
+	<div className="tabs-destinations">
+		<div className="container-fluid">
+			<div className="row">
+				<div className="col-md-4 d-flex align-items-center justify-content-center">
+					<img src={Globe} alt="Globe" height="500" width="500" />
+				</div>
+				<div className="col-md-8 align-items-center justify-content-center piece-light">
+					<i className="fas fa-globe banner-title" style={{ fontSize: 35 }} />
+					<h6 className="banner-title">Shipping to various locations</h6>
+					<h1 className="banner-title">Locations</h1>
+					<br />
+					<Tab.Container defaultActiveKey="first">
+						<div className="row">
+							<div className="col">
+								<Nav variant="pills" className="flex-column">
+									<Nav.Item>
+										<Nav.Link eventKey="first">North America</Nav.Link>
+									</Nav.Item>
+									<Nav.Item>
+										<Nav.Link eventKey="second">South America</Nav.Link>
+									</Nav.Item>
+									<Nav.Item>
+										<Nav.Link eventKey="third">Europe</Nav.Link>
+									</Nav.Item>
+									<Nav.Item>
+										<Nav.Link eventKey="fourth">Asia</Nav.Link>
+									</Nav.Item>
+									<Nav.Item>
+										<Nav.Link eventKey="fifth">Oceania</Nav.Link>
+									</Nav.Item>
+									<Nav.Item>
+										<Nav.Link eventKey="sixth">Africa</Nav.Link>
+									</Nav.Item>
+								</Nav>
+							</div>
+							<div className="col">
+								<Tab.Content>
+									<Tab.Pane eventKey="first">
+										<p>
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+											tempor incididunt ut labore et dolore magna aliqua.
+										</p>
+									</Tab.Pane>
+									<Tab.Pane eventKey="second">
+										<p>
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+											tempor incididunt ut labore et dolore magna aliqua.
+										</p>
+									</Tab.Pane>
+									<Tab.Pane eventKey="third">
+										<p>
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+											tempor incididunt ut labore et dolore magna aliqua.
+										</p>
+									</Tab.Pane>
+									<Tab.Pane eventKey="fourth">
+										<p>
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+											tempor incididunt ut labore et dolore magna aliqua.
+										</p>
+									</Tab.Pane>
+									<Tab.Pane eventKey="fifth">
+										<p>
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+											tempor incididunt ut labore et dolore magna aliqua.
+										</p>
+									</Tab.Pane>
+									<Tab.Pane eventKey="sixth">
+										<p>
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+											tempor incididunt ut labore et dolore magna aliqua.
+										</p>
+									</Tab.Pane>
+								</Tab.Content>
+							</div>
+						</div>
+					</Tab.Container>
+				</div>
+			</div>
+		</div>
+	</div>
+);
+
+export default ContactUs;

@@ -78,14 +78,13 @@ const FileInput = ({ itemName, quantity, onDelete, onFilesChange, itemKey, onUpd
 										onChange={onAviChange}
 										ref={aviInputRef}
 										type="file"
-										id="avi-1"
 										style={{ display: 'none' }}
 										accept="image/*"
 									/>
-									<img ref={aviRef} className="text-center" height="50" width="50" id="avi" />
+									<img ref={aviRef} className="text-center avi-img" />
 								</button>
 							</div>
-							<div className="col-md-10 pl-3 text-left pt-2">
+							<div className="col-md-10 pl-3 text-left pt-2 item-box">
 								<Accordion.Toggle
 									as={Button}
 									variant="link"
@@ -112,13 +111,13 @@ const FileInput = ({ itemName, quantity, onDelete, onFilesChange, itemKey, onUpd
 													onChange={addFile}
 													style={{ display: 'none' }}
 												/>
-												Add File(s)
+												Agregar
 											</button>
 											<button className="btn btn-link" type="button" onClick={onUpdate}>
-												Update Item
+												Actualizar
 											</button>
 											<button className="btn btn-link" type="button" onClick={onDelete}>
-												Remove Item
+												Borrar
 											</button>
 										</span>
 									</p>
@@ -144,7 +143,7 @@ const FileInput = ({ itemName, quantity, onDelete, onFilesChange, itemKey, onUpd
 												type="button"
 												onClick={() => removeItem(index)}
 											>
-												Remove
+												Borrar
 											</button>
 										</ListGroup.Item>
 									);

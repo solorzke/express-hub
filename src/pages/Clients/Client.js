@@ -161,12 +161,11 @@ const Body = () => {
 				onClose={() => setToast(false)}
 				show={toast}
 				message={message}
-				sssss
 				heading={heading}
 				img={<i className={`${img} p-3`} />}
 			/>
 			<div className="row">
-				<div className="col-md-12 w-100 client-pane">
+				<div className="col-lg-12 w-100 client-pane">
 					<Description state={client} formatString={formatString.bind(this)} />
 					<ButtonsPane onDelete={deleteClient.bind(this)} />
 				</div>
@@ -195,7 +194,7 @@ const Body = () => {
 };
 
 const Menu = ({ onDelete }) => (
-	<Dropdown className="float-sm-right">
+	<Dropdown className="float-sm-right menu">
 		<Dropdown.Toggle id="dropdown-basic">
 			<i className="fas fa-cog" />
 		</Dropdown.Toggle>
@@ -216,7 +215,7 @@ const Description = ({ state, formatString }) => (
 	<div id="description">
 		<h1>Cliente: {state !== null ? formatString(`${state.fname} ${state.lname}`) : ''}</h1>
 		<p>Cliente desde: {state !== null ? state.clientSince : 'Not Available'}</p>
-		<p style={{ width: '50%' }}>
+		<p className="desc-p-info">
 			Vea información sobre la cuenta de su cliente, descargue un archivo de su historial de pedidos o realice
 			cambios en su información con las opciones proporcionadas.
 		</p>

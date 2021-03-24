@@ -222,7 +222,6 @@ const ShippingStatus = ({ onClick }) => {
 	return (
 		<div id="shipping-tracking">
 			<h3 className="py-3">Estado Del Envío</h3>
-
 			<label htmlFor="status" className="pr-5">
 				Estado
 			</label>
@@ -249,13 +248,15 @@ const ShippingStatus = ({ onClick }) => {
 				<label htmlFor="tracking" className="col-sm-2 col-form-label">
 					El Número de Rastreo
 				</label>
-				<input
-					className="col-sm-10 form-control"
-					id="tracking"
-					type="text"
-					placeholder="Ingrese un número de seguimiento, si está disponible."
-					name="tracking"
-				/>
+				<div className="col-sm-10">
+					<input
+						className="form-control"
+						id="tracking"
+						type="text"
+						placeholder="Ingrese el número, si está disponible."
+						name="tracking"
+					/>
+				</div>
 			</div>
 		</div>
 	);

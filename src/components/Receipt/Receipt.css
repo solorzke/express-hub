@@ -196,3 +196,13 @@
     color: #6e7882;
     font-weight: 600;
 }
+
+@media (max-width: 768px) {
+    .receipt, .receipt-overview, .receipt-breakdown {
+        width: 100%;
+    }
+
+    .receipt-breakdown--header h2 {
+        display: block;
+    }
+}

@@ -1,0 +1,9 @@
+@media (max-width: 770px) {
+    .spreadsheet-header {
+        font-size: .8rem;
+    }
+
+    .spreadsheet-data > td {
+        font-size: .8rem;
+    }
+}

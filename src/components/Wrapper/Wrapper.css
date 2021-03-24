@@ -18,7 +18,7 @@
     margin-left: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 770px) {
     #wrapper.toggled #sidebar-wrapper {
         margin-left: -15rem;
         border-color: #2a1e5c;

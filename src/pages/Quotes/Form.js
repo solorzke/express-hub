@@ -191,40 +191,52 @@ const Item = ({ refs }) => (
 );
 
 const QuotedPrice = ({ refs }) => (
-	<div className="form-group row">
-		<label className="col-sm-2 pt-2" htmlFor="quoted-price">
-			Precio cotizado: $
+	<div className="form-group">
+		<label className="pt-2" htmlFor="quoted-price">
+			Precio cotizado:
 		</label>
-		<input
-			required
-			ref={refs.price}
-			type="number"
-			step="any"
-			min="1"
-			id="quoted-price"
-			className="form-control col-sm-1"
-			style={{ width: '10%' }}
-			placeholder="0.00"
-		/>
+		<div className="input-group price-input">
+			<div class="input-group-prepend">
+				<span class="input-group-text" id="basic-addon1">
+					$
+				</span>
+			</div>
+			<input
+				required
+				ref={refs.price}
+				type="number"
+				step="any"
+				min="1"
+				id="quoted-price"
+				className="form-control"
+				placeholder="0.00"
+			/>
+		</div>
 	</div>
 );
 
 const Cost = ({ refs }) => (
-	<div className="form-group row">
-		<label htmlFor="cost" className="col-sm-2 pt-2">
-			Costo: $
+	<div className="form-group">
+		<label htmlFor="cost" className="pt-2">
+			Costo:
 		</label>
-		<input
-			required
-			ref={refs.cost}
-			type="number"
-			step="any"
-			min="1"
-			id="cost"
-			className="form-control col-sm-1"
-			style={{ width: '10%' }}
-			placeholder="0.00"
-		/>
+		<div className="input-group price-input">
+			<div class="input-group-prepend">
+				<span class="input-group-text" id="basic-addon1">
+					$
+				</span>
+			</div>
+			<input
+				required
+				ref={refs.cost}
+				type="number"
+				step="any"
+				min="1"
+				id="cost"
+				className="form-control price-input"
+				placeholder="0.00"
+			/>
+		</div>
 	</div>
 );
 
