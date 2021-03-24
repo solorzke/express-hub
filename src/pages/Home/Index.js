@@ -73,7 +73,7 @@ const Article = () => (
 );
 
 const FirstFeature = () => (
-	<div className="piece animate__animated animate__slideInLeft">
+	<div className="piece">
 		<div className="container-fluid">
 			<div className="row">
 				<div className="col-lg-6 align-items-center justify-content-center piece">
@@ -125,7 +125,7 @@ const FirstFeature = () => (
 );
 
 const SecondFeature = () => (
-	<div className="piece animate__animated animate__slideInRight">
+	<div className="piece">
 		<div className="container-fluid">
 			<div className="row">
 				<div className="col-lg-6 d-flex align-items-center justify-content-center">
@@ -176,7 +176,7 @@ const SecondFeature = () => (
 );
 
 const ThirdFeature = () => (
-	<div className="piece animate__animated animate__slideInLeft">
+	<div className="piece">
 		<div className="container-fluid">
 			<div className="row">
 				<div className="col-lg-6 align-items-center justify-content-center piece">

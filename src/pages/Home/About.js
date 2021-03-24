@@ -93,7 +93,7 @@ const ContactInfo = () => (
 );
 
 const Location = () => (
-	<div className="piece-light animate__animated animate__slideInLeft">
+	<div className="piece-light">
 		<div className="container">
 			<div className="row">
 				<div className="col-lg-6 align-items-center justify-content-center piece-light">
