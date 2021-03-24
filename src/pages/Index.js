@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import Logo from '../teloentrego.png';
+import Nav from '../components/Nav/Navbar';
+import Footer from '../components/Footer/Footer';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -27,7 +29,7 @@ const Index = () => {
 			Cookie.setCookie('fname', store.data().fname);
 			Cookie.setCookie('uid', user.user.uid);
 			setProgress(false);
-			window.location.href = '/new-order';
+			window.location.href = '/cloud/new-order';
 		} catch (error) {
 			setProgress(false);
 			alert(error.message);
@@ -52,38 +54,39 @@ const Index = () => {
 	};
 
 	return (
-		<div className="login login-body">
-			<main className="login-login-container">
-				<div className="container">
-					<div className="row">
-						<div className="col-lg text-center message-box">
-							<img src={Logo} className="logo-container" />
-							<h2 className="pt-5 text-center jo-font">
-								Envío y embalaje en su máxima expresión! En Estados Unidos y Sudamérica
-							</h2>
-							<p className="pt-5 text-center jo-font">
-								Un tipo diferente de empresa. Un tipo diferente de envío exprés.
-							</p>
-						</div>
-						<div className="col-lg d-flex justify-content-center align-content-end flex-column">
-							{area === 'login' && (
-								<LoginBox
-									authenticate={authenticate.bind(this)}
-									progress={progress}
-									onClick={setArea}
-								/>
-							)}
-							{area === 'forgot-pw' && (
-								<ForgotPasswordBox onPasswordReset={onPasswordReset.bind(this)} onClick={setArea} />
-							)}
+		<Fragment>
+			<Nav active="cloud" />
+			<div className="login login-body">
+				<main className="login-login-container">
+					<div className="container">
+						<div className="row">
+							<div className="col-lg text-center message-box">
+								<img src={Logo} className="logo-container" />
+								<h2 className="pt-5 text-center jo-font">
+									Envío y embalaje en su máxima expresión! En Estados Unidos y Sudamérica
+								</h2>
+								<p className="pt-5 text-center jo-font">
+									Un tipo diferente de empresa. Un tipo diferente de envío exprés.
+								</p>
+							</div>
+							<div className="col-lg d-flex justify-content-center align-content-end flex-column">
+								{area === 'login' && (
+									<LoginBox
+										authenticate={authenticate.bind(this)}
+										progress={progress}
+										onClick={setArea}
+									/>
+								)}
+								{area === 'forgot-pw' && (
+									<ForgotPasswordBox onPasswordReset={onPasswordReset.bind(this)} onClick={setArea} />
+								)}
+							</div>
 						</div>
 					</div>
-				</div>
-			</main>
-			<footer>
-				<p id="footer" className="text-center" />
-			</footer>
-		</div>
+				</main>
+			</div>
+			<Footer />
+		</Fragment>
 	);
 };
 

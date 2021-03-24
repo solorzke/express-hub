@@ -29,7 +29,7 @@ const Body = () => {
 		console.log(log);
 		setTimeout(() => {
 			setToast(false);
-			if (action) window.location.href = '/new-order';
+			if (action) window.location.href = '/cloud/new-order';
 		}, 3000);
 	};
 
@@ -177,7 +177,7 @@ const ContactInfo = () => (
 const ButtonGroup = () => (
 	<div className="form-group row py-3">
 		<div className="col-md d-flex justify-content-end align-items-center">
-			<a href="/new-order" className="mr-2 btn btn-md btn-secondary">
+			<a href="/cloud/new-order" className="mr-2 btn btn-md btn-secondary">
 				Cancelar
 			</a>
 			<input value="Agregar Cliente" type="submit" className="btn btn-primary" id="btn-modal" />

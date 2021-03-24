@@ -173,7 +173,7 @@ const Body = () => {
 					header="Agregar Cotización"
 					title="Crear Una Nueva Cotización"
 					text="Comience a crear sus cotizaciones para sus clientes de inmediato aquí, incluido el precio y el costo cotizados."
-					path="/quotes/add"
+					path="/cloud/quotes/add"
 					image="fas fa-plus-square"
 				/>
 			</div>

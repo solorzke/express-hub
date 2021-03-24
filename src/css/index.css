@@ -193,7 +193,7 @@ h1 {
 }
 
 .piece {
-    background: #2A1E5C;
+    background: #34345B;
     color: #fff;
     padding: 10px;
 }
@@ -210,7 +210,7 @@ h1 {
 }
 
 .section-contact-us {
-    background: #2A1E5C;
+    background: #34345B;
     color: #fff;
     justify-content: center;
     align-items: center;
@@ -233,7 +233,7 @@ h1 {
 
 .contact-link > a {
     font-size: 20px;
-    color: #2A1E5C;
+    color: #34345B;
     font-family: 'Syne', sans-serif;
     padding-left: 5px;
 }
@@ -244,7 +244,7 @@ h1 {
 
 .contact-link + a {
     font-size: 20px;
-    color: #2A1E5C;
+    color: #34345B;
     font-family: 'Syne', sans-serif;
 }
 
@@ -256,6 +256,18 @@ h1 {
     background: #fff;
     padding: 50px;
     line-height: 2.5;
+}
+
+.main-bg {
+    background-color: #34345B;
+}
+
+.main-bg a {
+    color: #34345B
+}
+
+.main-bg a:hover {
+    color: #EE4266
 }
 /* Web Responsive */
 /* .logo-container {

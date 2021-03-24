@@ -1,0 +1,21 @@
+
+
+.banner-bg {
+	background-color: transparent;
+}
+
+.banner-title {
+	color: #EE4266;
+}
+
+@media screen and (max-width: 766px) {
+	.banner-img {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 415px) {
+	#btn {
+		font-size: 12px;
+	}
+}

@@ -3,6 +3,14 @@
 	padding: 40px;
 }
 
+.navigation-footer a {
+	color: #34345B;
+}
+
+.navigation-footer a:hover {
+	color: #EE4266;
+}
+
 .footer-icon {
 	padding: 0 10px;
 }

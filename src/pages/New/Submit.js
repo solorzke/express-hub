@@ -31,7 +31,7 @@ const Body = () => {
 		console.log(log);
 		setTimeout(() => {
 			setToast(false);
-			if (action) window.location.href = '/new-order';
+			if (action) window.location.href = '/cloud/new-order';
 		}, 3000);
 	};
 
@@ -151,14 +151,14 @@ const Paths = ({ historyHook, message }) => {
 	};
 	return (
 		<Breadcrumb>
-			<Breadcrumb.Item href="/new-orders" onClick={(e) => onClick(e, '/new-order/')}>
+			<Breadcrumb.Item href="/cloud/new-orders" onClick={(e) => onClick(e, '/cloud/new-order/')}>
 				Home
 			</Breadcrumb.Item>
-			<Breadcrumb.Item href="/new-orders" onClick={(e) => onClick(e, '/new-order/add-order')}>
+			<Breadcrumb.Item href="/cloud/new-orders" onClick={(e) => onClick(e, '/cloud/new-order/add-order')}>
 				Orden
 			</Breadcrumb.Item>
 			<Breadcrumb.Item
-				href="/new-orders/add-order/add-items"
+				href="/cloud/new-orders/add-order/add-items"
 				onClick={(e) => {
 					e.preventDefault();
 					historyHook.goBack();

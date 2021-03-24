@@ -22,7 +22,7 @@ const ResetPassword = () => {
 	useEffect(() => {
 		const query_mode = QUERY.get('mode');
 		const query_oobCode = QUERY.get('oobCode');
-		if (query_mode === null || query_oobCode === null) window.location.href = '/';
+		if (query_mode === null || query_oobCode === null) window.location.href = '/cloud';
 		setOobCode(query_oobCode);
 		setMode(query_mode);
 	}, []);

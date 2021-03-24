@@ -3,17 +3,13 @@ import Nav from '../../components/Nav/Navbar';
 import Banner from '../../components/Banner/Banner';
 import Footer from '../../components/Footer/Footer';
 import Globe from '../../media/globe.gif';
-import A1 from '../../media/5.png';
-import A2 from '../../media/6.png';
-import A3 from '../../media/7.png';
-import { Jumbotron, ListGroup, CardGroup, Card } from 'react-bootstrap';
 import Button from '../../components/Button/Button';
 import { Fragment } from 'react';
 
 const About = () => (
 	<Fragment>
-		<Nav />
-		<main style={{ backgroundColor: '#2A1E5C' }}>
+		<Nav active="about" />
+		<main className="main-bg">
 			<Banner height="60vh" />
 			<FirstSummary />
 			<SecondSummary />
@@ -74,7 +70,7 @@ const ContactInfo = () => (
 		<div className="container">
 			<div className="row">
 				<div className="col">
-					<h1 style={{ paddingTop: 20, paddingBottom: 20 }}>Here's Our Contact Info</h1>
+					<h1 style={{ paddingTop: 20, paddingBottom: 20 }}>Nuestra Información De Contacto</h1>
 					<div className="row">
 						<div className="col-md">
 							<i className="far fa-envelope footer-icon contact-link">
@@ -87,7 +83,7 @@ const ContactInfo = () => (
 						</div>
 						<div className="col-md">
 							<i className="fab fa-facebook-f footer-icon contact-link" />
-							<a href="#">Mtech Masters</a>
+							<a href="#">Teloentregoec</a>
 						</div>
 					</div>
 				</div>
@@ -102,8 +98,8 @@ const Location = () => (
 			<div className="row">
 				<div className="col-lg-6 align-items-center justify-content-center piece-light">
 					<i className="fas fa-compass banner-title" style={{ fontSize: 35 }} />
-					<h6 className="banner-title">Great Streamline Delivery Service</h6>
-					<h4 className="banner-title">Workflow & Management Tools</h4>
+					<h6 className="banner-title">Gran Servicio De Entrega Optimizado</h6>
+					<h4 className="banner-title">Herramientas De Gestión y Flujo De Trabajo</h4>
 					<br />
 					<p>
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
@@ -138,7 +134,7 @@ const Location = () => (
 				<div className="col-lg-6 d-flex align-items-center justify-content-center">
 					<img
 						src={Globe}
-						alt="Delivery Courier Royalty Free Illustration - Courier Png ..."
+						alt="Entrega De Mensajería Libre De Regalías Ilustración - Mensajero Png ..."
 						height="400"
 						width="400"
 					/>
@@ -153,7 +149,7 @@ const ContactUs = () => (
 		<div className="row">
 			<div className="col-md">
 				<div className="section-contact-us">
-					<h1 className="banner-title">Need Shipping?</h1>
+					<h1 className="banner-title">¿Necesitas Envío?</h1>
 					<a href="#">
 						<Button label="Contact Us" />
 					</a>

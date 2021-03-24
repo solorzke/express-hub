@@ -15,14 +15,14 @@ const Body = () => {
 					header="Cliente"
 					title="Nuevo Cliente"
 					text="Agregue un nuevo cliente y su orden de envío, incluida información como su nombre y sus detalles de envío para que se registre en la base de datos."
-					path="/new-order/add-client"
+					path="/cloud/new-order/add-client"
 					image="fas fa-user-circle"
 				/>
 				<CardBox
 					header="Orden"
 					title="Nuevo Orden"
 					text="Cree un nuevo pedido para un cliente existente en la base de datos y agregue su información de envío."
-					path="/new-order/add-order"
+					path="/cloud/new-order/add-order"
 					image="fas fa-dolly-flatbed"
 				/>
 			</div>

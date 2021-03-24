@@ -2,7 +2,7 @@ import React from 'react';
 import './Footer.css';
 
 const Copyright = () => (
-	<div className="copyright-container">
+	<div className="copyright-container px-3">
 		<p>
 			&copy; {new Date().getFullYear()} Teloentrego LLC All rights reserved
 			<span style={{ paddingLeft: 10, paddingRight: 10 }}>

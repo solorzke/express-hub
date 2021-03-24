@@ -16,7 +16,7 @@ const Drawer = ({ active = '' }) => {
 				console.log('> Firebase: Sign out successful');
 				Cookie.deleteCookie('fname');
 				Cookie.deleteCookie('uid');
-				window.location.href = '/';
+				window.location.href = '/cloud';
 			})
 			.catch((error) => {
 				alert(
@@ -36,34 +36,34 @@ const Drawer = ({ active = '' }) => {
 						<i className="fas fa-home pr-2" />Dashboard
 					</span>
 				</a> */}
-				<a href="/new-order" className="list-group-item list-group-item-action">
+				<a href="/cloud/new-order" className="list-group-item list-group-item-action">
 					<span className={active === 'new' ? 'activated' : ''}>
 						<i className="far fa-plus-square pr-2" />
 						Nuevo Orden
 					</span>
 				</a>
-				<a href="/quotes" className="list-group-item list-group-item-action">
+				<a href="/cloud/quotes" className="list-group-item list-group-item-action">
 					<span className={active === 'quotes' ? 'activated' : ''}>
 						<i className="fas fa-quote-right pr-2" />
 						Cotizaciónes
 					</span>
 				</a>
-				<a href="/clients" className="list-group-item list-group-item-action">
+				<a href="/cloud/clients" className="list-group-item list-group-item-action">
 					<span className={active === 'clients' ? 'activated' : ''}>
 						<i className="fas fa-users pr-2" />Clientes
 					</span>
 				</a>
-				<a href="/orders" className="list-group-item list-group-item-action">
+				<a href="/cloud/orders" className="list-group-item list-group-item-action">
 					<span className={active === 'orders' ? 'activated' : ''}>
 						<i className="fas fa-file-invoice pr-2" />Pedidos
 					</span>
 				</a>
-				<a href="/search" className="list-group-item list-group-item-action">
+				<a href="/cloud/search" className="list-group-item list-group-item-action">
 					<span className={active === 'search' ? 'activated' : ''}>
 						<i className="fas fa-search pr-2" />Buscar
 					</span>
 				</a>
-				<a href="/settings" className="list-group-item list-group-item-action">
+				<a href="/cloud/settings" className="list-group-item list-group-item-action">
 					<span className={active === 'settings' ? 'activated' : ''}>
 						<i className="fas fa-cog pr-2" />Ajustes
 					</span>

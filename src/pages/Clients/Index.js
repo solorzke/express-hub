@@ -39,7 +39,7 @@ const Body = () => {
 				console.log(`Val: ${value} Client: ${full_name}`);
 				const matching = matchingResults.filter((item) => item.detail === full_name);
 				if (matching.length === 0) {
-					matchingResults.push({ detail: full_name, path: `/clients/${data.id}` });
+					matchingResults.push({ detail: full_name, path: `/cloud/clients/${data.id}` });
 				}
 				console.table(matching);
 			}
@@ -51,7 +51,7 @@ const Body = () => {
 	const onSelect = (e) => {
 		e.preventDefault();
 		const value = e.target.value;
-		window.location.href = `/clients/${value}`;
+		window.location.href = `/cloud/clients/${value}`;
 	};
 
 	//Change the casing of every word in the string

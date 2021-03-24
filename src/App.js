@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Cookie } from './data/Cookie';
+import { ProtectedRoute } from './components/Protected/Route';
 import Home from './pages/Home/Index';
 import About from './pages/Home/About';
 import ContactUs from './pages/Home/Contact';
 import Index from './pages/Index';
-// import Home from './pages/Home';
 import NewIndex from './pages/New/Index';
 import AddClient from './pages/New/Client';
 import AddOrder from './pages/New/Order';
@@ -26,47 +26,35 @@ import Error404 from './pages/404';
 import 'animate.css';
 
 function App() {
-	const loggedIn = Cookie.checkCookie('uid');
-	console.log(`> Firebase: User is ${loggedIn ? 'logged in' : 'not logged in'}`);
-	if (loggedIn) {
-		return (
-			<Switch>
-				<Route path="/home" component={Home} />
-				<Route path="/about" component={About} />
-				<Route path="/contact" component={ContactUs} />
-				<Route path="/auth" component={ResetPassword} />
-				{/* <Route path="/home" component={Home} /> */}
-				<Route path="/settings" component={SettingsIndex} />
-				<Route path="/search" component={SearchIndex} />
-				<Route path="/orders" component={OrdersIndex} />
-				<Route path="/order/update-items" component={UpdateItems} />
-				<Route path="/order" component={Order} />
-				<Route path="/clients/:id" component={ClientSummary} />
-				<Route path="/clients" component={ClientIndex} />
-				<Route path="/quotes/quote" component={QuotesPage} />
-				<Route path="/quotes/add" component={QuotesForm} />
-				<Route path="/quotes" component={QuotesIndex} />
-				<Route path="/new-order/add-order/add-items" component={AddItems} />
-				<Route exact path="/new-order/add-order/submit" component={SubmitOrder} />
-				<Route path="/new-order/add-client" component={AddClient} />
-				<Route path="/new-order/add-order" component={AddOrder} />
-				<Route path="/new-order" component={NewIndex} />
-				<Route exact path="/" component={Index} />
-				<Route component={Error404} />
-			</Switch>
-		);
-	} else {
-		return (
-			<Switch>
-				<Route path="/home" component={Home} />
-				<Route path="/about" component={About} />
-				<Route path="/contact" component={ContactUs} />
-				<Route path="/auth" component={ResetPassword} />
-				<Route exact path="/" component={Index} />
-				<Route component={Error404} />
-			</Switch>
-		);
-	}
+	const [ auth, setAuth ] = useState(Cookie.getCookie('uid'));
+
+	useEffect(() => setAuth(Cookie.checkCookie('uid')), []);
+
+	return (
+		<Switch>
+			<ProtectedRoute isAuth={auth} path="/cloud/settings" component={SettingsIndex} />
+			<ProtectedRoute isAuth={auth} path="/cloud/search" component={SearchIndex} />
+			<ProtectedRoute isAuth={auth} path="/cloud/orders" component={OrdersIndex} />
+			<ProtectedRoute isAuth={auth} path="/cloud/order/update-items" component={UpdateItems} />
+			<ProtectedRoute isAuth={auth} path="/cloud/order" component={Order} />
+			<ProtectedRoute isAuth={auth} path="/cloud/clients/:id" component={ClientSummary} />
+			<ProtectedRoute isAuth={auth} path="/cloud/clients" component={ClientIndex} />
+			<ProtectedRoute isAuth={auth} path="/cloud/quotes/quote" component={QuotesPage} />
+			<ProtectedRoute isAuth={auth} path="/cloud/quotes/add" component={QuotesForm} />
+			<ProtectedRoute isAuth={auth} path="/cloud/quotes" component={QuotesIndex} />
+			<ProtectedRoute isAuth={auth} path="/cloud/new-order/add-order/add-items" component={AddItems} />
+			<ProtectedRoute isAuth={auth} exact path="/cloud/new-order/add-order/submit" component={SubmitOrder} />
+			<ProtectedRoute isAuth={auth} path="/cloud/new-order/add-client" component={AddClient} />
+			<ProtectedRoute isAuth={auth} path="/cloud/new-order/add-order" component={AddOrder} />
+			<ProtectedRoute isAuth={auth} path="/cloud/new-order" component={NewIndex} />
+			<Route exact path="/cloud" component={Index} />
+			<Route path="/about" component={About} />
+			<Route path="/contact" component={ContactUs} />
+			<Route path="/auth" component={ResetPassword} />
+			<Route path="/" component={Home} />
+			<Route component={Error404} />
+		</Switch>
+	);
 }
 
 export default App;

@@ -49,7 +49,7 @@ const Body = () => {
 		setMessage(toastMessage);
 		console.log(log);
 		setTimeout(() => {
-			if (action) window.location.href = '/orders';
+			if (action) window.location.href = '/cloud/orders';
 			setToast(false);
 			setImg('fas fa-spinner fa-pulse');
 			setHeading('Recopilar archivos y actualizarlos a la nube');

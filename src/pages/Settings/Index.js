@@ -36,7 +36,7 @@ const Body = () => {
 		console.log(log);
 		setTimeout(() => {
 			setToast(false);
-			if (action) window.location.href = '/settings';
+			if (action) window.location.href = '/cloud/settings';
 		}, 2500);
 	};
 

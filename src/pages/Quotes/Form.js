@@ -83,7 +83,7 @@ const Body = () => {
 		setMessage(toastMessage);
 		console.log(log);
 		setTimeout(() => {
-			if (action) window.location.href = '/quotes';
+			if (action) window.location.href = '/cloud/quotes';
 			setToast(false);
 			setImg('fas fa-spinner fa-pulse');
 			setHeading('Procesando');
@@ -254,7 +254,7 @@ const TextEditor = ({ setText }) => (
 const ConfirmButtons = () => (
 	<div className="form-group row">
 		<div className="col-md d-flex justify-content-end align-items-center">
-			<a href="/quotes" className="mr-2 btn btn-md btn-secondary">
+			<a href="/cloud/quotes" className="mr-2 btn btn-md btn-secondary">
 				Cancelar
 			</a>
 			<input type="submit" value="Guardar" className="btn btn-primary" id="btn-modal" />
@@ -270,7 +270,7 @@ const Paths = () => {
 	};
 	return (
 		<Breadcrumb>
-			<Breadcrumb.Item href="/quotes" onClick={(e) => onClick(e, '/quotes')}>
+			<Breadcrumb.Item href="/cloud/quotes" onClick={(e) => onClick(e, '/cloud/quotes')}>
 				Home
 			</Breadcrumb.Item>
 			<Breadcrumb.Item active>Agregar Nueva Cotización</Breadcrumb.Item>

@@ -55,7 +55,7 @@ const Body = () => {
 		setMessage(toastMessage);
 		console.log(log);
 		setTimeout(() => {
-			if (action) window.location.href = '/orders';
+			if (action) window.location.href = '/cloud/orders';
 			setToast(false);
 			setImg('fas fa-spinner fa-pulse');
 			setHeading('Se está eliminando el pedido ...');
@@ -70,7 +70,7 @@ const Body = () => {
 			const snapshot = await Firebase.firestore().collection('orders').where('orderId', '==', ORDER_ID).get();
 			if (snapshot.empty) {
 				alert('No encontramos el pedido con ese numero de Id.');
-				window.location.href = '/orders';
+				window.location.href = '/cloud/orders';
 			}
 			let order_doc = [];
 			snapshot.forEach((doc) => order_doc.push(doc.data()));
@@ -102,7 +102,7 @@ const Body = () => {
 		1. Get the order id first
 		2. Use the order id to delete the reference folder in storage that matches that id
 		3. Finally delete the order id from the firestore
-		4. Open a new page to /orders
+		4. Open a new page to /cloud/orders
 	*/
 	const deleteOrder = async () => {
 		try {
@@ -392,7 +392,7 @@ const Item = ({ data, formatString }) => {
 
 const Paths = () => (
 	<Breadcrumb className="py-2">
-		<Breadcrumb.Item href="/orders">Volver Al Origen</Breadcrumb.Item>
+		<Breadcrumb.Item href="/cloud/orders">Volver Al Origen</Breadcrumb.Item>
 		<Breadcrumb.Item active>Pedido</Breadcrumb.Item>
 	</Breadcrumb>
 );

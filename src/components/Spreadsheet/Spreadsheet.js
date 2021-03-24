@@ -86,9 +86,9 @@ export const Spreadsheet = ({ headings, clients, data, onSortAsc, onSortDes, onD
 		window.location.href = `/order?id=${orderId}&fname=${fname}&lname=${lname}`;
 	};
 
-	const onQuotePageClick = (uid) => (window.location.href = `/quotes/quote?id=${uid}`);
+	const onQuotePageClick = (uid) => (window.location.href = `/cloud/quotes/quote?id=${uid}`);
 
-	const onClientPageClick = (clientId) => (window.location.href = `/clients/${clientId}`);
+	const onClientPageClick = (clientId) => (window.location.href = `/cloud/clients/${clientId}`);
 
 	return (
 		<Fragment>

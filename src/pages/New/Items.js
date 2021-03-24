@@ -78,7 +78,7 @@ const Body = () => {
 
 		const data = { items: items, form: location.state };
 		console.log(data);
-		history.push('/new-order/add-order/submit', data);
+		history.push('/cloud/new-order/add-order/submit', data);
 	};
 
 	//Delete the item from the state
@@ -262,10 +262,13 @@ const Paths = ({ message }) => {
 	};
 	return (
 		<Breadcrumb>
-			<Breadcrumb.Item href="/new-orders" onClick={(e) => onClick(e, '/new-order/')}>
+			<Breadcrumb.Item href="/cloud/new-orders" onClick={(e) => onClick(e, '/cloud/new-order/')}>
 				Home
 			</Breadcrumb.Item>
-			<Breadcrumb.Item href="/new-orders/add-order" onClick={(e) => onClick(e, '/new-order/add-order')}>
+			<Breadcrumb.Item
+				href="/cloud/new-orders/add-order"
+				onClick={(e) => onClick(e, '/cloud/new-order/add-order')}
+			>
 				Pedido
 			</Breadcrumb.Item>
 			<Breadcrumb.Item active>Artículos</Breadcrumb.Item>

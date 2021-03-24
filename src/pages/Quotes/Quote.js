@@ -29,7 +29,7 @@ const Body = () => {
 	const [ heading, setHeading ] = useState('Procesando');
 
 	useEffect(() => {
-		if (quote_id === null) window.location.href = '/quotes';
+		if (quote_id === null) window.location.href = '/cloud/quotes';
 		if (quote === null) getQuote(quote_id);
 	}, []);
 
@@ -40,7 +40,7 @@ const Body = () => {
 		setMessage(toastMessage);
 		console.log(log);
 		setTimeout(() => {
-			if (action) window.location.href = '/quotes';
+			if (action) window.location.href = '/cloud/quotes';
 			setToast(false);
 			setImg('fas fa-spinner fa-pulse');
 			setHeading('Procesando');
@@ -174,7 +174,7 @@ const Details = ({ state, formatString, onUpdate }) => {
 
 const Paths = () => (
 	<Breadcrumb className="py-2">
-		<Breadcrumb.Item href="/quotes">Volver Al Origen</Breadcrumb.Item>
+		<Breadcrumb.Item href="/cloud/quotes">Volver Al Origen</Breadcrumb.Item>
 		<Breadcrumb.Item active>Cotizacion</Breadcrumb.Item>
 	</Breadcrumb>
 );

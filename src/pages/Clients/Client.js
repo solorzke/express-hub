@@ -294,7 +294,7 @@ const EmptyBox = () => (
 
 const Paths = () => (
 	<Breadcrumb>
-		<Breadcrumb.Item href="/clients">Volver al origen</Breadcrumb.Item>
+		<Breadcrumb.Item href="/cloud/clients">Volver al origen</Breadcrumb.Item>
 		<Breadcrumb.Item active>Cliente</Breadcrumb.Item>
 	</Breadcrumb>
 );

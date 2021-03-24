@@ -5,7 +5,7 @@ const ConfirmButton = ({ onConfirm }) => {
 	const warnBeforeProceeding = (e) => {
 		e.preventDefault();
 		const message = `Are you sure you'd like to cancel your order? All changes made will be lost.`;
-		if (window.confirm(message)) window.location.href = '/new-order';
+		if (window.confirm(message)) window.location.href = '/cloud/new-order';
 	};
 
 	return (

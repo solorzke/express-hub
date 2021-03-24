@@ -79,7 +79,7 @@ const Body = () => {
 				trackingNum: tracking.length === 0 ? '' : tracking
 			};
 
-			history.push('/new-order/add-order/add-items', data);
+			history.push('/cloud/new-order/add-order/add-items', data);
 		} catch (error) {
 			console.log(`> App: Unable to save form data.\n ${error.message}`);
 		}
@@ -276,7 +276,7 @@ const TextEditor = ({ setText }) => (
 const ConfirmButtons = () => (
 	<div className="form-group row">
 		<div className="col-md d-flex justify-content-end align-items-center">
-			<a href="/new-order" className="mr-2 btn btn-md btn-secondary">
+			<a href="/cloud/new-order" className="mr-2 btn btn-md btn-secondary">
 				Cancelar
 			</a>
 			<input type="submit" value="Continuar" className="btn btn-primary" id="btn-modal" />
