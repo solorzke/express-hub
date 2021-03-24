@@ -29,12 +29,7 @@ const Banner = ({ height }) => {
 						<Button label="Aprende Más" />
 					</div>
 					<div className="col-md-6">
-						<img
-							src={Logo}
-							width="300"
-							height="300"
-							className="banner-img animate__animated animate__slideInLeft"
-						/>
+						<img src={Logo} width="300" height="300" className="banner-img" />
 					</div>
 				</Row>
 			</Container>

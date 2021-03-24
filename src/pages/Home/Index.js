@@ -28,7 +28,7 @@ const Home = () => {
 };
 
 const Article = () => (
-	<article className="row">
+	<article className="row m-0">
 		<div className="article col-lg">
 			<Jumbotron>
 				<div className="row">
