@@ -269,6 +269,11 @@ h1 {
 .main-bg a:hover {
     color: #EE4266
 }
+
+.globe-img {
+    width: 100%;
+
+}
 /* Web Responsive */
 /* .logo-container {
     background-image: url('../teloentrego.png') no-repeat center;

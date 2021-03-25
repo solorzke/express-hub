@@ -14,9 +14,9 @@ const ContactUs = () => (
 			<Banner height="60vh" />
 			<Info />
 			<Summary />
+			<Message />
 		</main>
 		<Destination />
-		<Message />
 		<Footer />
 	</Fragment>
 );
@@ -49,13 +49,13 @@ const Info = () => (
 );
 
 const Message = () => (
-	<div className="container-fluid m-0 p-0">
+	<div className="container-fluid">
 		<div className="row">
 			<div className="col-md">
 				<div className="section-contact-us">
-					<h1 className="banner-title">¿Necesitas Envío?</h1>
+					<h1 className="banner-title text-center">¿Necesitas Envío?</h1>
 					<a href="#">
-						<Button label="Contact Us" />
+						<Button label="Manda Un Mensaje" />
 					</a>
 				</div>
 			</div>
@@ -90,7 +90,7 @@ const Destination = () => (
 		<div className="container-fluid">
 			<div className="row">
 				<div className="col-md-4 d-flex align-items-center justify-content-center">
-					<img src={Globe} alt="Globe" height="500" width="500" />
+					<img src={Globe} alt="Globe" className="globe-img" />
 				</div>
 				<div className="col-md-8 align-items-center justify-content-center piece-light">
 					<i className="fas fa-globe banner-title" style={{ fontSize: 35 }} />
@@ -99,7 +99,7 @@ const Destination = () => (
 					<br />
 					<Tab.Container defaultActiveKey="first">
 						<div className="row">
-							<div className="col">
+							<div className="col-lg">
 								<Nav variant="pills" className="flex-column">
 									<Nav.Item>
 										<Nav.Link eventKey="first">Quito</Nav.Link>
@@ -121,7 +121,7 @@ const Destination = () => (
 									</Nav.Item>
 								</Nav>
 							</div>
-							<div className="col">
+							<div className="col-lg">
 								<Tab.Content>
 									<Tab.Pane eventKey="first">
 										<p>

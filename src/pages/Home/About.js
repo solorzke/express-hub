@@ -135,8 +135,7 @@ const Location = () => (
 					<img
 						src={Globe}
 						alt="Entrega De Mensajería Libre De Regalías Ilustración - Mensajero Png ..."
-						height="400"
-						width="400"
+						className="globe-img"
 					/>
 				</div>
 			</div>
@@ -149,7 +148,7 @@ const ContactUs = () => (
 		<div className="row">
 			<div className="col-md">
 				<div className="section-contact-us">
-					<h1 className="banner-title">¿Necesitas Envío?</h1>
+					<h1 className="banner-title text-center">¿Necesitas Envío?</h1>
 					<a href="#">
 						<Button label="Contact Us" />
 					</a>
