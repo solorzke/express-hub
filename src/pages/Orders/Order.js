@@ -185,7 +185,7 @@ const Body = () => {
 					children={<Documents state={ORDER} formatString={formatString.bind(this)} />}
 					title="Documentos"
 					options={
-						<a href={`/order/update-items?id=${ORDER_ID}`} className="btn btn-link">
+						<a href={`/cloud/order/update-items?id=${ORDER_ID}`} className="btn btn-link">
 							Agregar / actualizar lista de documentos
 						</a>
 					}

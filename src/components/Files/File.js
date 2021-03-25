@@ -4,7 +4,7 @@ import './File.css';
 const File = ({ id, date, items, names }) => {
 	return (
 		<a
-			href={`/order?id=${id}&fname=${names.fname}&lname=${names.lname}`}
+			href={`/cloud/order?id=${id}&fname=${names.fname}&lname=${names.lname}`}
 			className="pl-5 border border-light"
 			style={{ backgroundColor: '#FFFCF2' }}
 		>

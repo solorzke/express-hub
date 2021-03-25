@@ -29,7 +29,7 @@ const Body = () => {
 						const names = await getClientById(order.clientId);
 						results.push({
 							detail: `${order.orderId}: ${items}`,
-							path: `/order?id=${order.orderId}&fname=${names.fname}&lname=${names.lname}`,
+							path: `/clodu/order?id=${order.orderId}&fname=${names.fname}&lname=${names.lname}`,
 							orderId: order.orderId
 						});
 					}

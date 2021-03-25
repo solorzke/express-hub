@@ -83,7 +83,7 @@ export const Spreadsheet = ({ headings, clients, data, onSortAsc, onSortDes, onD
 	const onOrderPageClick = (orderId, clientId) => {
 		const fname = clients[clientId].fname;
 		const lname = clients[clientId].lname;
-		window.location.href = `/order?id=${orderId}&fname=${fname}&lname=${lname}`;
+		window.location.href = `/cloud/order?id=${orderId}&fname=${fname}&lname=${lname}`;
 	};
 
 	const onQuotePageClick = (uid) => (window.location.href = `/cloud/quotes/quote?id=${uid}`);
