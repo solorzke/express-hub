@@ -107,7 +107,7 @@ const Body = () => {
 };
 
 const PortraitHeader = () => (
-	<div className="w-100 d-flex justify-content-center align-items-center pb-5 flex-column">
+	<div className="d-flex justify-content-center align-items-center pb-5 flex-column">
 		<img src={Logo} className="rounded search-logo" />
 	</div>
 );

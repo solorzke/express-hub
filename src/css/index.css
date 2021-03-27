@@ -170,7 +170,8 @@ h1 {
 }
 
 .search-logo {
-    width: 100%;
+    max-width: 50%;
+    max-height: 50%;
 }
 
 .price-input {
