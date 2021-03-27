@@ -29,7 +29,9 @@ const Body = () => {
 	const getClients = async () => {
 		const snapshot = await Firebase.firestore().collection('clients').get();
 		let clients = [];
-		snapshot.forEach((doc) => clients.push(doc.data()));
+		snapshot.forEach((doc) => {
+			if (!doc.data().hasOwnProperty('ghost')) clients.push(doc.data());
+		});
 		setClients(clients);
 		return clients;
 	};

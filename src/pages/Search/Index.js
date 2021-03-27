@@ -18,7 +18,9 @@ const Body = () => {
 			let results = [];
 			let orders = [];
 			const snapshot = await Firebase.firestore().collection('orders').get();
-			snapshot.forEach((doc) => orders.push(doc.data()));
+			snapshot.forEach((doc) => {
+				if (!doc.data().hasOwnProperty('ghost')) orders.push(doc.data());
+			});
 			for (let i = 0; i < orders.length; i++) {
 				const order = orders[i];
 				const queryValue = order[query].toLowerCase();
@@ -56,7 +58,9 @@ const Body = () => {
 			let order = [];
 			value = value.toLowerCase();
 			const snapshot = await Firebase.firestore().collection('clients').get();
-			snapshot.forEach((doc) => clients.push(doc.data()));
+			snapshot.forEach((doc) => {
+				if (!doc.data().hasOwnProperty('ghost')) clients.push(doc.data());
+			});
 			for (let i = 0; i < clients.length; i++) {
 				const client = clients[i];
 				const fullName = `${client.fname} ${client.lname}`;

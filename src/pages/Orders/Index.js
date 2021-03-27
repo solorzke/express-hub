@@ -67,7 +67,9 @@ const Body = () => {
 		try {
 			let results = [];
 			const snapshot = await Firebase.firestore().collection('orders').get();
-			snapshot.forEach((doc) => results.push(doc.data()));
+			snapshot.forEach((doc) => {
+				if (!doc.data().hasOwnProperty('ghost')) results.push(doc.data());
+			});
 			setOrders(results);
 			setFilteredOrders(results);
 			console.log(`> Firebase: ${results.length} results found.`);

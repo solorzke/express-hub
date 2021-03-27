@@ -19,7 +19,9 @@ const Body = () => {
 	const getClients = async () => {
 		const snapshot = await Firebase.firestore().collection('clients').get();
 		let clients = [];
-		snapshot.forEach((doc) => clients.push(doc.data()));
+		snapshot.forEach((doc) => {
+			if (!doc.data().hasOwnProperty('ghost')) clients.push(doc.data());
+		});
 		return clients;
 	};
 
@@ -33,6 +35,7 @@ const Body = () => {
 		//Request a list of clients from the firestore
 		const snapshot = await Firebase.firestore().collection('clients').get();
 		snapshot.forEach((doc) => {
+			if (doc.data().hasOwnProperty('ghost')) return;
 			const data = doc.data();
 			const full_name = `${data.fname} ${data.lname}`;
 			if (full_name.includes(value) && value.length > 0) {

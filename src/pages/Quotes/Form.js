@@ -34,7 +34,9 @@ const Body = () => {
 		try {
 			const snapshot = await Firebase.firestore().collection('clients').get();
 			let results = [];
-			snapshot.forEach((doc) => results.push(doc.data()));
+			snapshot.forEach((doc) => {
+				if (!doc.data().hasOwnProperty('ghost')) results.push(doc.data());
+			});
 			setClients(results);
 			console.log('> Firebase: all clients fetched.');
 			return results;
