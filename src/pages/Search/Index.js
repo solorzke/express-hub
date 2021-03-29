@@ -37,7 +37,6 @@ const Body = () => {
 					}
 				}
 			}
-			console.log(results);
 			resolve(results);
 		});
 

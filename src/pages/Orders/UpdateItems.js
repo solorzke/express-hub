@@ -111,7 +111,6 @@ const Body = () => {
 		stateHandler(index);
 		let copy = ITEMS[itemKey]['files'][index];
 		const FieldValue = Firebase.firestore.FieldValue;
-		console.log(copy);
 		const filtered_files = ITEMS[itemKey]['files'].filter((item, i) => index !== i);
 		await Firebase.storage().ref(`images/${ORDER_ID}/${copy.name}`).delete().catch((e) => console.error(e));
 		await Firebase.firestore()
@@ -201,7 +200,6 @@ const Body = () => {
 					}
 				}
 			} while (fileKeys.length !== 0);
-			console.log(ORDER);
 			resolve({ files: urls, avi: avis });
 		});
 
@@ -600,5 +598,3 @@ const FileBox = (props) => {
 };
 
 export default UpdateItems;
-
-// console.log(`Is it a file: ${inputFiles[0] instanceof File}`);

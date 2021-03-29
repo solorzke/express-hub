@@ -31,7 +31,6 @@ const Body = () => {
 	const [ empty, setEmpty ] = useState(false);
 
 	useEffect(() => {
-		console.log(id);
 		getClient();
 		getOrders();
 	}, []);
@@ -147,7 +146,6 @@ const Body = () => {
 	const formatString = (str) => {
 		//Check if its multi-word
 		const parsedStr = str.replaceAll('%20', ' ');
-		console.log(`${str} => ${parsedStr}`);
 		const words = parsedStr.split(' ');
 		const newString = words.map((item) => item.charAt(0).toUpperCase() + item.slice(1));
 		return newString.join(' ');

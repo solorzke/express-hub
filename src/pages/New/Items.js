@@ -77,7 +77,6 @@ const Body = () => {
 		});
 
 		const data = { items: items, form: location.state };
-		console.log(data);
 		history.push('/cloud/new-order/add-order/submit', data);
 	};
 

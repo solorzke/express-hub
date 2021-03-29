@@ -39,8 +39,6 @@ const Body = () => {
 			const data = doc.data();
 			const full_name = `${data.fname} ${data.lname}`;
 			if (full_name.includes(value) && value.length > 0) {
-				console.log(`Val: ${value} Client: ${full_name}`);
-				const matching = matchingResults.filter((item) => item.detail === full_name);
 				if (matching.length === 0) {
 					matchingResults.push({ detail: full_name, path: `/cloud/clients/${data.id}` });
 				}

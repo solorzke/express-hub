@@ -50,7 +50,6 @@ const Body = () => {
 				);
 				//Don't need the clientname for the firestore update
 				delete data.form.clientName;
-				console.log(data);
 				Firebase.firestore().collection('orders').doc(data.form.orderId).set(data.form).then(() => {
 					setToastProps(
 						'fas fa-check-circle toast-success',
