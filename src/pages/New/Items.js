@@ -31,7 +31,7 @@ const Body = () => {
 
 	useEffect(
 		() => {
-			console.table(items);
+			console.log('items state has changed');
 			document.getElementById('item').value = '';
 			document.getElementById('quantity').value = '1';
 		},
@@ -97,8 +97,7 @@ const Body = () => {
 
 	//Log the current state of the files uploaded to the console
 	const onFilesChange = (files, avi, key) => {
-		console.table(files);
-		console.table(avi);
+		console.log('new files have been submitted, ready for upload');
 		let copy = items[key];
 		copy['files'] = files;
 		copy['avi'] = avi;

@@ -43,7 +43,6 @@ const Body = () => {
 				if (matching.length === 0) {
 					matchingResults.push({ detail: full_name, path: `/cloud/clients/${data.id}` });
 				}
-				console.table(matching);
 			}
 		});
 		setNames(matchingResults);
